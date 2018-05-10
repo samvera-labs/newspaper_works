@@ -14,7 +14,7 @@ RSpec.shared_examples 'a persistent work type' do
     expect(@work.id).to be_nil
   end
   it 'saves' do
-    @work.save
+    expect(@work.save).to be true
   end
   it 'has non-nil id after save' do
     expect(@work.id).to_not be_nil
@@ -78,10 +78,8 @@ def model_fixtures(target_type)
   # parents via members setter method, per PCDM Profile for Newspapers.
   publication = NewspaperTitle.new
   publication.title = ["Yesterday's News"]
-  #publication.save
   issue1 = NewspaperIssue.new
   issue1.title = ['December 7, 1941']
-  #issue1.save
   publication.members.push issue1
   page1 = NewspaperPage.new
   page1.title = ['Page 1']
@@ -107,13 +105,13 @@ def model_fixtures(target_type)
   container.members.push(page1, page2)
 
   # save swarm, persist all the things!
-  issue1.save
-  publication.save
-  page1.save
-  page2.save
-  article1.save
-  article2.save
-  container.save
+  issue1.save!
+  publication.save!
+  page1.save!
+  page2.save!
+  article1.save!
+  article2.save!
+  container.save!
 
   # return types appropriate to target class: return correct starting point
   # for the object graph of these fixtures, in the context of their use.
