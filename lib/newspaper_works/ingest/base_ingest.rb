@@ -2,6 +2,8 @@ module NewspaperWorks
   module Ingest
     # base class for ingesting works, implements, as-needed, temp files
     class BaseIngest
+      attr_accessor :work, :io, :filename
+
       def initialize(work)
         # adapted context:
         @work = work
