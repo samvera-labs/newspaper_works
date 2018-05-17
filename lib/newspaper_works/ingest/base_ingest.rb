@@ -14,9 +14,9 @@ module NewspaperWorks
         raise ArgumentError, 'File not found or readable' unless
           File.readable?(source)
         # path may be relative to Dir.pwd, but no matter for our use
-        @path = source
-        @io = File.open(source)
-        @filename ||= File.split(source)[-1]
+        @path = source.to_s
+        @io = File.open(@path)
+        @filename ||= File.split(@path)[-1]
       end
 
       def loadio(source)
@@ -28,24 +28,31 @@ module NewspaperWorks
         @filename ||= source.path
       end
 
-      def ingest(source, filename: nil)
-        # source is a string (path) or source is an IO
+      def load(source, filename: nil)
+        # source is a string path, Pathname object, or quacks like an IO
         unless source.class == String ||
+               source.class == Pathname ||
                source.respond_to?('read')
-          raise ArgumentError, 'Source is neither string (path) nor IO object'
+          raise ArgumentError, 'Source is neither path nor IO object'
         end
         # permit the possibility of a filename identifier metadata distinct
         #   from the actual path on disk:
         @filename = filename
-        loader = source.class == String ? method(:loadpath) : method(:loadio)
+        ispath = source.class == String || source.class == Pathname
+        loader = ispath ? method(:loadpath) : method(:loadio)
         loader.call(source)
-        handle_file
       end
 
       # default handler attaches file to work's file set, subclasses
       #   may overwride or wrap this.
-      def handle_file
-        # read file data and add it to file set on work
+      def import
+        upload = Hyrax::UploadedFile.new(file: @io)
+        Hyrax::AttachFilesToWorkJob.perform_now(@work, [upload])
+      end
+
+      def ingest(source, filename: nil)
+        load(source, filename)
+        import
       end
     end
   end
