@@ -27,6 +27,7 @@ module NewspaperWorks
       ) do |index|
         index.as :stored_searchable
       end
+
       # - Section
       property(
         :section,
@@ -35,6 +36,25 @@ module NewspaperWorks
       ) do |index|
         index.as :stored_searchable
       end
+
+      # - Height
+      property(
+        :height,
+        predicate: ::RDF::URI.new('http://dbpedia.org/ontology/height'),
+        multiple: false
+      ) do |index|
+        index.as :stored_searchable
+      end
+
+      # - Width
+      property(
+        :width,
+        predicate: ::RDF::URI.new('http://dbpedia.org/ontology/width'),
+        multiple: false
+      ) do |index|
+        index.as :stored_searchable
+      end
+
       # - Reel # TBD TODO needs predicate TBD
     end
   end
