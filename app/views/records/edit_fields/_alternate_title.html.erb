@@ -1,0 +1,4 @@
+<% # app/views/records/edit_fields/_alternate_title.html.erb %>
+<%= f.input :contact_phone, required: f.object.required?(key),
+    input_html: { class: 'form-control', multiple: true }
+%>
