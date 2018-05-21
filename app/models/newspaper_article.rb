@@ -27,6 +27,15 @@ class NewspaperArticle < ActiveFedora::Base
 
   # - Author
   property(
+    :subtitle,
+    predicate: ::RDF::Vocab::DC.alternative,
+    multiple: true
+  ) do |index|
+    index.as :stored_searchable
+  end
+
+  # - Author
+  property(
     :author,
     predicate: ::RDF::Vocab::MARCRelators.aut,
     multiple: true
