@@ -7,6 +7,14 @@ require 'engine_cart'
 EngineCart.load_application!
 
 RSpec.configure do |config|
+
+  # enable FactoryBot:
+  require 'factory_bot'
+  config.include FactoryBot::Syntax::Methods
+  # require to load specific factories:
+  require 'factories/newspaper_page'
+  require 'factories/newspaper_page_ingest'
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
