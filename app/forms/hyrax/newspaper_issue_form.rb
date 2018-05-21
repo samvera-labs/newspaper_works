@@ -4,12 +4,12 @@ module Hyrax
   # Newspaper Issue Form Class
   class NewspaperIssueForm < Hyrax::Forms::WorkForm
     self.model_class = ::NewspaperIssue
-    self.terms += [:alternative_title, :resource_type, :genre,
-                   :place_of_publication, :volume, :edition, :issue, :language,
-                   :issn, :lccn, :oclcnum, :extent, :held_by, :issued]
-    self.terms -= [:creator, :keyword, :related_url, :source, :description,
-                   :contributor, :date_created, :subject, :based_near]
+    self.terms += [:resource_type, :genre, :issued, :place_of_publication,
+                   :issn, :lccn, :oclcnum, :held_by]
+    self.terms += [:alternative_title, :volume, :edition, :issue, :extent]
+    self.terms -= [:based_near, :creator, :contributor, :date_created,
+                   :description, :keyword, :related_url, :source, :subject]
     self.required_fields += [:resource_type, :genre, :language, :held_by]
-    self.required_fields -= [:creator, :rights_statement, :keyword]
+    self.required_fields -= [:creator, :keyword, :rights_statement]
   end
 end
