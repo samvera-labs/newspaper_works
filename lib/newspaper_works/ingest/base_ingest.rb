@@ -2,7 +2,7 @@ module NewspaperWorks
   module Ingest
     # base class for ingesting works, implements, as-needed, temp files
     class BaseIngest
-      attr_accessor :work, :io, :filename
+      attr_accessor :work, :io, :path, :filename
 
       def initialize(work)
         # adapted context:
@@ -25,7 +25,8 @@ module NewspaperWorks
         raise ArgumentError, 'Explicit or inferred file name required' unless
           source.respond_to?('path') || @filename
         @io = source
-        @filename ||= source.path
+        @path = source.respond_to?('path') ? source.path : nil
+        @filename ||= File.split(@path)[-1]
       end
 
       def load(source, filename: nil)
@@ -51,7 +52,7 @@ module NewspaperWorks
       end
 
       def ingest(source, filename: nil)
-        load(source, filename)
+        load(source, filename: filename)
         import
       end
     end
