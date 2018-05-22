@@ -85,12 +85,12 @@ def model_fixtures(target_type)
   # issue1.save
   publication.members.push issue1
   page1 = NewspaperPage.new
-  page1.label = 'Page 1'
+  page1.title = ['Page 1']
   page1.page_number = '1'
   page1.height = "200"
   page1.width = "200"
   page2 = NewspaperPage.new
-  page2.label = 'Page 2'
+  page2.title = ['Page 2']
   page2.page_number = '2'
   page2.height = "200"
   page2.width = "200"

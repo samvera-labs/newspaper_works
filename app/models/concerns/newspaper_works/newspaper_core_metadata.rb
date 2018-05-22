@@ -1,6 +1,6 @@
 # module comment...
 module NewspaperWorks
-  # core metdata for newspaper models
+  # core metadata for newspaper models
   module NewspaperCoreMetadata
     extend ActiveSupport::Concern
 

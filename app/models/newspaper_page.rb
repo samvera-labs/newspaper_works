@@ -13,9 +13,9 @@ class NewspaperPage < ActiveFedora::Base
 
   # Validation and required fields:
   #self.required_fields = [:label, :height, :width]
-  validates :label, presence: { message: 'A newspaper page requires a label.' }
-  validates :height, presence: { message: 'A newspaper page requires a height.' }
-  validates :height, presence: { message: 'A newspaper page requires a width.' }
+  validates :title, presence: { message: 'A newspaper page requires a label.' }
+  #validates :height, presence: { message: 'A newspaper page requires a height.' }
+  #validates :width, presence: { message: 'A newspaper page requires a width.' }
 
   self.human_readable_type = 'Newspaper Page'
 
