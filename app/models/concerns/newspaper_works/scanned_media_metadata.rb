@@ -21,7 +21,7 @@ module NewspaperWorks
 
       # - Page Number
       property(
-        :pagination,
+        :page_number,
         predicate: ::RDF::Vocab::SCHEMA.pagination,
         multiple: false
       ) do |index|
@@ -37,7 +37,7 @@ module NewspaperWorks
         index.as :stored_searchable
       end
 
-      
+
       # - Reel # TBD TODO needs predicate TBD
     end
   end
