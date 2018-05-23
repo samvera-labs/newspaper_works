@@ -11,8 +11,21 @@ class NewspaperIssue < ActiveFedora::Base
   # self.valid_child_concerns = []
 
   # Validation and required fields:
-  # self.required_fields = [:resource_type, :genre, :language, :held_by]
-  validates :title, presence: { message: 'Your work must have a title.' }
+  validates :title, presence: {
+    message: 'Your work must have a title.'
+  }
+  validates :resource_type, presence: {
+    message: 'A newspaper article requires a resource type.'
+  }
+  validates :genre, presence: {
+    message: 'A newspaper article requires a genre.'
+  }
+  validates :language, presence: {
+    message: 'A newspaper article requires a language.'
+  }
+  validates :held_by, presence: {
+    message: 'A newspaper article requires a holding location.'
+  }
 
   self.human_readable_type = 'Newspaper Issue'
 

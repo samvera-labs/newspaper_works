@@ -10,7 +10,7 @@ module Hyrax
                    :description, :license, :subject, :date_created, :subject,
                    :language, :based_near, :related_url, :source,
                    :resource_type, :publisher]
-    self.required_fields += [:label, :height, :width]
+    self.required_fields += [:label]
     self.required_fields -= [:title, :creator, :keyword, :rights_statement]
   end
 end
