@@ -8,6 +8,7 @@ cache:
   bundler: true
 
 before_install:
+  - sudo apt-get install -y poppler-utils
   - gem update --system
   - gem install bundler
   - google-chrome-stable --headless --disable-gpu --no-sandbox --remote-debugging-port=9222 http://localhost &
