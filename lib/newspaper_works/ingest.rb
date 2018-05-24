@@ -1,3 +1,4 @@
+require 'newspaper_works/ingest/pdf_images'
 require 'newspaper_works/ingest/base_ingest'
 require 'newspaper_works/ingest/newspaper_page_ingest'
 require 'newspaper_works/ingest/newspaper_issue_ingest'
