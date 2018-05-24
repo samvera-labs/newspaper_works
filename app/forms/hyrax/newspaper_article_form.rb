@@ -3,7 +3,7 @@
 module Hyrax
   class NewspaperArticleForm < ::NewspaperWorks::NewspaperCoreFormData
     self.model_class = ::NewspaperArticle
-    self.terms += [:subtitle, :author, :photographer, :volume, :edition, :issue,
+    self.terms += [:alternative_title, :author, :photographer, :volume, :edition, :issue,
                    :section, :subject, :geographic_coverage, :extent,
                    :pagination, :section]
   end

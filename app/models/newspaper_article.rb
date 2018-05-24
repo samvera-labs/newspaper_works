@@ -16,6 +16,7 @@ class NewspaperArticle < ActiveFedora::Base
   validates :title, presence: {
     message: 'A newspaper article requires a title.'
   }
+  # TODO: Implement validations
   # validates :resource_type, presence: {
   #   message: 'A newspaper article requires a resource type.'
   # }
@@ -36,15 +37,6 @@ class NewspaperArticle < ActiveFedora::Base
   # TODO: DRY on the indexing of fields, the index block is repetitive...
 
   # TODO: Reel #: https://github.com/samvera-labs/uri_selection_wg/issues/2
-
-  # - Author
-  property(
-    :subtitle,
-    predicate: ::RDF::Vocab::DC.alternative,
-    multiple: true
-  ) do |index|
-    index.as :stored_searchable
-  end
 
   # - Author
   property(
