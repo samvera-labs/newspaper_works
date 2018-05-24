@@ -15,18 +15,18 @@ class NewspaperTitle < ActiveFedora::Base
   validates :title, presence: {
     message: 'A newspaper title a title (publication name).'
   }
-  validates :resource_type, presence: {
-    message: 'A newspaper article requires a resource type.'
-  }
-  validates :genre, presence: {
-    message: 'A newspaper article requires a genre.'
-  }
-  validates :language, presence: {
-    message: 'A newspaper article requires a language.'
-  }
-  validates :held_by, presence: {
-    message: 'A newspaper article requires a holding location.'
-  }
+  # validates :resource_type, presence: {
+  #   message: 'A newspaper article requires a resource type.'
+  # }
+  # validates :genre, presence: {
+  #   message: 'A newspaper article requires a genre.'
+  # }
+  # validates :language, presence: {
+  #   message: 'A newspaper article requires a language.'
+  # }
+  # validates :held_by, presence: {
+  #   message: 'A newspaper article requires a holding location.'
+  # }
 
   # validations below causing save failures
   # TODO: get them working || enforce validation elsewhere || remove
