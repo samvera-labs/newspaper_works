@@ -1,6 +1,6 @@
 # Scanned Media: Shared Metadata
 module NewspaperWorks
-  # scanned media metdata for newspaper models (e.g. page, article images)
+  # scanned media metadata for newspaper models (e.g. page, article images)
   module ScannedMediaMetadata
     extend ActiveSupport::Concern
 
