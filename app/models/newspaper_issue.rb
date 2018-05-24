@@ -14,6 +14,7 @@ class NewspaperIssue < ActiveFedora::Base
   validates :title, presence: {
     message: 'Your work must have a title.'
   }
+  # TODO: Implement validations
   # validates :resource_type, presence: {
   #   message: 'A newspaper article requires a resource type.'
   # }
@@ -31,10 +32,28 @@ class NewspaperIssue < ActiveFedora::Base
 
   # TODO: Reel #: https://github.com/samvera-labs/uri_selection_wg/issues/2
 
+  #  - Volume
+  property(
+    :volume,
+    predicate: ::RDF::Vocab::BIBO.volume,
+    multiple: false
+  ) do |index|
+    index.as :stored_searchable
+  end
+
   #  - Edition
   property(
     :edition,
     predicate: ::RDF::Vocab::BIBO.edition,
+    multiple: false
+  ) do |index|
+    index.as :stored_searchable
+  end
+
+  #  - Issue
+  property(
+    :issue,
+    predicate: ::RDF::Vocab::BIBO.issue,
     multiple: false
   ) do |index|
     index.as :stored_searchable
