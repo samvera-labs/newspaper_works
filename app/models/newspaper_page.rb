@@ -13,6 +13,7 @@ class NewspaperPage < ActiveFedora::Base
 
   # Validation and required fields:
   validates :title, presence: { message: 'A newspaper page requires a label.' }
+  # TODO: Implement validations
   #validates :height, presence: { message: 'A newspaper page requires a height.' }
   #validates :width, presence: { message: 'A newspaper page requires a width.' }
 
@@ -21,22 +22,22 @@ class NewspaperPage < ActiveFedora::Base
   # == Type-specific properties ==
 
   # - Height
-  # property(
-  #   :height,
-  #   predicate: ::RDF::URI.new('http://dbpedia.org/ontology/height'),
-  #   multiple: false
-  # ) do |index|
-  #   index.as :stored_searchable
-  # end
-  #
-  # # - Width
-  # property(
-  #   :width,
-  #   predicate: ::RDF::URI.new('http://dbpedia.org/ontology/width'),
-  #   multiple: false
-  # ) do |index|
-  #   index.as :stored_searchable
-  # end
+  property(
+    :height,
+    predicate: ::RDF::URI.new('http://dbpedia.org/ontology/height'),
+    multiple: false
+  ) do |index|
+    index.as :stored_searchable
+  end
+
+  # - Width
+  property(
+    :width,
+    predicate: ::RDF::URI.new('http://dbpedia.org/ontology/width'),
+    multiple: false
+  ) do |index|
+    index.as :stored_searchable
+  end
 
   # TODO: Add Reel number: https://github.com/samvera-labs/uri_selection_wg/issues/2
 

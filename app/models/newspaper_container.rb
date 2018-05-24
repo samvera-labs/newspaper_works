@@ -15,6 +15,7 @@ class NewspaperContainer < ActiveFedora::Base
   validates :title, presence: {
     message: 'A newspaper container requires a title.'
   }
+  # TODO: Implement validations
   # validates :resource_type, presence: {
   #   message: 'A newspaper article requires a resource type.'
   # }

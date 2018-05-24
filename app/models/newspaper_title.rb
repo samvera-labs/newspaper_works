@@ -15,6 +15,7 @@ class NewspaperTitle < ActiveFedora::Base
   validates :title, presence: {
     message: 'A newspaper title a title (publication name).'
   }
+  # TODO: Implement validations
   # validates :resource_type, presence: {
   #   message: 'A newspaper article requires a resource type.'
   # }
