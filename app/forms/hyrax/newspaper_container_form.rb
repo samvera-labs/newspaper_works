@@ -5,7 +5,6 @@ module Hyrax
   class NewspaperContainerForm < ::NewspaperWorks::NewspaperCoreFormData
     self.model_class = ::NewspaperContainer
     self.terms += [:alternative_title, :extent]
-    self.terms -= [:based_near, :creator, :contributor, :date_created,
-                   :description, :related_url, :source, :subject]
+    self.terms -= [:creator, :contributor, :description, :subject]
   end
 end

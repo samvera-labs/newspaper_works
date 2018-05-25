@@ -5,7 +5,6 @@ module Hyrax
   class NewspaperIssueForm < ::NewspaperWorks::NewspaperCoreFormData
     self.model_class = ::NewspaperIssue
     self.terms += [:alternative_title, :volume, :edition, :issue, :extent]
-    self.terms -= [:based_near, :creator, :contributor, :date_created,
-                   :description, :related_url, :source, :subject]
+    self.terms -= [:creator, :contributor, :description, :subject]
   end
 end

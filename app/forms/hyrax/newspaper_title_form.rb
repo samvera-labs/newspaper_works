@@ -6,7 +6,6 @@ module Hyrax
     self.model_class = ::NewspaperTitle
     self.terms += [:alternative_title, :edition, :frequency, :preceded_by,
                    :succeeded_by]
-    self.terms -= [:based_near, :creator, :contributor, :date_created,
-                   :description, :related_url, :source, :subject]
+    self.terms -= [:creator, :contributor, :description, :source, :subject]
   end
 end
