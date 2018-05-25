@@ -82,7 +82,6 @@ module NewspaperWorks
         # with poppler 0.25+, pdfimages just gives us this:
         selectcolumn(COL_XPPI, &:to_i).max
       end
-
     end
   end
 end
