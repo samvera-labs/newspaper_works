@@ -15,6 +15,10 @@ RSpec.describe NewspaperWorks::Ingest::PdfImages do
     it "gets height" do
       expect(pdfimages.height).to be 9600
     end
+
+    it "gets ppi" do
+      expect(pdfimages.ppi).to be 400
+    end
   end
 
   describe "get image info from PDF" do

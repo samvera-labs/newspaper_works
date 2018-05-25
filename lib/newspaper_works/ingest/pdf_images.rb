@@ -1,8 +1,22 @@
 require 'open3'
+require 'mini_magick'
 
 module NewspaperWorks
   module Ingest
+    # PdfImages uses poppler 0.19+ pdfimages command to extract image
+    #   listing metadata from PDF files.
+    #   For dpi extraction, falls back to calculating using MiniMagick,
+    #   if neccessary.
     class PdfImages
+      # class constant column numbers
+      COL_WIDTH = 3
+      COL_HEIGHT = 4
+      COL_COLOR = 5
+      COL_CHANNELS = 6
+      COL_BITS = 7
+      # only poppler 0.25+ has this column in output:
+      COL_XPPI = 12
+
       def initialize(path)
         @path = path
         @cmd = format('pdfimages -list %<path>s', path: path)
@@ -33,27 +47,42 @@ module NewspaperWorks
         @entries
       end
 
-      def first
-        entries[0]
+      def selectcolumn(i, &block)
+        result = entries.map { |e| e[i] }
+        return result.map!(&block) if block_given?
+        result
       end
 
       def width
-        first[3].to_i
+        selectcolumn(COL_WIDTH, &:to_i).max
       end
 
       def height
-        first[4].to_i
+        selectcolumn(COL_HEIGHT, &:to_i).max
       end
 
       def color
         # desc is either 'gray' or 'color', but 1-bit gray is black/white
         #   so caller may want all of this information, and in case of
         #   mixed color spaces across images, this returns maximum
-        desc = entries.any? { |e| e[5] == 'color' } ? 'color' : 'gray'
-        channels = entries.map { |e| e[6].to_i }.max
-        bits = entries.map { |e| e[7].to_i }.max
+        desc = entries.any? { |e| e[COL_COLOR] == 'color' } ? 'color' : 'gray'
+        channels = entries.map { |e| e[COL_CHANNELS].to_i }.max
+        bits = entries.map { |e| e[COL_BITS].to_i }.max
         [desc, channels, bits]
       end
+
+      def ppi
+        if entries[0].size <= 12
+          # poppler < 0.25
+          pdf = MiniMagick::Image.open(@path)
+          width_points = pdf.width
+          width_px = width
+          return (72 * width_px / width_points).to_i
+        end
+        # with poppler 0.25+, pdfimages just gives us this:
+        selectcolumn(COL_XPPI, &:to_i).max
+      end
+
     end
   end
 end
