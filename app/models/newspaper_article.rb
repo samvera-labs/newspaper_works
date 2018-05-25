@@ -101,15 +101,6 @@ class NewspaperArticle < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  # - Page number
-  property(
-    :page_number,
-    predicate: ::RDF::Vocab::SCHEMA.pagination,
-    multiple: true
-  ) do |index|
-    index.as :stored_searchable
-  end
-
   # TODO: Add Reel number: https://github.com/samvera-labs/uri_selection_wg/issues/2
 
   # BasicMetadata must be included last
