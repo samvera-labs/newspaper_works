@@ -26,9 +26,9 @@ module NewspaperWorks
         index.as :stored_searchable
       end
 
-      #  - Issued date
+      #  - publication date
       property(
-        :issued,
+        :publication_date,
         predicate: ::RDF::Vocab::DC.issued,
         multiple: false
       ) do |index|
