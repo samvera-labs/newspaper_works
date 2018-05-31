@@ -62,10 +62,10 @@ module NewspaperWorks
       end
 
       def color
-        # desc is either 'gray' or 'color', but 1-bit gray is black/white
+        # desc is either 'gray', 'cmyk', 'rgb', but 1-bit gray is black/white
         #   so caller may want all of this information, and in case of
         #   mixed color spaces across images, this returns maximum
-        desc = entries.any? { |e| e[COL_COLOR] == 'color' } ? 'color' : 'gray'
+        desc = entries.any? { |e| e[COL_COLOR] != 'gray' } ? 'rgb' : 'gray'
         channels = entries.map { |e| e[COL_CHANNELS].to_i }.max
         bits = entries.map { |e| e[COL_BITS].to_i }.max
         [desc, channels, bits]
