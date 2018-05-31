@@ -1,0 +1,6 @@
+<% is_multi = f.object.class.multiple?(key) ? true : false %>
+<%=
+  f.input key, as: :date, html5: true,
+    input_html: { class: 'form-control', multiple: is_multi },
+    required: f.object.required?(key)
+%>

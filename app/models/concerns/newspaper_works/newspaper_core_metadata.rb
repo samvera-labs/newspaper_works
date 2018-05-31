@@ -32,7 +32,7 @@ module NewspaperWorks
         predicate: ::RDF::Vocab::DC.issued,
         multiple: false
       ) do |index|
-        index.as :stored_searchable
+        index.as :stored_searchable, :dateable
       end
 
       #  - Place of Publication
