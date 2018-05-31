@@ -1,4 +1,4 @@
-require 'mini_magick'
+require 'open3'
 require 'securerandom'
 require 'tmpdir'
 
@@ -49,13 +49,13 @@ module NewspaperWorks
 
       # ghostscript convert all pages to TIFF
       def gsconvert
-        output_base = File.join(tmpdir, '#{@baseid}-page%%d.tiff')
+        output_base = File.join(tmpdir, "#{@baseid}-page%d.tiff")
         ppi = pdfinfo.ppi
         cmd = "gs -dNOPAUSE -dBATCH -sDEVICE=#{gsdevice} " \
-              "-sOutputFile=#{output_base} -r #{ppi} -f #{@pdfpath}"
+              "-sOutputFile=#{output_base} -r#{ppi} -f #{@pdfpath}"
         # rubocop:disable Lint/UnusedBlockArgument
         Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
-          output = stdout.read.split('\n')
+          output = stdout.read.split("\n")
           @size = output.select { |e| e.start_with?('Page ') }.length
         end
         # rubocop:enable Lint/UnusedBlockArgument
@@ -69,9 +69,9 @@ module NewspaperWorks
         @entries
       end
 
-      def each(&block)
+      def each
         entries.each do |e|
-          block.call(e)
+          yield(e)
         end
       end
     end
