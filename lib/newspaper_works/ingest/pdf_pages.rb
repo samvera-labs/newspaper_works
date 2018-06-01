@@ -66,7 +66,7 @@ module NewspaperWorks
         Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
           output = stdout.read.split("\n")
           pages_e = output.select { |e| e.start_with?('Pages:') }[0]
-          @pagecount = pages_e.split()[-1].to_i
+          @pagecount = pages_e.split[-1].to_i
         end
         # rubocop:enable Lint/UnusedBlockArgument
         @pagecount
