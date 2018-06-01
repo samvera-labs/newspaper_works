@@ -14,6 +14,8 @@ module NewspaperWorks
         @entries = nil
         @tmpdir = nil
         @size = nil
+        @pagecount = nil
+        @pdftext = nil
       end
 
       # return
@@ -47,11 +49,45 @@ module NewspaperWorks
         device
       end
 
+      def gstext
+        cmd = "gs -dNOPAUSE -dBATCH -sDEVICE=txtwrite " \
+              "-sOutputFile=- -f #{@pdfpath}"
+        # rubocop:disable Lint/UnusedBlockArgument
+        Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
+          @pdftext = stdout.read
+        end
+        # rubocop:enable Lint/UnusedBlockArgument
+        @pdftext
+      end
+
+      def pagecount
+        cmd = "pdfinfo #{@pdfpath}"
+        # rubocop:disable Lint/UnusedBlockArgument
+        Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
+          output = stdout.read.split("\n")
+          pages_e = output.select { |e| e.start_with?('Pages:') }[0]
+          @pagecount = pages_e.split()[-1].to_i
+        end
+        # rubocop:enable Lint/UnusedBlockArgument
+        @pagecount
+      end
+
+      def ppi
+        imageppi = pdfinfo.ppi
+        if imageppi < 300
+          # check text to see if this looks like it is not scanned media
+          #   and defer to minimum 400ppi if necessary.
+          text = gstext
+          return 400 if (text.length / pagecount.to_f) > 160
+        end
+        imageppi
+      end
+
       # ghostscript convert all pages to TIFF
       def gsconvert
         output_base = File.join(tmpdir, "#{@baseid}-page%d.tiff")
-        ppi = pdfinfo.ppi
         cmd = "gs -dNOPAUSE -dBATCH -sDEVICE=#{gsdevice} " \
+              "-dTextAlphaBits=4 " \
               "-sOutputFile=#{output_base} -r#{ppi} -f #{@pdfpath}"
         # rubocop:disable Lint/UnusedBlockArgument
         Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
