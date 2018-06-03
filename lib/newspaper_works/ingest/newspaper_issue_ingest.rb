@@ -12,7 +12,7 @@ module NewspaperWorks
       end
 
       def new_child_page_with_file(tiffpath, idx)
-        page = NewspaperWorks::NewspaperPage.new
+        page = NewspaperPage.new
         page.title = [format("Page %<pagenum>i", pagenum: idx + 1)]
         page.save!
         @work.members.push(page)
