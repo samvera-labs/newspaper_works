@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'mini_magick'
 
 RSpec.describe NewspaperWorks::Ingest::PdfPages do
   let(:sample1) do
@@ -67,35 +68,19 @@ RSpec.describe NewspaperWorks::Ingest::PdfPages do
       end
     end
 
-    # rubocop:disable RSpec/ExampleLength
     it "one bit sample splits into Group 4 TIFF per page" do
       pages = onebitpages.entries
       pages.each do |path|
-        # we do not use MiniMagick to generate TIFF, so it is good
-        #   independent verification of output
-        image = MiniMagick::Image.open(path)
-        expect(image.mime_type).to eq 'image/tiff'
-        expect(image.colorspace).to start_with 'DirectClass Gray'
-        begin
-          expect(image.data['channelDepth']['gray']).to eq "1"
-        rescue
-          # ImageMagick on Ubuntu 14.04 produces faulty JSON, so we
-          #   work around the ugly way.
-          json = MiniMagick::Tool::Convert.new do |convert|
-            convert << path
-            convert << "json:"
-          end
-          channel_depth = json.gsub(/\s+/, '') \
-                              .split('channelDepth')[1] \
-                              .split('}')[0] \
-                              .split(':')[2] \
-                              .delete('"') \
-                              .to_i
-          expect(channel_depth).to eq 1
+        # rubocop:disable Lint/UnusedBlockArgument
+        Open3.popen3("identify #{path}") do |stdin, stdout, stderr, wait_thr|
+          output = stdout.read
+          expect(output).to include '1-bit'
+          expect(output).to include 'Gray'
+          expect(output).to include 'TIFF'
         end
+        # rubocop:enable Lint/UnusedBlockArgument
       end
     end
-    # rubocop:enable RSpec/ExampleLength
 
     it "one bit sample is 7200x9600 scan, verify" do
       pages = onebitpages.entries
