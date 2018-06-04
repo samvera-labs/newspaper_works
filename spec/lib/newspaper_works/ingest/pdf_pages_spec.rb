@@ -75,7 +75,7 @@ RSpec.describe NewspaperWorks::Ingest::PdfPages do
         Open3.popen3("identify #{path}") do |stdin, stdout, stderr, wait_thr|
           output = stdout.read
           expect(output).to include '1-bit'
-          expect(output).to include 'Gray'
+          expect(output).to include 'Bilevel'
           expect(output).to include 'TIFF'
         end
         # rubocop:enable Lint/UnusedBlockArgument
