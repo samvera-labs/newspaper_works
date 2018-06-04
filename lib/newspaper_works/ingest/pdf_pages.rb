@@ -50,7 +50,7 @@ module NewspaperWorks
       end
 
       def gstext
-        cmd = "gs -dNOPAUSE -dBATCH -sDEVICE=txtwrite " \
+        cmd = "gs -q -dNOPAUSE -dBATCH -sDEVICE=txtwrite " \
               "-sOutputFile=- -f #{@pdfpath}"
         # rubocop:disable Lint/UnusedBlockArgument
         Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
