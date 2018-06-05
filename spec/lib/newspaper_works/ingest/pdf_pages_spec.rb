@@ -10,8 +10,13 @@ RSpec.describe NewspaperWorks::Ingest::PdfPages do
     base = Pathname.new(NewspaperWorks::GEM_PATH).join('spec/fixtures/files')
     base.join('sample-color-newsletter.pdf').to_s
   end
+  let(:sample3) do
+    base = Pathname.new(NewspaperWorks::GEM_PATH).join('spec/fixtures/files')
+    base.join('ndnp-sample1.pdf').to_s
+  end
   let(:onebitpages) { described_class.new(sample1) }
   let(:colorpages) { described_class.new(sample2) }
+  let(:graypages) { described_class.new(sample3) }
 
   describe "implementation details" do
     it "pdfinfo gets PdfImages, memoized" do
@@ -90,5 +95,22 @@ RSpec.describe NewspaperWorks::Ingest::PdfPages do
         expect(image.height).to eq 9600
       end
     end
+
+    # rubocop:disable RSpec/ExampleLength
+    it "processes Grayscale NDNP PDF correctly" do
+      pages = graypages.entries
+      expect(pages.length).to eq 1
+      pages.each do |path|
+        # rubocop:disable Lint/UnusedBlockArgument
+        Open3.popen3("identify #{path}") do |stdin, stdout, stderr, wait_thr|
+          output = stdout.read
+          expect(output).to include 'Grayscale'
+          expect(output).to include '8-bit'
+          expect(output).to include 'TIFF'
+        end
+        # rubocop:enable Lint/UnusedBlockArgument
+      end
+    end
+    # rubocop:enable RSpec/ExampleLength
   end
 end
