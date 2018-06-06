@@ -15,6 +15,9 @@ RSpec.configure do |config|
   require 'factories/newspaper_page'
   require 'factories/newspaper_page_ingest'
 
+  # require shared examples
+  require 'lib/newspaper_works/ingest/ingest_shared'
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
