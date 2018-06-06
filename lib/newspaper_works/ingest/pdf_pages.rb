@@ -72,15 +72,20 @@ module NewspaperWorks
         @pagecount
       end
 
+      def looks_scanned
+        max_image_px = pdfinfo.width * pdfinfo.height
+        single_image_per_page = pdfinfo.entries.length == pagecount
+        # single 10mp+ image per page?
+        single_image_per_page && max_image_px > 1024 * 1024 * 10
+      end
+
       def ppi
-        imageppi = pdfinfo.ppi
-        if imageppi < 300
-          # check text to see if this looks like it is not scanned media
-          #   and defer to minimum 400ppi if necessary.
-          text = gstext
-          return 400 if (text.length / pagecount.to_f) > 160
+        unless looks_scanned
+          # 400 dpi for something that does not look like scanned media:
+          return 400
         end
-        imageppi
+        # For scanned media, defer to detected image PPI:
+        pdfinfo.ppi
       end
 
       # ghostscript convert all pages to TIFF
