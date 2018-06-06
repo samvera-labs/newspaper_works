@@ -12,6 +12,8 @@ RSpec.configure do |config|
   require 'factory_bot'
   config.include FactoryBot::Syntax::Methods
   # require to load specific factories:
+  require 'factories/newspaper_issue'
+  require 'factories/newspaper_issue_ingest'
   require 'factories/newspaper_page'
   require 'factories/newspaper_page_ingest'
 
