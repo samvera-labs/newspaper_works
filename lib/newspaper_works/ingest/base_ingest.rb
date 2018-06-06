@@ -48,7 +48,7 @@ module NewspaperWorks
       #   may overwride or wrap this.
       def import
         upload = Hyrax::UploadedFile.new(file: @io)
-        Hyrax::AttachFilesToWorkJob.perform_now(@work, [upload])
+        AttachFilesToWorkJob.perform_now(@work, [upload])
       end
 
       def ingest(source, filename: nil)
