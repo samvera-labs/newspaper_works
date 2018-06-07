@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-# test BaseIngest against work
-RSpec.describe NewspaperWorks::Ingest::BaseIngest do
+# test NewspaperPageIngest against work
+RSpec.describe NewspaperWorks::Ingest::NewspaperPageIngest do
   # define the path to the file we will use for multiple examples
   let(:path) do
     fixtures = File.join(NewspaperWorks::GEM_PATH, 'spec/fixtures/files')
