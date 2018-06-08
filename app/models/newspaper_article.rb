@@ -19,7 +19,7 @@ class NewspaperArticle < ActiveFedora::Base
 
   validates :publication_date, format: { with: DateRegex,
     message: "Incorrect Date. Date input should be formatted yyyy-mm-dd."},
-    allow_nil: true
+    allow_nil: true, allow_blank: true
 
   # TODO: Implement validations
   # validates :resource_type, presence: {
