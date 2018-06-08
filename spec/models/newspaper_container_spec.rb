@@ -13,6 +13,8 @@ RSpec.describe NewspaperContainer do
   describe "Metadata properties" do
     it "has expected properties" do
       expect(fixture).to respond_to(:extent)
+      expect(fixture).to respond_to(:publication_date_start)
+      expect(fixture).to respond_to(:publication_date_end)
     end
   end
 
@@ -38,4 +40,33 @@ RSpec.describe NewspaperContainer do
       end
     end
   end
+
+  describe 'publication_date_start' do
+    it "is not valid with bad date format" do
+      nc = NewspaperContainer.new(title: ["Breaking News!"],
+                                  publication_date_start: "06/21/1978")
+      expect(nc).to_not be_valid
+    end
+
+    it "is valid with proper date format" do
+      nc = NewspaperContainer.new(title: ["Breaking News!"],
+                                  publication_date_start: "1978-06-21")
+      expect(nc).to be_valid
+    end
+  end
+
+  describe 'publication_date_end' do
+    it "is not valid with bad date format" do
+      nc = NewspaperContainer.new(title: ["Breaking News!"],
+                                  publication_date_end: "06/21/1978")
+      expect(nc).to_not be_valid
+    end
+
+    it "is valid with proper date format" do
+      nc = NewspaperContainer.new(title: ["Breaking News!"],
+                                  publication_date_end: "1978-06-21")
+      expect(nc).to be_valid
+    end
+  end
+
 end

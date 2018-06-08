@@ -15,6 +15,15 @@ class NewspaperTitle < ActiveFedora::Base
   validates :title, presence: {
     message: 'A newspaper title a title (publication name).'
   }
+
+  validates :publication_date_start, format: { with: DateRegex,
+    message: "Incorrect Date. Date input should be formatted yyyy-mm-dd."},
+    allow_nil: true
+
+  validates :publication_date_end, format: { with: DateRegex,
+    message: "Incorrect Date. Date input should be formatted yyyy-mm-dd."},
+    allow_nil: true
+
   # TODO: Implement validations
   # validates :resource_type, presence: {
   #   message: 'A newspaper article requires a resource type.'
@@ -79,6 +88,25 @@ class NewspaperTitle < ActiveFedora::Base
   ) do |index|
     index.as :stored_searchable
   end
+
+  #  - publication date start
+  property(
+    :publication_date_start,
+    predicate: ::RDF::Vocab::SCHEMA.startDate,
+    multiple: false
+  ) do |index|
+    index.as :dateable
+  end
+
+  #  - publication date end
+  property(
+    :publication_date_end,
+    predicate: ::RDF::Vocab::SCHEMA.endDate,
+    multiple: false
+  ) do |index|
+    index.as :dateable
+  end
+
 
   # BasicMetadata must be included last
   include ::Hyrax::BasicMetadata

@@ -23,9 +23,9 @@ RSpec.describe Hyrax::NewspaperIssueForm do
 
     it do
       is_expected.to eq ([:license, :rights_statement, :publisher, :identifier,
-                          :publication_date, :place_of_publication, :issn,
-                          :lccn, :oclcnum, :alternative_title, :volume,
-                          :edition, :issue, :extent])
+                          :place_of_publication, :issn, :lccn, :oclcnum,
+                          :alternative_title, :volume, :edition, :issue,
+                          :extent, :publication_date])
     end
   end
 end

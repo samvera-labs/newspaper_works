@@ -14,6 +14,7 @@ RSpec.describe NewspaperIssue do
     it 'has expected properties' do
       expect(fixture).to respond_to(:edition)
       expect(fixture).to respond_to(:extent)
+      expect(fixture).to respond_to(:publication_date)
     end
   end
 
@@ -48,4 +49,19 @@ RSpec.describe NewspaperIssue do
       end
     end
   end
+
+  describe 'publication_date' do
+    it "is not valid with bad date format" do
+      ni = NewspaperIssue.new(title: ["Breaking News!"],
+                              publication_date: "06/21/1978")
+      expect(ni).to_not be_valid
+    end
+
+    it "is valid with proper date format" do
+      ni = NewspaperIssue.new(title: ["Breaking News!"],
+                              publication_date: "1978-06-21")
+      expect(ni).to be_valid
+    end
+  end
+
 end

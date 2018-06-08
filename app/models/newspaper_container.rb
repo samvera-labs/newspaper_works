@@ -15,6 +15,15 @@ class NewspaperContainer < ActiveFedora::Base
   validates :title, presence: {
     message: 'A newspaper container requires a title.'
   }
+
+  validates :publication_date_start, format: { with: DateRegex,
+    message: "Incorrect Date. Date input should be formatted yyyy-mm-dd."},
+    allow_nil: true, allow_blank: true
+
+  validates :publication_date_end, format: { with: DateRegex,
+    message: "Incorrect Date. Date input should be formatted yyyy-mm-dd."},
+    allow_nil: true
+
   # TODO: Implement validations
   # validates :resource_type, presence: {
   #   message: 'A newspaper article requires a resource type.'
@@ -44,6 +53,24 @@ class NewspaperContainer < ActiveFedora::Base
     multiple: false
   ) do |index|
     index.as :stored_searchable
+  end
+
+  #  - publication date start
+  property(
+    :publication_date_start,
+    predicate: ::RDF::Vocab::SCHEMA.startDate,
+    multiple: false
+  ) do |index|
+    index.as :dateable
+  end
+
+  #  - publication date end
+  property(
+    :publication_date_end,
+    predicate: ::RDF::Vocab::SCHEMA.endDate,
+    multiple: false
+  ) do |index|
+    index.as :dateable
   end
 
   # TODO: Reel #: https://github.com/samvera-labs/uri_selection_wg/issues/2

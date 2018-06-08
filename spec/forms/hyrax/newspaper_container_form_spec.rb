@@ -23,8 +23,9 @@ RSpec.describe Hyrax::NewspaperContainerForm do
 
     it do
       is_expected.to eq ([:license, :rights_statement, :publisher, :identifier,
-                          :publication_date, :place_of_publication, :issn,
-                          :lccn, :oclcnum, :alternative_title, :extent])
+                          :place_of_publication, :issn, :lccn, :oclcnum,
+                          :alternative_title, :extent,
+                          :publication_date_start, :publication_date_end])
     end
   end
 end

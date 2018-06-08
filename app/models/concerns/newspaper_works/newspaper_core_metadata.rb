@@ -4,6 +4,8 @@ module NewspaperWorks
   module NewspaperCoreMetadata
     extend ActiveSupport::Concern
 
+    DateRegex = /\d{4}-\d{2}-\d{2}/
+
     included do
       # common metadata for Newspaper title, issue, article; fields
       # that are not in ::Hyrax::BasicMetadata are enumerated here.
@@ -24,15 +26,6 @@ module NewspaperWorks
         multiple: true
       ) do |index|
         index.as :stored_searchable
-      end
-
-      #  - publication date
-      property(
-        :publication_date,
-        predicate: ::RDF::Vocab::DC.issued,
-        multiple: false
-      ) do |index|
-        index.as :dateable
       end
 
       #  - Place of Publication

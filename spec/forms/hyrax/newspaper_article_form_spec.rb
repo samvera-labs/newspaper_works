@@ -24,9 +24,9 @@ RSpec.describe Hyrax::NewspaperArticleForm do
     it do
       is_expected.to eq ([:creator, :contributor, :description, :license,
                           :rights_statement, :publisher, :subject, :identifier,
-                          :publication_date, :place_of_publication, :issn,
-                          :lccn, :oclcnum, :alternative_title, :author,
-                          :photographer, :volume, :edition, :issue,
+                          :place_of_publication, :issn, :lccn, :oclcnum,
+                          :alternative_title, :author, :photographer,
+                          :publication_date, :volume, :edition, :issue,
                           :geographic_coverage, :extent, :page_number,
                           :section])
     end
