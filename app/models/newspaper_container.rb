@@ -18,7 +18,7 @@ class NewspaperContainer < ActiveFedora::Base
 
   validates :publication_date_start, format: { with: DateRegex,
     message: "Incorrect Date. Date input should be formatted yyyy-mm-dd."},
-    allow_nil: true, allow_blank: true
+    allow_nil: true
 
   validates :publication_date_end, format: { with: DateRegex,
     message: "Incorrect Date. Date input should be formatted yyyy-mm-dd."},
