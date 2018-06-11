@@ -75,12 +75,14 @@ RSpec.describe NewspaperTitle do
       nt = NewspaperTitle.new(title: ["Breaking News!"],
                               publication_date_start: "1978-06-01",
                               publication_date_end: "1977-06-01")
+      expect(nt).to_not be_valid
     end
 
     it "is valid with start date before end date" do
       nt = NewspaperTitle.new(title: ["Breaking News!"],
                               publication_date_start: "1978-06-01",
                               publication_date_end: "1979-06-01")
+      expect(nt).to be_valid
     end
   end
 

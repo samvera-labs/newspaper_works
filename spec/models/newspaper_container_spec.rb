@@ -70,12 +70,14 @@ RSpec.describe NewspaperContainer do
       nc = NewspaperContainer.new(title: ["Breaking News!"],
                                   publication_date_start: "1978-06-01",
                                   publication_date_end: "1977-06-01")
+      expect(nc).to_not be_valid
     end
 
     it "is valid with start date before end date" do
       nc = NewspaperContainer.new(title: ["Breaking News!"],
                               publication_date_start: "1978-06-01",
                               publication_date_end: "1979-06-01")
+      expect(nc).to be_valid
     end
   end
 

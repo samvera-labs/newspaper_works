@@ -57,12 +57,12 @@ class NewspaperContainer < ActiveFedora::Base
     if publication_date_start.present? && publication_date_end.present?
       pub_start = publication_date_start.split("-")
       pub_end = publication_date_end.split("-")
-      if (pub_end[0] > pub_start[0])
-        errors.add(:publication_date_start, :publication_date_end, error_msg)
-      elsif (pub_start[1] && pub_end[1] && pub_end[1] > pub_start[1])
-        errors.add(:publication_date_start, :publication_date_end, error_msg)
-      elsif (pub_start[2] && pub_end[2] && pub_end[2] > pub_start[2])
-        errors.add(:publication_date_start, :publication_date_end, error_msg)
+      if (pub_end[0] < pub_start[0])
+        errors.add(:publication_date_start, error_msg)
+      elsif (pub_start[1] && pub_end[1] && pub_end[1] < pub_start[1])
+        errors.add(:publication_date_start, error_msg)
+      elsif (pub_start[2] && pub_end[2] && pub_end[2] < pub_start[2])
+        errors.add(:publication_date_start, error_msg)
       end
     end
   end
