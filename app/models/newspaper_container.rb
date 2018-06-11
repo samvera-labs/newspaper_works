@@ -16,13 +16,39 @@ class NewspaperContainer < ActiveFedora::Base
     message: 'A newspaper container requires a title.'
   }
 
-  validates :publication_date_start, format: { with: DateRegex,
-    message: "Incorrect Date. Date input should be formatted yyyy-mm-dd."},
-    allow_nil: true, allow_blank: true
+  validate :publication_date_start_valid, :publication_date_end_valid
 
-  validates :publication_date_end, format: { with: DateRegex,
-    message: "Incorrect Date. Date input should be formatted yyyy-mm-dd."},
-    allow_nil: true, allow_blank: true
+  def publication_date_start_valid
+    error_msg = "Incorrect Date. Date input should be formatted yyyy[-mm][-dd] and be a valid date."
+    if publication_date_start.present?
+      if !DateRangeRegex.match(publication_date_start)
+        errors.add(:publication_date_start, error_msg)
+      else
+        date_split = publication_date_start.split("-").map(&:to_i)
+        if date_split.length == 3
+          if !Date.valid_date?(date_split[0], date_split[1], date_split[2])
+            errors.add(:publication_date_start, error_msg)
+          end
+        end
+      end
+    end
+  end
+
+  def publication_date_end_valid
+    error_msg = "Incorrect Date. Date input should be formatted yyyy[-mm][-dd] and be a valid date."
+    if publication_date_end.present?
+      if !DateRangeRegex.match(publication_date_end)
+        errors.add(:publication_date_end, error_msg)
+      else
+        date_split = publication_date_end.split("-").map(&:to_i)
+        if date_split.length == 3
+          if !Date.valid_date?(date_split[0], date_split[1], date_split[2])
+            errors.add(:publication_date_end, error_msg)
+          end
+        end
+      end
+    end
+  end
 
   # TODO: Implement validations
   # validates :resource_type, presence: {

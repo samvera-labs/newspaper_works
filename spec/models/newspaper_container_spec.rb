@@ -53,6 +53,18 @@ RSpec.describe NewspaperContainer do
                                   publication_date_start: "1978-06-21")
       expect(nc).to be_valid
     end
+
+    it "is valid with a year" do
+      nc = NewspaperContainer.new(title: ["Breaking News!"],
+                                  publication_date_start: "1978")
+      expect(nc).to be_valid
+    end
+
+    it "is valid with a year and month" do
+      nc = NewspaperContainer.new(title: ["Breaking News!"],
+                                  publication_date_start: "1978-06")
+      expect(nc).to be_valid
+    end
   end
 
   describe 'publication_date_end' do
@@ -65,6 +77,18 @@ RSpec.describe NewspaperContainer do
     it "is valid with proper date format" do
       nc = NewspaperContainer.new(title: ["Breaking News!"],
                                   publication_date_end: "1978-06-21")
+      expect(nc).to be_valid
+    end
+
+    it "is valid with a year" do
+      nc = NewspaperContainer.new(title: ["Breaking News!"],
+                                  publication_date_end: "1978")
+      expect(nc).to be_valid
+    end
+
+    it "is valid with a year and month" do
+      nc = NewspaperContainer.new(title: ["Breaking News!"],
+                                  publication_date_end: "1978-06")
       expect(nc).to be_valid
     end
   end

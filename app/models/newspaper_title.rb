@@ -16,13 +16,39 @@ class NewspaperTitle < ActiveFedora::Base
     message: 'A newspaper title a title (publication name).'
   }
 
-  validates :publication_date_start, format: { with: DateRegex,
-    message: "Incorrect Date. Date input should be formatted yyyy-mm-dd."},
-    allow_nil: true, allow_blank: true
+  validate :publication_date_start_valid, :publication_date_end_valid
 
-  validates :publication_date_end, format: { with: DateRegex,
-    message: "Incorrect Date. Date input should be formatted yyyy-mm-dd."},
-    allow_nil: true, allow_blank: true
+  def publication_date_start_valid
+    error_msg = "Incorrect Date. Date input should be formatted yyyy[-mm][-dd] and be a valid date."
+    if publication_date_start.present?
+      if !DateRangeRegex.match(publication_date_start)
+        errors.add(:publication_date_start, error_msg)
+      else
+        date_split = publication_date_start.split("-").map(&:to_i)
+        if date_split.length == 3
+          if !Date.valid_date?(date_split[0], date_split[1], date_split[2])
+            errors.add(:publication_date_start, error_msg)
+          end
+        end
+      end
+    end
+  end
+
+  def publication_date_end_valid
+    error_msg = "Incorrect Date. Date input should be formatted yyyy[-mm][-dd] and be a valid date."
+    if publication_date_end.present?
+      if !DateRangeRegex.match(publication_date_end)
+        errors.add(:publication_date_end, error_msg)
+      else
+        date_split = publication_date_end.split("-").map(&:to_i)
+        if date_split.length == 3
+          if !Date.valid_date?(date_split[0], date_split[1], date_split[2])
+            errors.add(:publication_date_end, error_msg)
+          end
+        end
+      end
+    end
+  end
 
   # TODO: Implement validations
   # validates :resource_type, presence: {
@@ -71,7 +97,7 @@ class NewspaperTitle < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  # Preceded by
+  # - Preceded by
   property(
     :preceded_by,
     predicate: ::RDF::URI.new('http://rdaregistry.info/Elements/u/P60261'),
@@ -80,7 +106,7 @@ class NewspaperTitle < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  # Succeeded by
+  # - Succeeded by
   property(
     :succeeded_by,
     predicate: ::RDF::URI.new('http://rdaregistry.info/Elements/u/P60278'),
@@ -89,7 +115,7 @@ class NewspaperTitle < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  #  - publication date start
+  # - Publication date start
   property(
     :publication_date_start,
     predicate: ::RDF::Vocab::SCHEMA.startDate,
@@ -98,7 +124,7 @@ class NewspaperTitle < ActiveFedora::Base
     index.as :dateable
   end
 
-  #  - publication date end
+  # - Publication date end
   property(
     :publication_date_end,
     predicate: ::RDF::Vocab::SCHEMA.endDate,
@@ -106,7 +132,6 @@ class NewspaperTitle < ActiveFedora::Base
   ) do |index|
     index.as :dateable
   end
-
 
   # BasicMetadata must be included last
   include ::Hyrax::BasicMetadata
@@ -119,4 +144,5 @@ class NewspaperTitle < ActiveFedora::Base
   def containers
     self.members.select { |v| v.instance_of?(NewspaperContainer) }
   end
+
 end

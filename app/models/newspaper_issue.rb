@@ -15,9 +15,21 @@ class NewspaperIssue < ActiveFedora::Base
     message: 'Your work must have a title.'
   }
 
-  validates :publication_date, format: { with: DateRegex,
-    message: "Incorrect Date. Date input should be formatted yyyy-mm-dd."},
-    allow_nil: true, allow_blank: true
+  validate :publication_date_valid
+
+  def publication_date_valid
+    error_msg = "Incorrect Date. Date input should be formatted yyyy-mm-dd and be a valid date."
+    if publication_date.present?
+      if !DateRegex.match(publication_date)
+        errors.add(:publication_date, error_msg)
+      else
+        date_split = publication_date.split("-").map(&:to_i)
+        if !Date.valid_date?(date_split[0], date_split[1], date_split[2])
+          errors.add(:publication_date, error_msg)
+        end
+      end
+    end
+  end
 
   # TODO: Implement validations
   # validates :resource_type, presence: {

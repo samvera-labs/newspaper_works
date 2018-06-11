@@ -58,6 +58,18 @@ RSpec.describe NewspaperTitle do
                               publication_date_start: "1978-06-21")
       expect(nt).to be_valid
     end
+
+    it "is valid with a year" do
+      nt = NewspaperTitle.new(title: ["Breaking News!"],
+                              publication_date_start: "1978")
+      expect(nt).to be_valid
+    end
+
+    it "is valid with a year and month" do
+      nt = NewspaperTitle.new(title: ["Breaking News!"],
+                              publication_date_start: "1978-06")
+      expect(nt).to be_valid
+    end
   end
 
   describe 'publication_date_end' do
@@ -70,6 +82,18 @@ RSpec.describe NewspaperTitle do
     it "is valid with proper date format" do
       nt = NewspaperTitle.new(title: ["Breaking News!"],
                               publication_date_end: "1978-06-21")
+      expect(nt).to be_valid
+    end
+
+    it "is valid with a year" do
+      nt = NewspaperTitle.new(title: ["Breaking News!"],
+                              publication_date_end: "1978")
+      expect(nt).to be_valid
+    end
+
+    it "is valid with proper a year and month" do
+      nt = NewspaperTitle.new(title: ["Breaking News!"],
+                              publication_date_end: "1978-06")
       expect(nt).to be_valid
     end
   end
