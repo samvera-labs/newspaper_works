@@ -16,7 +16,9 @@ class NewspaperContainer < ActiveFedora::Base
     message: 'A newspaper container requires a title.'
   }
 
-  validate :publication_date_start_valid, :publication_date_end_valid
+  validate :publication_date_start_valid,
+           :publication_date_end_valid,
+           :publication_date_start_before_publication_date_end
 
   def publication_date_start_valid
     error_msg = "Incorrect Date. Date input should be formatted yyyy[-mm][-dd] and be a valid date."
@@ -46,6 +48,21 @@ class NewspaperContainer < ActiveFedora::Base
             errors.add(:publication_date_end, error_msg)
           end
         end
+      end
+    end
+  end
+
+  def publication_date_start_before_publication_date_end
+    error_msg = "Publication start date must be earlier or the same as end date."
+    if publication_date_start.present? && publication_date_end.present?
+      pub_start = publication_date_start.split("-")
+      pub_end = publication_date_end.split("-")
+      if (pub_end[0] > pub_start[0])
+        errors.add(:publication_date_start, :publication_date_end, error_msg)
+      elsif (pub_start[1] && pub_end[1] && pub_end[1] > pub_start[1])
+        errors.add(:publication_date_start, :publication_date_end, error_msg)
+      elsif (pub_start[2] && pub_end[2] && pub_end[2] > pub_start[2])
+        errors.add(:publication_date_start, :publication_date_end, error_msg)
       end
     end
   end
