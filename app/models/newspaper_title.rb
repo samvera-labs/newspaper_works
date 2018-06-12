@@ -13,7 +13,7 @@ class NewspaperTitle < ActiveFedora::Base
 
   # Validation and required fields:
   validates :title, presence: {
-    message: 'A newspaper title a title (publication name).'
+    message: 'A newspaper title requires a title (publication name).'
   }
 
   validate :publication_date_start_valid,
@@ -60,9 +60,9 @@ class NewspaperTitle < ActiveFedora::Base
       if (pub_end[0] < pub_start[0])
         errors.add(:publication_date_start, error_msg)
       elsif (pub_start[1] && pub_end[1] && pub_end[1] < pub_start[1])
-        errors.add(:publication_date_start, error_msg)
+        errors.add(:publication_date_start, :publication_date_end, error_msg)
       elsif (pub_start[2] && pub_end[2] && pub_end[2] < pub_start[2])
-        errors.add(:publication_date_start, error_msg)
+        errors.add(:publication_date_start, :publication_date_end, error_msg)
       end
     end
   end
