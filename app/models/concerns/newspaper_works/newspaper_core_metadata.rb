@@ -4,8 +4,8 @@ module NewspaperWorks
   module NewspaperCoreMetadata
     extend ActiveSupport::Concern
 
-    DateRegex = /\A\d{4}-((0[1-9])|(1[0-2]))-(([0-2][1-9])|3[0-1])\z/
-    DateRangeRegex = /\A\d{4}(-((0[1-9])|(1[0-2])))?(-(([0-2][1-9])|3[0-1]))?\z/
+    DATE_REGEX = /\A\d{4}-((0[1-9])|(1[0-2]))-(([0-2][1-9])|3[0-1])\z/
+    DATE_RANGE_REGEX = /\A\d{4}(-((0[1-9])|(1[0-2])))?(-(([0-2][1-9])|3[0-1]))?\z/
 
     included do
       # common metadata for Newspaper title, issue, article; fields

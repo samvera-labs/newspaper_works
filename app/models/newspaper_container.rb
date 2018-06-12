@@ -20,50 +20,24 @@ class NewspaperContainer < ActiveFedora::Base
            :publication_date_end_valid,
            :publication_date_start_before_publication_date_end
 
+  @date_incorrect_error_msg = "Incorrect Date. Date input should be formatted yyyy[-mm][-dd] and be a valid date."
   def publication_date_start_valid
-    error_msg = "Incorrect Date. Date input should be formatted yyyy[-mm][-dd] and be a valid date."
-    if publication_date_start.present?
-      if !DateRangeRegex.match(publication_date_start)
-        errors.add(:publication_date_start, error_msg)
-      else
-        date_split = publication_date_start.split("-").map(&:to_i)
-        if date_split.length == 3
-          if !Date.valid_date?(date_split[0], date_split[1], date_split[2])
-            errors.add(:publication_date_start, error_msg)
-          end
-        end
-      end
-    end
+    return if !publication_date_start.present? || publication_date_valid?(publication_date_start)
+    errors.add(:publication_date_start, @date_incorrect_error_msg)
   end
 
   def publication_date_end_valid
-    error_msg = "Incorrect Date. Date input should be formatted yyyy[-mm][-dd] and be a valid date."
-    if publication_date_end.present?
-      if !DateRangeRegex.match(publication_date_end)
-        errors.add(:publication_date_end, error_msg)
-      else
-        date_split = publication_date_end.split("-").map(&:to_i)
-        if date_split.length == 3
-          if !Date.valid_date?(date_split[0], date_split[1], date_split[2])
-            errors.add(:publication_date_end, error_msg)
-          end
-        end
-      end
-    end
+    return if !publication_date_end.present? || publication_date_valid?(publication_date_end)
+    errors.add(:publication_date_end, @date_incorrect_error_msg)
   end
 
   def publication_date_start_before_publication_date_end
-    error_msg = "Publication start date must be earlier or the same as end date."
-    if publication_date_start.present? && publication_date_end.present?
-      pub_start = publication_date_start.split("-")
-      pub_end = publication_date_end.split("-")
-      if (pub_end[0] < pub_start[0])
-        errors.add(:publication_date_start, error_msg)
-      elsif (pub_start[1] && pub_end[1] && pub_end[1] < pub_start[1])
-        errors.add(:publication_date_start, error_msg)
-      elsif (pub_start[2] && pub_end[2] && pub_end[2] < pub_start[2])
-        errors.add(:publication_date_start, error_msg)
-      end
+    return unless publication_date_start.present? && publication_date_end.present?
+    pub_start = publication_date_start.split("-")
+    pub_end = publication_date_end.split("-")
+    (0..2).each do |i|
+      errors.add(:publication_date_start, "Publication start date must be earlier or the same as end date.") if pub_start[i] && pub_end[i] && pub_end[i] < pub_start[i]
+      break
     end
   end
 
@@ -125,11 +99,21 @@ class NewspaperContainer < ActiveFedora::Base
   # relationship methods
 
   def publication
-    result = self.member_of.select { |v| v.instance_of?(NewspaperTitle) }
-    result[0] unless result.length == 0
+    result = member_of.select { |v| v.instance_of?(NewspaperTitle) }
+    result[0] unless result.empty?
   end
 
   def pages
-    self.members.select { |v| v.instance_of?(NewspaperPage) }
+    members.select { |v| v.instance_of?(NewspaperPage) }
   end
+
+  private
+
+    def publication_date_valid?(pub_date)
+      return false unless DATE_RANGE_REGEX.match(pub_date)
+      date_split = pub_date.split("-").map(&:to_i)
+      return false if date_split.length == 3 &&
+                      !Date.valid_date?(date_split[0], date_split[1], date_split[2])
+      true
+    end
 end

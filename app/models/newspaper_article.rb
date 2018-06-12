@@ -17,24 +17,17 @@ class NewspaperArticle < ActiveFedora::Base
     message: 'A newspaper article requires a title.'
   }
 
-  validates :publication_date, format: { with: DateRegex,
-    message: "Incorrect Date. Date input should be formatted yyyy-mm-dd."},
-    allow_nil: true, allow_blank: true
-
   validate :publication_date_valid
 
   def publication_date_valid
     error_msg = "Incorrect Date. Date input should be formatted yyyy-mm-dd and be a valid date."
-    if publication_date.present?
-      if !DateRegex.match(publication_date)
-        errors.add(:publication_date, error_msg)
-      else
-        date_split = publication_date.split("-").map(&:to_i)
-        if !Date.valid_date?(date_split[0], date_split[1], date_split[2])
-          errors.add(:publication_date, error_msg)
-        end
-      end
+    return unless publication_date.present?
+    unless DATE_REGEX.match(publication_date)
+      errors.add(:publication_date, error_msg)
+      return
     end
+    date_split = publication_date.split("-").map(&:to_i)
+    errors.add(:publication_date, error_msg) unless Date.valid_date?(date_split[0], date_split[1], date_split[2])
   end
 
   # TODO: Implement validations
@@ -131,7 +124,6 @@ class NewspaperArticle < ActiveFedora::Base
     index.as :dateable
   end
 
-
   # TODO: Add Reel number: https://github.com/samvera-labs/uri_selection_wg/issues/2
 
   # BasicMetadata must be included last
@@ -140,12 +132,12 @@ class NewspaperArticle < ActiveFedora::Base
   # relationship methods:
 
   def pages
-    self.members.select { |v| v.instance_of?(NewspaperPage) }
+    members.select { |v| v.instance_of?(NewspaperPage) }
   end
 
   def issue
-    issues = self.member_of.select { |v| v.instance_of?(NewspaperIssue) }
-    issues[0] unless !issues.length
+    issues = member_of.select { |v| v.instance_of?(NewspaperIssue) }
+    issues[0] unless issues.empty?
   end
 
   def publication
@@ -155,8 +147,6 @@ class NewspaperArticle < ActiveFedora::Base
 
   def containers
     pages = self.pages
-    if pages.length > 0
-      return pages[0].member_of.select { |v| v.instance_of?(NewspaperContainer) }
-    end
+    return pages[0].member_of.select { |v| v.instance_of?(NewspaperContainer) } unless pages.empty?
   end
 end

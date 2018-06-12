@@ -19,16 +19,13 @@ class NewspaperIssue < ActiveFedora::Base
 
   def publication_date_valid
     error_msg = "Incorrect Date. Date input should be formatted yyyy-mm-dd and be a valid date."
-    if publication_date.present?
-      if !DateRegex.match(publication_date)
-        errors.add(:publication_date, error_msg)
-      else
-        date_split = publication_date.split("-").map(&:to_i)
-        if !Date.valid_date?(date_split[0], date_split[1], date_split[2])
-          errors.add(:publication_date, error_msg)
-        end
-      end
+    return unless publication_date.present?
+    unless DATE_REGEX.match(publication_date)
+      errors.add(:publication_date, error_msg)
+      return
     end
+    date_split = publication_date.split("-").map(&:to_i)
+    errors.add(:publication_date, error_msg) unless Date.valid_date?(date_split[0], date_split[1], date_split[2])
   end
 
   # TODO: Implement validations
@@ -94,21 +91,20 @@ class NewspaperIssue < ActiveFedora::Base
     index.as :dateable
   end
 
-
   # BasicMetadata must be included last
   include ::Hyrax::BasicMetadata
 
   # relationship methods
   def publication
-    result = self.member_of.select { |v| v.instance_of?(NewspaperTitle) }
-    result[0] unless result.length == 0
+    result = member_of.select { |v| v.instance_of?(NewspaperTitle) }
+    result[0] unless result.empty?
   end
 
   def articles
-    self.members.select { |v| v.instance_of?(NewspaperArticle) }
+    members.select { |v| v.instance_of?(NewspaperArticle) }
   end
 
   def pages
-    self.members.select { |v| v.instance_of?(NewspaperPage) }
+    members.select { |v| v.instance_of?(NewspaperPage) }
   end
 end
