@@ -1,5 +1,6 @@
 module NewspaperWorks
-  # validates that a properly formatted date has been entered
+  # validates that start and end date are properly formatted and the end date
+  # comes after or on the same date as the start date.
   class PublicationDateStartEndValidator < ActiveModel::Validator
     DATE_RANGE_REGEX = /\A\d{4}(-((0[1-9])|(1[0-2])))?(-(([0-2][1-9])|3[0-1]))?\z/
     def validate(record)
