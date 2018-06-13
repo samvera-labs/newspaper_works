@@ -52,16 +52,15 @@ RSpec.describe NewspaperIssue do
 
   describe 'publication_date' do
     it "is not valid with bad date format" do
-      ni = NewspaperIssue.new(title: ["Breaking News!"],
-                              publication_date: "06/21/1978")
-      expect(ni).to_not be_valid
+      ni = described_class.new(title: ["Breaking News!"],
+                               publication_date: "06/21/1978")
+      expect(ni).not_to be_valid
     end
 
     it "is valid with proper date format" do
-      ni = NewspaperIssue.new(title: ["Breaking News!"],
-                              publication_date: "1978-06-21")
+      ni = described_class.new(title: ["Breaking News!"],
+                               publication_date: "1978-06-21")
       expect(ni).to be_valid
     end
   end
-
 end

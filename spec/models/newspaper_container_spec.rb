@@ -43,68 +43,67 @@ RSpec.describe NewspaperContainer do
 
   describe 'publication_date_start' do
     it "is not valid with bad date format" do
-      nc = NewspaperContainer.new(title: ["Breaking News!"],
-                                  publication_date_start: "06/21/1978")
-      expect(nc).to_not be_valid
+      nc = described_class.new(title: ["Breaking News!"],
+                               publication_date_start: "06/21/1978")
+      expect(nc).not_to be_valid
     end
 
     it "is valid with proper date format" do
-      nc = NewspaperContainer.new(title: ["Breaking News!"],
-                                  publication_date_start: "1978-06-21")
+      nc = described_class.new(title: ["Breaking News!"],
+                               publication_date_start: "1978-06-21")
       expect(nc).to be_valid
     end
 
     it "is valid with a year" do
-      nc = NewspaperContainer.new(title: ["Breaking News!"],
-                                  publication_date_start: "1978")
+      nc = described_class.new(title: ["Breaking News!"],
+                               publication_date_start: "1978")
       expect(nc).to be_valid
     end
 
     it "is valid with a year and month" do
-      nc = NewspaperContainer.new(title: ["Breaking News!"],
-                                  publication_date_start: "1978-06")
+      nc = described_class.new(title: ["Breaking News!"],
+                               publication_date_start: "1978-06")
       expect(nc).to be_valid
     end
 
     it "is not valid with start date after end date" do
-      nc = NewspaperContainer.new(title: ["Breaking News!"],
-                                  publication_date_start: "1978-06-01",
-                                  publication_date_end: "1977-06-01")
-      expect(nc).to_not be_valid
+      nc = described_class.new(title: ["Breaking News!"],
+                               publication_date_start: "1978-06-01",
+                               publication_date_end: "1977-06-01")
+      expect(nc).not_to be_valid
     end
 
     it "is valid with start date before end date" do
-      nc = NewspaperContainer.new(title: ["Breaking News!"],
-                              publication_date_start: "1978-06-01",
-                              publication_date_end: "1979-06-01")
+      nc = described_class.new(title: ["Breaking News!"],
+                               publication_date_start: "1978-06-01",
+                               publication_date_end: "1979-06-01")
       expect(nc).to be_valid
     end
   end
 
   describe 'publication_date_end' do
     it "is not valid with bad date format" do
-      nc = NewspaperContainer.new(title: ["Breaking News!"],
-                                  publication_date_end: "06/21/1978")
-      expect(nc).to_not be_valid
+      nc = described_class.new(title: ["Breaking News!"],
+                               publication_date_end: "06/21/1978")
+      expect(nc).not_to be_valid
     end
 
     it "is valid with proper date format" do
-      nc = NewspaperContainer.new(title: ["Breaking News!"],
-                                  publication_date_end: "1978-06-21")
+      nc = described_class.new(title: ["Breaking News!"],
+                               publication_date_end: "1978-06-21")
       expect(nc).to be_valid
     end
 
     it "is valid with a year" do
-      nc = NewspaperContainer.new(title: ["Breaking News!"],
-                                  publication_date_end: "1978")
+      nc = described_class.new(title: ["Breaking News!"],
+                               publication_date_end: "1978")
       expect(nc).to be_valid
     end
 
     it "is valid with a year and month" do
-      nc = NewspaperContainer.new(title: ["Breaking News!"],
-                                  publication_date_end: "1978-06")
+      nc = described_class.new(title: ["Breaking News!"],
+                               publication_date_end: "1978-06")
       expect(nc).to be_valid
     end
   end
-
 end
