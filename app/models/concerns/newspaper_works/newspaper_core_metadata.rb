@@ -4,9 +4,6 @@ module NewspaperWorks
   module NewspaperCoreMetadata
     extend ActiveSupport::Concern
 
-    DATE_REGEX = /\A\d{4}-((0[1-9])|(1[0-2]))-(([0-2][1-9])|3[0-1])\z/
-    DATE_RANGE_REGEX = /\A\d{4}(-((0[1-9])|(1[0-2])))?(-(([0-2][1-9])|3[0-1]))?\z/
-
     included do
       # common metadata for Newspaper title, issue, article; fields
       # that are not in ::Hyrax::BasicMetadata are enumerated here.
