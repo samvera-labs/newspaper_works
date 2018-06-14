@@ -35,5 +35,4 @@ SUMMARY
   spec.add_development_dependency 'sqlite3'
 
   spec.add_dependency 'simple_form', '~> 3.2', '<= 3.5.0'
-
 end

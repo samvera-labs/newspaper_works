@@ -7,7 +7,6 @@ require 'engine_cart'
 EngineCart.load_application!
 
 RSpec.configure do |config|
-
   # enable FactoryBot:
   require 'factory_bot'
   config.include FactoryBot::Syntax::Methods
