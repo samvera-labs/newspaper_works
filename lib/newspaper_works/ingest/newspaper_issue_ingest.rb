@@ -13,10 +13,12 @@ module NewspaperWorks
       #   latter is appropriate if framework is already handling the
       #   NewspaperIssue file attachment (e.g. Hyrax upload via browser).
       def create_child_pages
-        pages = NewspaperWorks::Ingest::PdfPages.new(path)
+        pages = NewspaperWorks::Ingest::PdfPages.new(path).to_a
         pages.each_with_index do |tiffpath, idx|
-          new_child_page_with_file(tiffpath, idx)
+          page = new_child_page_with_file(tiffpath, idx)
+          @work.members.push(page)
         end
+        @work.save!(validate: false) unless pages.empty?
       end
 
       def new_child_page_with_file(tiffpath, idx)
@@ -24,9 +26,8 @@ module NewspaperWorks
         page.title = [format("Page %<pagenum>i", pagenum: idx + 1)]
         page.depositor = @work.depositor
         page.save!
-        @work.members.push(page)
-        @work.save!
         NewspaperPageIngest.new(page).ingest(tiffpath)
+        page
       end
     end
   end
