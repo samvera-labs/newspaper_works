@@ -5,12 +5,13 @@ dist: trusty
 addons:
   chrome: stable
   apt:
+    sources:
+      - "trusty-media"
     packages:
     - poppler-utils
     - ghostscript
-    - tesseract
+    - tesseract-ocr
     - libreoffice
-    - imagemagick
 cache:
   bundler: true
 
@@ -38,3 +39,4 @@ services:
   - redis-server
 before_script:
 - jdk_switcher use oraclejdk8
+- pecl install imagick
