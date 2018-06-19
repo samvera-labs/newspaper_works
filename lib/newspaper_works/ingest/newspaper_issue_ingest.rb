@@ -25,8 +25,8 @@ module NewspaperWorks
         page = NewspaperPage.new
         page.title = [format("Page %<pagenum>i", pagenum: idx + 1)]
         page.depositor = @work.depositor
-        page.save!
         NewspaperPageIngest.new(page).ingest(tiffpath)
+        page.save!
         page
       end
     end
