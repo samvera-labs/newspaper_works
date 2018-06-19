@@ -11,6 +11,7 @@ addons:
     - poppler-utils
     - ghostscript
     - tesseract-ocr
+    - imagemagick
     - libreoffice
 cache:
   bundler: true
@@ -39,4 +40,3 @@ services:
   - redis-server
 before_script:
 - jdk_switcher use oraclejdk8
-- pecl install imagick
