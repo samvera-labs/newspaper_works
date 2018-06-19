@@ -8,6 +8,9 @@ addons:
     packages:
     - poppler-utils
     - ghostscript
+    - tesseract
+    - libreoffice
+    - imagemagick
 cache:
   bundler: true
 
