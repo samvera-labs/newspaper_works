@@ -23,6 +23,8 @@ module Hyrax
         paths = paths.select { |path| path.end_with?('.pdf') }
         return if paths.empty?
         work = env.curation_concern
+        # must persist work to serialize job using it
+        work.save!(validate: false)
         user = env.user.user_key
         NewspaperWorks::CreateIssuePagesJob.perform_later(work, paths, user)
       end
