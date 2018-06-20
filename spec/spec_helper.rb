@@ -10,11 +10,8 @@ RSpec.configure do |config|
   # enable FactoryBot:
   require 'factory_bot'
   config.include FactoryBot::Syntax::Methods
-  # require to load specific factories:
-  require 'factories/newspaper_issue'
-  require 'factories/newspaper_issue_ingest'
-  require 'factories/newspaper_page'
-  require 'factories/newspaper_page_ingest'
+  # auto-detect and load all factories in spec/factories:
+  FactoryBot.find_definitions
 
   # require shared examples
   require 'lib/newspaper_works/ingest/ingest_shared'
