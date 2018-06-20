@@ -14,6 +14,19 @@ module Hyrax
         next_actor.update(env)
       end
 
+      def default_admin_set
+        AdminSet.find_or_create_default_admin_set_id
+      end
+
+      def queue_job(work, paths, user, admin_set_id)
+        NewspaperWorks::CreateIssuePagesJob.perform_later(
+          work,
+          paths,
+          user,
+          admin_set_id
+        )
+      end
+
       def handle_issue_upload(env)
         return unless env.attributes.keys.include? 'uploaded_files'
         upload_ids = filter_file_ids(env.attributes['uploaded_files'])
@@ -26,7 +39,8 @@ module Hyrax
         # must persist work to serialize job using it
         work.save!(validate: false)
         user = env.user.user_key
-        NewspaperWorks::CreateIssuePagesJob.perform_later(work, paths, user)
+        env.attributes[:admin_set_id] ||= default_admin_set
+        queue_job(work, paths, user, env.attributes[:admin_set_id])
       end
 
       # Given Hyrax::Upload object, return path to file on local filesystem
