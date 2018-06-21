@@ -38,7 +38,7 @@ module Hyrax
         work = env.curation_concern
         # must persist work to serialize job using it
         work.save!(validate: false)
-        user = env.current_ability.user_key
+        user = env.current_ability.current_user.user_key
         env.attributes[:admin_set_id] ||= default_admin_set
         queue_job(work, paths, user, env.attributes[:admin_set_id])
       end
