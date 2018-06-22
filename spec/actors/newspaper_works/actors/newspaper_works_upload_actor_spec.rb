@@ -1,7 +1,7 @@
 require 'faraday'
 require 'spec_helper'
 
-RSpec.describe ::Hyrax::Actors::NewspaperWorksUploadActor do
+RSpec.describe NewspaperWorks::Actors::NewspaperWorksUploadActor do
   let(:issue) { build(:newspaper_issue) }
   let(:ability) { build(:ability) }
   let(:uploaded_pdf_file) { create(:uploaded_pdf_file) }

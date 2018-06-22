@@ -1,4 +1,4 @@
-module Hyrax
+module NewspaperWorks
   module Actors
     class NewspaperWorksUploadActor < Hyrax::Actors::BaseActor
       def create(env)
@@ -31,7 +31,7 @@ module Hyrax
         return unless env.attributes.keys.include? 'uploaded_files'
         upload_ids = filter_file_ids(env.attributes['uploaded_files'])
         return if upload_ids.empty?
-        uploads = UploadedFile.find(upload_ids)
+        uploads = Hyrax::UploadedFile.find(upload_ids)
         paths = uploads.map(&method(:upload_path))
         paths = paths.select { |path| path.end_with?('.pdf') }
         return if paths.empty?
