@@ -63,5 +63,25 @@ RSpec.describe NewspaperWorks::PluggableDerivativeService do
       service.cleanup_derivatives
       expect(FakeDerivativeService.cleanup_called).to eq 2
     end
+
+    it "test meta: spec restores original plugins" do
+      # verify `after do` clean up of plugins array to original value
+      plugins = described_class.plugins
+      expect(plugins.length).to eq 1
+      expect(plugins).to include Hyrax::FileSetDerivativesService
+    end
+  end
+
+  describe "service registration" do
+    # integration test with Hyrax, verify services is registered
+
+    it "is registered with Hyrax" do
+      expect(Hyrax::DerivativeService.services).to include described_class
+    end
+
+    it "is the first valide service found" do
+      found = Hyrax::DerivativeService.for(FileSet.new)
+      expect(found.class).to be described_class
+    end
   end
 end
