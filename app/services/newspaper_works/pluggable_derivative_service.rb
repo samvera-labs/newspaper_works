@@ -30,7 +30,7 @@ class NewspaperWorks::PluggableDerivativeService
 
   # make and expose an array of plugins
   @plugins = [default_plugin]
-  @allowed_methods = ['cleanup_derivatives', 'create_derivatives']
+  @allowed_methods = [:cleanup_derivatives, :create_derivatives]
   class << self
     attr_accessor :plugins, :allowed_methods
   end
@@ -51,7 +51,7 @@ class NewspaperWorks::PluggableDerivativeService
   end
 
   def respond_to_missing?(method_name)
-    self.class.allowed_methods.include(method_name) || super
+    self.class.allowed_methods.include?(method_name) || super
   end
 
   def method_missing(name, *args, **opts, &block)
@@ -61,7 +61,7 @@ class NewspaperWorks::PluggableDerivativeService
       services = plugins.map { |plugin| plugin.new(file_set) }.select(&:valid?)
       # run all valid services, in order:
       services.each do |plugin|
-        plugin.send(name, *args, **opts, &block)
+        plugin.send(name, *args)
       end
     else
       super
