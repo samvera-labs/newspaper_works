@@ -1,24 +1,24 @@
 require 'open3'
 
 module NewspaperWorks
-  # OpenJPEG 2000 Command to make NDNP-compliant grayscale JP2:
-  CMD_GRAY = 'opj_compress -i %<source_file>s -o %<out_file>s ' \
-             '-d 0,0 -b 64,64 -n 6 -p RLCP -t 1024,1024 -I -M 1 ' \
-             '-r 64,53.821,45.249,40,32,26.911,22.630,20,16,14.286,' \
-             '11.364,10,8,6.667,5.556,4.762,4,3.333,2.857,2.500,2,' \
-             '1.667,1.429,1.190,1'.freeze
-
-  # OpenJPEG 2000 Command to make RGB JP2:
-  CMD_COLOR = 'opj_compress -i %<source_file>s -o %<out_file>s ' \
-              '-d 0,0 -b 64,64 -n 6 -p RPCL -t 1024,1024 -I -M 1 '\
-              '-r 2.4,1.48331273,.91673033,.56657224,.35016049,.21641118,' \
-              '.13374944,.0944,.08266171'.freeze
-
-  # OpenJPEG 1.x command replacement for 2.x opj_compress, takes same options;
-  #   this is necessary on Ubuntu Trusty (e.g. Travis CI)
-  CMD_1X = 'image_to_j2k'.freeze
-
   class JP2DerivativeService < NewspaperPageDerivativeService
+    # OpenJPEG 2000 Command to make NDNP-compliant grayscale JP2:
+    CMD_GRAY = 'opj_compress -i %<source_file>s -o %<out_file>s ' \
+              '-d 0,0 -b 64,64 -n 6 -p RLCP -t 1024,1024 -I -M 1 ' \
+              '-r 64,53.821,45.249,40,32,26.911,22.630,20,16,14.286,' \
+              '11.364,10,8,6.667,5.556,4.762,4,3.333,2.857,2.500,2,' \
+              '1.667,1.429,1.190,1'.freeze
+
+    # OpenJPEG 2000 Command to make RGB JP2:
+    CMD_COLOR = 'opj_compress -i %<source_file>s -o %<out_file>s ' \
+                '-d 0,0 -b 64,64 -n 6 -p RPCL -t 1024,1024 -I -M 1 '\
+                '-r 2.4,1.48331273,.91673033,.56657224,.35016049,.21641118,' \
+                '.13374944,.0944,.08266171'.freeze
+
+    # OpenJPEG 1.x command replacement for 2.x opj_compress, takes same options;
+    #   this is necessary on Ubuntu Trusty (e.g. Travis CI)
+    CMD_1X = 'image_to_j2k'.freeze
+
     attr_accessor :source_meta
     attr_reader :file_set
     delegate :uri, :mime_type, to: :file_set
@@ -125,14 +125,13 @@ module NewspaperWorks
       end
 
       def make_intermediate_source
-        ext = use_color? ? 'ppm' : 'pgm'
         # generate a random filename to be made, with appropriate extension,
         #   inside /tmp dir:
         tmpname = File.join(
           Dir.tmpdir,
           format(
             "#{SecureRandom.uuid}.%<ext>s",
-            ext: ext
+            ext: use_color? ? 'ppm' : 'pgm'
           )
         )
         # Use ImageMagick `convert` to create intermediate bitmap:
@@ -148,11 +147,7 @@ module NewspaperWorks
         cmd = use_color? ? CMD_COLOR : CMD_GRAY
         cmd = cmd.sub('opj_compress', 'image_to_j2k') if use_openjpeg_1x
         # return command with source and destination file names injected
-        format(
-          cmd,
-          source_file: @source_path,
-          out_file: @dest_path
-        )
+        format(cmd, source_file: @source_path, out_file: @dest_path)
       end
 
       def derivative_path_factory
