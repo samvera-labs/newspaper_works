@@ -5,4 +5,5 @@
     - Re-rendered with embedded fonts via Apple Preview.app
 * `ndnp-sample1.pdf` — originally via:
   - https://chroniclingamerica.loc.gov/data/batches/batch_dlc_harry_ver01/data/sn82016187/00211102366/1898111001/0528.pdf
-
+* `4.1.07.tiff` is a low-res color sample image from USC-SIPI Image Database
+   and is licensed as "Free to use".  Via http://sipi.usc.edu/database/
