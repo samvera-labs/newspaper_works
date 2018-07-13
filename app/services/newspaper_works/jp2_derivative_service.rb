@@ -49,7 +49,7 @@ module NewspaperWorks
       needs_intermediate ? make_intermediate_source : make_symlink
 
       # Get destination path from Hyrax for 'jp2' destination name:
-      @dest_path = derivative_path_factory.path_for_reference(@file_set, 'jp2')
+      load_destpath
 
       # Get OpenJPEG command, rendered with source, destination, appropriate
       #   to either color or grayscale source
@@ -75,8 +75,12 @@ module NewspaperWorks
       def identify
         if @source_meta.nil?
           path = @source_path
+          cmd = "identify #{path}"
+          # use graphicsmagick if source is jp2, as Ubuntu 16.10 ImageMagick
+          #   has no jp2 support.
+          cmd = 'gm ' + cmd if path.ends_with?('jp2')
           # rubocop:disable Lint/UnusedBlockArgument
-          Open3.popen3("identify #{path}") do |stdin, stdout, stderr, wait_thr|
+          Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
             @source_meta = stdout.read
           end
           # rubocop:enable Lint/UnusedBlockArgument
@@ -98,12 +102,22 @@ module NewspaperWorks
         identify.include?('1-bit')
       end
 
+      # calculate and ensure directory components for @dest_path
+      def load_destpath
+        @dest_path = derivative_path_factory.derivative_path_for_reference(
+          @file_set,
+          'jp2'
+        )
+        dir = File.join(@dest_path.split('/')[0..-2])
+        FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
+      end
+
       def make_symlink
         # OpenJPEG binaries have annoying quirk of only using TIFF input
         #   files whose name ends in .TIF or .tif (three letter); for all
         #   non-monochrome TIFF files, we just assume we need to symlink
         #   to such a filename.
-        tmpname = File.join(Dir.tmpdir, '#{SecureRandom.uuid}.tif')
+        tmpname = File.join(Dir.tmpdir, "#{SecureRandom.uuid}.tif")
         FileUtils.ln_s(@source_path, tmpname)
         @unlink_after_creation.push(tmpname)
         # finally, point @source_path for command at intermediate link:
@@ -117,7 +131,7 @@ module NewspaperWorks
         tmpname = File.join(
           Dir.tmpdir,
           format(
-            '#{SecureRandom.uuid}.%<ext>s',
+            "#{SecureRandom.uuid}.%<ext>s",
             ext: ext
           )
         )
@@ -137,7 +151,7 @@ module NewspaperWorks
         format(
           cmd,
           source_file: @source_path,
-          dest_file: @dest_path
+          out_file: @dest_path
         )
       end
 
