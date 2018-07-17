@@ -19,6 +19,9 @@ module NewspaperWorks
     #   this is necessary on Ubuntu Trusty (e.g. Travis CI)
     CMD_1X = 'image_to_j2k'.freeze
 
+    # Target file extension of this service plugin:
+    TARGET_EXT = 'jp2'.freeze
+
     attr_accessor :source_meta
     attr_reader :file_set
     delegate :uri, :mime_type, to: :file_set
@@ -27,14 +30,13 @@ module NewspaperWorks
       # cached result string for imagemagick `identify` command
       @source_meta = nil
       @command = nil
-      @source_path = nil
-      @dest_path = nil
       @unlink_after_creation = []
       super(file_set)
     end
 
     def create_derivatives(filename)
-      @source_path = filename
+      # Base class takes care of loading @source_path, @dest_path
+      super(filename)
 
       # no creation if jp2 master => deemed unnecessary/duplicative
       return if mime_type == 'image/jp2'
@@ -48,9 +50,6 @@ module NewspaperWorks
       #   around OpenJPEG 2000 file naming quirk).
       needs_intermediate ? make_intermediate_source : make_symlink
 
-      # Get destination path from Hyrax for 'jp2' destination name:
-      load_destpath
-
       # Get OpenJPEG command, rendered with source, destination, appropriate
       #   to either color or grayscale source
       render_cmd = opj_command
@@ -62,54 +61,12 @@ module NewspaperWorks
       cleanup_intermediate
     end
 
-    def cleanup_derivatives
-      derivative_path_factory.derivatives_for_reference(file_set).each do |path|
-        FileUtils.rm_f(path) if path.ends_with?('jp2')
-      end
-    end
-
     private
 
       # source introspection:
 
-      def identify
-        if @source_meta.nil?
-          path = @source_path
-          cmd = "identify #{path}"
-          # use graphicsmagick if source is jp2, as Ubuntu 16.10 ImageMagick
-          #   has no jp2 support.
-          cmd = 'gm ' + cmd if path.ends_with?('jp2')
-          # rubocop:disable Lint/UnusedBlockArgument
-          Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
-            @source_meta = stdout.read
-          end
-          # rubocop:enable Lint/UnusedBlockArgument
-        end
-        @source_meta
-      end
-
       def tiff_source?
         identify.include?('TIFF')
-      end
-
-      def use_color?
-        # imagemagick `identify` output describes color space:
-        identify.include?('sRGB') || identify.include?('CMYK')
-      end
-
-      # is source one-bit monochrome?
-      def one_bit?
-        identify.include?('1-bit')
-      end
-
-      # calculate and ensure directory components for @dest_path
-      def load_destpath
-        @dest_path = derivative_path_factory.derivative_path_for_reference(
-          @file_set,
-          'jp2'
-        )
-        dir = File.join(@dest_path.split('/')[0..-2])
-        FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
       end
 
       def make_symlink
@@ -150,10 +107,6 @@ module NewspaperWorks
         format(cmd, source_file: @source_path, out_file: @dest_path)
       end
 
-      def derivative_path_factory
-        Hyrax::DerivativePath
-      end
-
       def cleanup_intermediate
         # remove symlink or intermediate file once we no longer need
         @unlink_after_creation.each do |path|
@@ -161,4 +114,6 @@ module NewspaperWorks
         end
       end
   end
+
+  NewspaperWorks::PluggableDerivativeService.plugins.push(JP2DerivativeService)
 end
