@@ -11,11 +11,10 @@ RSpec.describe NewspaperWorks::PluggableDerivativeService do
   after do
     described_class.plugins = @orig_plugins
   end
-  # rubocop:enable RSpec/InstanceVariable
 
   describe ".plugins=" do
     it "allows setting of derivative service plugins" do
-      expect(described_class.plugins).to eq [Hyrax::FileSetDerivativesService]
+      expect(described_class.plugins).to eq @orig_plugins
       described_class.plugins = [Hyrax::FileSetDerivativesService] * 2
       expect(described_class.plugins).to eq [Hyrax::FileSetDerivativesService] * 2
     end
@@ -67,7 +66,7 @@ RSpec.describe NewspaperWorks::PluggableDerivativeService do
     it "test meta: spec restores original plugins" do
       # verify `after do` clean up of plugins array to original value
       plugins = described_class.plugins
-      expect(plugins.length).to eq 1
+      expect(plugins.length).to eq @orig_plugins.length
       expect(plugins).to include Hyrax::FileSetDerivativesService
     end
   end
@@ -84,4 +83,5 @@ RSpec.describe NewspaperWorks::PluggableDerivativeService do
       expect(found.class).to be described_class
     end
   end
+  # rubocop:enable RSpec/InstanceVariable
 end
