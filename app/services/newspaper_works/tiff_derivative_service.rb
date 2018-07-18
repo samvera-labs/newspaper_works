@@ -11,6 +11,11 @@ module NewspaperWorks
                '-depth 8 -colorspace Gray ' \
                '-compress lzw %<out_file>s'.freeze
 
+    # Monochrome one-bit black/white TIFF, Group 4 compressed:
+    MONO_CMD = 'convert %<source_file>s ' \
+               '-depth 1 -monochrome -compress Group4 -type bilevel ' \
+               '%<out_file>s'.freeze
+
     # sRBG color TIFF (8 bits per channel, lzw)
     COLOR_CMD = 'convert %<source_file>s ' \
                 '-depth 24 ' \
@@ -29,6 +34,7 @@ module NewspaperWorks
       source_path = @source_path
       source_path += '[0]' if @source_path.ends_with('pdf')
       template = use_color? ? COLOR_PDF_CMD : GRAY_PDF_CMD
+      template = MONO_CMD if one_bit?
       cmd = format(template, source_file: source_path, out_file: @dest_path)
       # normalization of command based on source
       @source_path.ends_with?('jp2') ? GM_PREFIX + cmd : cmd
