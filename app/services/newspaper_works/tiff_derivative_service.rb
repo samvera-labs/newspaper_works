@@ -26,8 +26,11 @@ module NewspaperWorks
     # Get conversion command; command varies on whether or not we have
     #   JP2 source, and whether we have color or grayscale material.
     def convert_cmd
+      source_path = @source_path
+      source_path += '[0]' if @source_path.ends_with('pdf')
       template = use_color? ? COLOR_PDF_CMD : GRAY_PDF_CMD
-      cmd = format(template, source_file: @source_path, out_file: @dest_path)
+      cmd = format(template, source_file: source_path, out_file: @dest_path)
+      # normalization of command based on source
       @source_path.ends_with?('jp2') ? GM_PREFIX + cmd : cmd
     end
 

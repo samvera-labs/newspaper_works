@@ -91,8 +91,11 @@ module NewspaperWorks
             ext: use_color? ? 'ppm' : 'pgm'
           )
         )
+        # if pdf source, get only first page
+        source_path = @source_path
+        source_path += '[0]' if @source_path.ends_with('pdf')
         # Use ImageMagick `convert` to create intermediate bitmap:
-        `convert #{@source_path} #{tmpname}`
+        `convert #{source_path} #{tmpname}`
         @unlink_after_creation.push(tmpname)
         # finally, point @source_path for command at intermediate file:
         @source_path = tmpname
