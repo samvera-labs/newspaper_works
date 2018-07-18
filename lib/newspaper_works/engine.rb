@@ -21,6 +21,15 @@ module NewspaperWorks
         NewspaperWorks::PluggableDerivativeService
       )
 
+      # Register specific derivative services to be considered by
+      #   PluggableDerivativeService:
+      [
+        NewspaperWorks::JP2DerivativeService,
+        NewspaperWorks::PDFDerivativeService
+      ].each do |plugin|
+        NewspaperWorks::PluggableDerivativeService.plugins.push plugin
+      end
+
       # Register actor to handle any NewspaperWorks upload behaviors before
       #   CreateWithFilesActor gets to them:
       Hyrax::CurationConcern.actor_factory.insert_before Hyrax::Actors::CreateWithFilesActor, NewspaperWorks::Actors::NewspaperWorksUploadActor

@@ -68,7 +68,7 @@ module NewspaperWorks
 
       # Get destination path from Hyrax for file extension defined in
       #   TARGET_EXT constant on respective derivative service subclass.
-      load_despath
+      load_destpath
     end
 
     def cleanup_derivatives

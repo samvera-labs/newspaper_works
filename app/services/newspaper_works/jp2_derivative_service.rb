@@ -114,6 +114,4 @@ module NewspaperWorks
         end
       end
   end
-
-  NewspaperWorks::PluggableDerivativeService.plugins.push(JP2DerivativeService)
 end

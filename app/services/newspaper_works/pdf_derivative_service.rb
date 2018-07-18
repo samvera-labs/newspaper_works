@@ -42,6 +42,4 @@ module NewspaperWorks
       `#{convert_cmd}`
     end
   end
-
-  NewspaperWorks::PluggableDerivativeService.plugins.push(PDFDerivativeService)
 end
