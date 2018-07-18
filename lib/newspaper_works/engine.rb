@@ -25,7 +25,8 @@ module NewspaperWorks
       #   PluggableDerivativeService:
       [
         NewspaperWorks::JP2DerivativeService,
-        NewspaperWorks::PDFDerivativeService
+        NewspaperWorks::PDFDerivativeService,
+        NewspaperWorks::TIFFDerivativeService
       ].each do |plugin|
         NewspaperWorks::PluggableDerivativeService.plugins.push plugin
       end
