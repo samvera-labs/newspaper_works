@@ -21,7 +21,13 @@ RSpec.describe NewspaperWorks::NewspaperPageDerivativeService do
     fs
   end
 
-  describe "abstract functionality" do
+  let(:fixture_path) do
+    File.join(
+      NewspaperWorks::GEM_PATH, 'spec', 'fixtures', 'files'
+    )
+  end
+
+  describe "core path/extension functionality" do
     class MyDerivativeService < described_class
       TARGET_EXT = 'jpg'.freeze
     end
@@ -52,6 +58,43 @@ RSpec.describe NewspaperWorks::NewspaperPageDerivativeService do
       expect(Pathname.new(expected_pairtree)).to be_directory
       # cleanup:
       FileUtils.rm_rf(expected_pairtree)
+    end
+  end
+
+  describe "source identification" do
+    def service_for_file(name)
+      # construct a new service for each test, as there are memoized things
+      #   that make sharing problematic
+      svc = described_class.new(valid_file_set)
+      svc.instance_variable_set(:@source_path, File.join(fixture_path, name))
+      svc
+    end
+
+    it "identifies a source file using ImageMagick" do
+      expect(service_for_file('4.1.07.tiff').identify).to include 'TIFF'
+      expect(service_for_file('4.1.07.tiff').identify).to include '8-bit'
+    end
+
+    it "identifies jp2 source" do
+      # test/verify jp2 source is identified, which relies on GraphicsMagick
+      expect(service_for_file('4.1.07.jp2').identify).to include 'JP2'
+      expect(service_for_file('4.1.07.jp2').identify).to include '8-bit'
+    end
+
+    it "identifies color and gray sources" do
+      expect(service_for_file('4.1.07.tiff').use_color?).to be true
+      expect(service_for_file('page1.tiff').use_color?).to be false
+    end
+
+    it "identifies a one-bit source" do
+      # 1-bit group4 monochrome TIFF:
+      expect(service_for_file('page1.tiff').one_bit?).to be true
+      # 8-bit gray TIFF:
+      expect(
+        service_for_file('lowres-gray-via-ndnp-sample.tiff').one_bit?
+      ).to be false
+      # color TIFF:
+      expect(service_for_file('4.1.07.tif').one_bit?).to be false
     end
   end
 end
