@@ -8,11 +8,12 @@ addons:
     sources:
       - "trusty-media"
     packages:
-    - poppler-utils
     - ghostscript
-    - tesseract-ocr
+    - graphicsmagick
     - imagemagick
     - libreoffice
+    - poppler-utils
+    - tesseract-ocr
 cache:
   bundler: true
 
