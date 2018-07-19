@@ -18,8 +18,11 @@ module NewspaperWorks
     end
 
     def valid?
-      # plugins of this base type only valid for NewspaperPage
-      file_set.in_works[0].class == NewspaperPage
+      parent = file_set.in_works[0]
+      # fallback to Fedora-stored relationships if work's aggregation of
+      #   file set is not indexed in Solr
+      parent = file_set.member_of.select(&:work?)[0] if parent.nil?
+      parent.class == NewspaperPage
     end
 
     def derivative_path_factory
