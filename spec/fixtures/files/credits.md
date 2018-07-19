@@ -9,3 +9,4 @@
      low resolution 8 bit grayscale TIFF test image in derivative testing.
 * `4.1.07.tiff` is a low-res color sample image from USC-SIPI Image Database
    and is licensed as "Free to use".  Via http://sipi.usc.edu/database/
+  - 4.1.07.jp2 is a derivative of this made via opj_compress
