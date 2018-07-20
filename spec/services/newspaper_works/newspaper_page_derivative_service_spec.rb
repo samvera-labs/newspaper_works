@@ -59,6 +59,33 @@ RSpec.describe NewspaperWorks::NewspaperPageDerivativeService do
       # cleanup:
       FileUtils.rm_rf(expected_pairtree)
     end
+
+    # rubocop:disable RSpec/ExampleLength
+    it "successfully removes on cleanup_derivatives" do
+      svc = MyDerivativeService.new(valid_file_set)
+      # load destpath just makes directories
+      svc.load_destpath
+      expected = Hyrax::DerivativePath.derivative_path_for_reference(
+        valid_file_set,
+        'jpg'
+      )
+      expected_pairtree = File.join(expected.split('/')[0..-2])
+      expect(Pathname.new(expected_pairtree)).to be_directory
+      # simulate, simply touch a file with correct extension in
+      #   the derivative path made above; makes a zero-byte '.jpg' file
+      `touch #{expected}`
+      expect(File.exist?(expected)).to be true
+      svc.cleanup_derivatives
+      # no more derivative file for this extension:
+      expect(File.exist?(expected)).to be false
+      # however, we still have a directory hanging around, this is normal,
+      #   becauase any derivative service is blind to other derivatives
+      #   for the same fileset, beside the one extension each manages:
+      expect(Pathname.new(expected_pairtree)).to be_directory
+      # cleanup after test:
+      FileUtils.rm_rf(expected_pairtree)
+    end
+    # rubocop:enable RSpec/ExampleLength
   end
 
   describe "source identification" do
