@@ -57,7 +57,7 @@ module NewspaperWorks
 
     def use_color?
       # imagemagick `identify` output describes color space:
-      identify.include?('sRGB') || identify.include?('CMYK')
+      !(identify.include?('Gray') || one_bit?)
     end
 
     # is source one-bit monochrome?
