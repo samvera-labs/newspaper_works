@@ -29,6 +29,7 @@ RSpec.describe NewspaperWorks::JP2DerivativeService do
       expect(File.exist?(expected)).to be true
       desc = `gm identify #{expected}`
       expect(desc).to include 'JP2'
+      svc.cleanup_derivatives
     end
 
     it "creates gray JP2 derivative from one-bit source" do
