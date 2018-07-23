@@ -12,6 +12,7 @@ addons:
     - graphicsmagick
     - imagemagick
     - libreoffice
+    - openjpeg-tools
     - poppler-utils
     - tesseract-ocr
 cache:
