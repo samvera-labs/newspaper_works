@@ -23,7 +23,7 @@ RSpec.describe NewspaperWorks::TIFFDerivativeService do
 
     def get_res(path)
       lines = `gm identify -verbose #{path}`.lines
-      lines.select { |line| line.strip.start_with?('Page geometry') }[0].strip
+      lines.select { |line| line.strip.start_with?('Geometry') }[0].strip
     end
 
     def check_dpi_match(orig, dest)
