@@ -21,6 +21,16 @@ RSpec.describe NewspaperWorks::JP2DerivativeService do
       Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'jp2')
     end
 
+    def get_res(path)
+      lines = `gm identify -verbose #{path}`.lines
+      lines.select { |line| line.strip.start_with?('Page geometry') }[0].strip
+    end
+
+    def check_dpi_match(orig, dest)
+      # check ppi, but skip pdf to avoid ghostscript warnings to stderr
+      expect(get_res(orig)).to eq get_res(dest) unless orig.end_with?('pdf')
+    end
+
     def makes_jp2(filename)
       expected = expected_path(valid_file_set)
       expect(File.exist?(expected)).to be false
@@ -29,6 +39,7 @@ RSpec.describe NewspaperWorks::JP2DerivativeService do
       expect(File.exist?(expected)).to be true
       desc = `gm identify #{expected}`
       expect(desc).to include 'JP2'
+      check_dpi_match(source_image(filename), expected)
       svc.cleanup_derivatives
     end
 
