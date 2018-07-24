@@ -3,6 +3,23 @@ require 'spec_helper'
 RSpec.describe NewspaperWorks::PluggableDerivativeService do
   let(:valid_file_set) { FileSet.new }
 
+  let(:persisted_file_set) do
+    fs = FileSet.new
+    work = NewspaperPage.new
+    work.title = ['This is a page!']
+    work.members.push(fs)
+    fs.instance_variable_set(:@mime_type, 'image/tiff')
+    fs.save!(validate: false)
+    work.save!(validate: false)
+    fs
+  end
+
+  let(:fixture_path) do
+    File.join(
+      NewspaperWorks::GEM_PATH, 'spec', 'fixtures', 'files'
+    )
+  end
+
   # cache and restore originally described derivative service plugins
   # rubocop:disable RSpec/InstanceVariable
   before do
@@ -81,6 +98,43 @@ RSpec.describe NewspaperWorks::PluggableDerivativeService do
     it "is the first valide service found" do
       found = Hyrax::DerivativeService.for(FileSet.new)
       expect(found.class).to be described_class
+    end
+  end
+
+  # integration tests for plugins
+  describe "runs multiple plugins, makes multiple derivatives" do
+    def source_image(name)
+      File.join(fixture_path, name)
+    end
+
+    def derivatives_for(file_set)
+      Hyrax::DerivativePath.derivatives_for_reference(file_set)
+    end
+
+    it "has expected valid plugins configured" do
+      # Describe the expected set of Plugins that will run for file set
+      plugins = described_class.plugins
+      fs = persisted_file_set
+      services = plugins.map { |plugin| plugin.new(fs) }.select(&:valid?)
+      expect(services.length).to eq 4
+      used_plugins = services.map(&:class)
+      expect(used_plugins).to include NewspaperWorks::JP2DerivativeService
+      expect(used_plugins).to include Hyrax::FileSetDerivativesService
+      expect(used_plugins).to include NewspaperWorks::PDFDerivativeService
+      expect(used_plugins).to include NewspaperWorks::TIFFDerivativeService
+    end
+
+    it "creates expected derivatives from TIFF source" do
+      svc = described_class.new(persisted_file_set)
+      svc.create_derivatives(source_image('4.1.07.tiff'))
+      made = derivatives_for(persisted_file_set)
+      made.each { |path| expect(File.exist?(path)) }
+      extensions = made.map { |path| path.split('.')[-1] }
+      expect(extensions).to include 'pdf'
+      expect(extensions).to include 'jp2'
+      expect(extensions).not_to include 'tiff'
+      # Thumbnail, created by Hyrax:
+      expect(extensions).to include 'jpeg'
     end
   end
   # rubocop:enable RSpec/InstanceVariable
