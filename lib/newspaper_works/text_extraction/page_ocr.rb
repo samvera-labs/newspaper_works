@@ -11,43 +11,47 @@ module NewspaperWorks
       end
 
       def initialize(path)
-        @filepath = path
+        @path = path
         @words = nil
         @processor = "mini_magick"
         @source_meta = nil
-        @use_gm = false
+        @use_gm = extension.start_with?('jp2')
+        @box = nil
+        @plain = nil
       end
 
       def extension
-        @filepath.split('.')[-1].downcase
+        @path.split('.')[-1].downcase
       end
 
-      # configure this component, based on source
-      def config!
-        @use_gm = extension.start_with?('jp2')
-      end
-
-      def load_words
-        RTesseract::Box.new(@filepath, processor: @processor)
+      def load_box
+        if @box.nil?
+          if @use_gm
+            MiniMagick.with_cli(:graphicsmagick) do
+              @box = RTesseract::Box.new(@path, processor: @processor)
+              @plain = @box.to_s
+            end
+          else
+            @box = RTesseract::Box.new(@path, processor: @processor)
+            @plain = @box.to_s
+          end
+        end
+        @box
       end
 
       def words
-        if @words.nil?
-          config!
-          if @use_gm
-            MiniMagick.with_cli(:graphicsmagick) do
-              @words = load_words.words
-            end
-          else
-            @words = load_words.words
-          end
-        end
+        @words = load_box.words if @words.nil?
         @words
+      end
+
+      def plain
+        load_box
+        @plain
       end
 
       def identify
         if @source_geometry.nil?
-          path = @filepath
+          path = @path
           cmd = "identify -verbose #{path}"
           cmd = 'gm ' + cmd if @use_gm
           lines = `#{cmd}`.lines

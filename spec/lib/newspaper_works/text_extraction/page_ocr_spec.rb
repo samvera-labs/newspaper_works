@@ -60,4 +60,13 @@ RSpec.describe NewspaperWorks::TextExtraction::PageOCR do
       expect(document.at_css('PrintSpace')['HEIGHT']).to eq "1046"
     end
   end
+
+  describe "plain text" do
+    it "makes plain text available for image" do
+      ocr = described_class.new(example_gray_tiff)
+      plain = ocr.plain
+      expect(plain.class).to be String
+      expect(plain.length).to be > 0
+    end
+  end
 end
