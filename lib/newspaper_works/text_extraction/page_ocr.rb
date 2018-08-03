@@ -24,14 +24,11 @@ module NewspaperWorks
 
       # configure this component, based on source
       def config!
-        # do not use mini_magick preprocess on TIFF, instead RTesseract
-        #   will use a processor that merely copies it to tempfile
-        @processor = 'none' if extension.start_with?('tif')
         @use_gm = extension.start_with?('jp2')
       end
 
       def load_words
-        @words = RTesseract::Box.new(@filepath, processor: @processor)
+        RTesseract::Box.new(@filepath, processor: @processor)
       end
 
       def words
@@ -39,10 +36,10 @@ module NewspaperWorks
           config!
           if @use_gm
             MiniMagick.with_cli(:graphicsmagick) do
-              load_words
+              @words = load_words.words
             end
           else
-            load_words
+            @words = load_words.words
           end
         end
         @words
