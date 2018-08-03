@@ -1,6 +1,17 @@
 require 'spec_helper'
 
 RSpec.describe NewspaperWorks::TextExtraction::RenderAlto do
+  let(:fixture_path) do
+    File.join(
+      NewspaperWorks::GEM_PATH, 'spec', 'fixtures', 'files'
+    )
+  end
+
+  let(:altoxsd) do
+    xsdpath = File.join(fixture_path, 'alto-2-0.xsd')
+    Nokogiri::XML::Schema(File.read(xsdpath))
+  end
+
   let(:words) do
     [
       { word: 'If',  x_start: 52, y_start: 13, x_end: 63, y_end: 27 },
@@ -28,6 +39,13 @@ RSpec.describe NewspaperWorks::TextExtraction::RenderAlto do
       expect(output).to include '<alto'
       expect(output).to include '<String'
       expect(Nokogiri::XML(output).errors.empty?).to be true
+    end
+
+    it "makes alto 2.0 that validates" do
+      renderer = described_class.new(12_000, 9600)
+      output = renderer.to_alto(words)
+      document = Nokogiri::XML(output)
+      altoxsd.validate(document)
     end
   end
 end
