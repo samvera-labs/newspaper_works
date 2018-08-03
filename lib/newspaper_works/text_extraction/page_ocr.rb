@@ -1,3 +1,4 @@
+require 'open3'
 require 'rtesseract'
 
 # --
@@ -13,6 +14,7 @@ module NewspaperWorks
         @filepath = path
         @words = nil
         @processor = "mini_magick"
+        @source_meta = nil
         @use_gm = false
       end
 
@@ -46,8 +48,31 @@ module NewspaperWorks
         @words
       end
 
-      # TODO: moved ALTO generation to its own class
-      def alto; end
+      def identify
+        if @source_geometry.nil?
+          path = @filepath
+          cmd = "identify -verbose #{path}"
+          cmd = 'gm ' + cmd if @use_gm
+          lines = `#{cmd}`.lines
+          geo = lines.select { |line| line.strip.start_with?('Geometry') }[0]
+          img_geo = geo.strip.split(':')[-1].strip.split('+')[0]
+          @source_geometry = img_geo.split('x').map(&:to_i)
+        end
+        @source_geometry
+      end
+
+      def width
+        identify[0]
+      end
+
+      def height
+        identify[1]
+      end
+
+      def alto
+        writer = NewspaperWorks::TextExtraction::RenderAlto.new(width, height)
+        writer.to_alto(words)
+      end
     end
   end
 end
