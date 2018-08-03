@@ -51,11 +51,13 @@ RSpec.describe NewspaperWorks::TextExtraction::PageOCR do
   end
 
   describe "turns image into ALTO" do
-    it "takes grayscale tiff, outputs ALTO" do
+    it "takes grayscale tiff, outputs valid ALTO, geometry" do
       ocr = described_class.new(example_gray_tiff)
       alto = ocr.alto
       document = Nokogiri::XML(alto)
       altoxsd.validate(document)
+      expect(document.at_css('PrintSpace')['WIDTH']).to eq "418"
+      expect(document.at_css('PrintSpace')['HEIGHT']).to eq "1046"
     end
   end
 end
