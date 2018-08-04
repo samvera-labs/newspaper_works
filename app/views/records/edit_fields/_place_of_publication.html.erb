@@ -1,12 +1,94 @@
 <%= f.input key,
-            as: :controlled_vocabulary,
+            as: :multi_value,
             placeholder: 'Search for a location',
             input_html: {
               class: 'form-control',
-              data: { 'autocomplete-url' => "/authorities/search/geonames",
-                      'autocomplete' => key }
+              data: { 'multi-autocomplete': "place_of_publication" },
+            #  data: { 'autocomplete-url' => "/authorities/search/geonames",
+            #          'autocomplete' => key }
             },
             ### Required for the ControlledVocabulary javascript:
-            wrapper_html: { data: { 'autocomplete-url' => "/authorities/search/geonames",
-                                    'field-name' => key }},
+            #wrapper_html: { data: { 'autocomplete-url' => "/authorities/search/geonames",
+            #                        'field-name' => key }},
             required: f.object.required?(key) %>
+
+<script>
+$(function() {
+  $( '*[data-multi-autocomplete="place_of_publication"]' ).autocomplete({
+    source: function(request, response) {
+    	$.get("http://api.geonames.org/searchJSON",
+              { q: request.term, username: "hive", maxRows: "10" },
+              function(data) {
+                console.log(data);
+                response_array = [];
+                $.each(data.geonames, function(index, value) {
+                    response_array[index] = value;
+                    response_array[index]["label"] = response_array[index]["name"];
+                });
+                response(response_array);
+            });
+    },
+    minLength: 2,
+    select: function( event, ui ) {
+        event.preventDefault();
+        $('*[data-multi-autocomplete="place_of_publication"]').val(ui.item.name);
+		this.value = ui.item.name;
+        $('*[data-multi-autocomplete="place_of_publication_latitude"]').val(ui.item.lat);
+		$('*[data-multi-autocomplete="place_of_publication_longitude"]').val(ui.item.lng);
+        $('#geoname').val(ui.item.geonameId);
+        $('*[data-multi-autocomplete="place_of_publication_city"]').val(ui.item.toponymName);
+        $('*[data-multi-autocomplete="place_of_publication_state"]').val(ui.item.adminName1);
+        $('*[data-multi-autocomplete="place_of_publication_country"]').val(ui.item.countryName);
+    }
+  });
+});
+</script>
+
+<script>
+/*
+alert( $( '*[data-multi-autocomplete="true"]' ).first().attr('placeholder') );
+$( '*[data-multi-autocomplete="true"]' ).first().autocomplete({
+    serviceUrl: "http://api.geonames.org/searchJSON?featureCode=PPL&featureCode=PPLA&featureCode=PPLC&featureCode=PPLX",
+    paramName: "q",
+    params: {"username": <%= config.geonames_username | "hive" %>, "maxRows": "10"},
+    transformResult: function(response) {
+      return {
+        suggestions: $.map(response.geonames, function(dataItem) {
+            return { value: dataItem.name,
+                     data: dataItem.name,
+                     lat: dataItem.lat,
+                     lng: dataItem.lng,
+                     toponymName: dataItem.toponymName,
+                     geonameId: dataItem.geonameId,
+                     stateName: dataItem.adminName1,
+                     countryName: dataItem.countryName
+                   }
+        })
+      };
+    },
+    onSelect: function (suggestion) {
+      if ( $("#place_of_publication").length ) {
+        $("#place_of_publication").val("http://sws.geonames.org/".concat(suggestion.geonameId, "/"));
+      }
+      if ( $("#place_of_publication").length ) {
+        $("#place_of_publication").val(suggestion.data.concat(", ", suggestion.stateName, ", ", suggestion.countryName));
+      }
+      if ( $("#place_of_publication_state").length ) {
+        $("#place_of_publication_state").val(suggestion.stateName);
+      }
+      if ( $("#place_of_publication_city").length ) {
+        $("#place_of_publication_city").val(suggestion.toponymName);
+      }
+      if ( $("#place_of_publication_latitude").length ) {
+        $("#place_of_publication_latitude").val(suggestion.lat);
+      }
+      if ( $("#place_of_publication_longitude").length ) {
+        $("#place_of_publication_longitude").val(suggestion.lng);
+      }
+    },
+    dataType: "json",
+    minChars: 3,
+    deferRequestBy: 0
+});
+*/
+</script>

@@ -1,0 +1,8 @@
+<% # app/views/records/edit_fields/_place_of_publication_country.html.erb %>
+<%= f.input key, as: :string,
+    required: f.object.required?(key),
+    input_html: { class: 'form-control',
+                  multiple: false,
+                  data: { 'multi-autocomplete': "place_of_publication_country" }
+                }
+%>

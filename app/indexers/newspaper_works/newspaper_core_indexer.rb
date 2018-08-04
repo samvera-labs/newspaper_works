@@ -18,6 +18,30 @@ module NewspaperWorks
 
     def generate_solr_document
       super.tap do |solr_doc|
+        if defined? object.place_of_publication_city
+          solr_doc['place_of_publication_city_ssim'] = object.place_of_publication_city.to_s
+          solr_doc['place_of_publication_tesim'] = object.place_of_publication_city.to_s
+        end
+        if defined? object.place_of_publication_state
+          solr_doc['place_of_publication_state_ssim'] = object.place_of_publication_state.to_s
+          if solr_doc.key?("place_of_publication_tesim")
+            solr_doc['place_of_publication_tesim'] = object.place_of_publication_state.to_s
+          else
+            solr_doc['place_of_publication_tesim'] << ", #{object.place_of_publication_state}"
+          end
+        end
+        if defined? object.place_of_publication_country
+          solr_doc['place_of_publication_country_ssim'] = object.place_of_publication_country.to_s
+          if solr_doc.key?("place_of_publication_tesim")
+            solr_doc['place_of_publication_tesim'] = object.place_of_publication_country.to_s
+          else
+            solr_doc['place_of_publication_tesim'] << ", #{object.place_of_publication_country}"
+          end
+        end
+        if defined? object.place_of_publication_latitude && defined? object.place_of_publication_longitude
+          solr_doc['place_of_publication_llsim'] = "#{object.place_of_publication_latitude}, "\
+                                                   "#{object.place_of_publication_longitude}"
+        end
         if defined? object.publication_date_start
           case object.publication_date_start
           when /\A\d{4}\z/
