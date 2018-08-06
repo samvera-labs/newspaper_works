@@ -29,7 +29,7 @@ module NewspaperWorks
         # given block to manage word generation, wrap with page/block/line
         def alto_page(pxwidth, pxheight, &block)
           builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
-            xml.alto(xmlns: 'http://schema.ccs-gmbh.com/ALTO') do
+            xml.alto(xmlns: 'http://www.loc.gov/standards/alto/ns-v2#') do
               xml.Description do
                 xml.MeasurementUnit 'pixel'
               end
@@ -58,7 +58,8 @@ module NewspaperWorks
 
         # make block line and call word-block
         def alto_blockline(xml, pxwidth, pxheight)
-          xml.TextBlock(HEIGHT: pxheight.to_i,
+          xml.TextBlock(ID: 'ID1a',
+                        HEIGHT: pxheight.to_i,
                         WIDTH: pxwidth.to_i,
                         HPOS: '0',
                         VPOS: '0') do

@@ -55,7 +55,8 @@ RSpec.describe NewspaperWorks::TextExtraction::PageOCR do
       ocr = described_class.new(example_gray_tiff)
       alto = ocr.alto
       document = Nokogiri::XML(alto)
-      altoxsd.validate(document)
+      errors = altoxsd.validate(document)
+      expect(errors.length).to eq 0
       expect(document.at_css('PrintSpace')['WIDTH']).to eq "418"
       expect(document.at_css('PrintSpace')['HEIGHT']).to eq "1046"
     end
