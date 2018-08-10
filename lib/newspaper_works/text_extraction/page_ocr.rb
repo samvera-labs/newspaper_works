@@ -44,6 +44,22 @@ module NewspaperWorks
         @words
       end
 
+      def normalized_coordinate(word)
+        {
+          word: word[:word],
+          height: (word[:y_end] - word[:y_start]),
+          width: (word[:x_end] - word[:x_start]),
+          x_start: word[:x_start].to_s,
+          y_start: word[:y_start].to_s
+        }
+      end
+
+      def word_json
+        save_words = words.map { |w| normalized_coordinate(w) }
+        payload = { words: save_words }
+        JSON.generate(payload)
+      end
+
       def plain
         load_box
         @plain
