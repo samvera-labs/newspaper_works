@@ -18,29 +18,32 @@ module NewspaperWorks
 
     def generate_solr_document
       super.tap do |solr_doc|
-        if defined? object.place_of_publication_city
-          solr_doc['place_of_publication_city_ssim'] = object.place_of_publication_city.to_s
-          solr_doc['place_of_publication_tesim'] = object.place_of_publication_city.to_s
-        end
-        if defined? object.place_of_publication_state
-          solr_doc['place_of_publication_state_ssim'] = object.place_of_publication_state.to_s
-          if solr_doc.key?("place_of_publication_tesim")
-            solr_doc['place_of_publication_tesim'] = object.place_of_publication_state.to_s
-          else
-            solr_doc['place_of_publication_tesim'] << ", #{object.place_of_publication_state}"
+        if defined? object.place_of_publication
+          geodata = get_geodata(object.place_of_publication.first)
+          if geodata && geodata.key?("name")
+            solr_doc['place_of_publication_city_ssim'] = geodata["name"]
+            solr_doc['place_of_publication_tesim'] = geodata["name"]
           end
-        end
-        if defined? object.place_of_publication_country
-          solr_doc['place_of_publication_country_ssim'] = object.place_of_publication_country.to_s
-          if solr_doc.key?("place_of_publication_tesim")
-            solr_doc['place_of_publication_tesim'] = object.place_of_publication_country.to_s
-          else
-            solr_doc['place_of_publication_tesim'] << ", #{object.place_of_publication_country}"
+          if geodata && geodata.key?("adminName1")
+            solr_doc['place_of_publication_state_ssim'] = geodata["adminName1"]
+            if solr_doc.key?("place_of_publication_tesim")
+              solr_doc['place_of_publication_tesim'] << ", #{geodata['adminName1']}"
+            else
+              solr_doc['place_of_publication_tesim'] = geodata["adminName1"]
+            end
           end
-        end
-        if defined? object.place_of_publication_latitude && defined? object.place_of_publication_longitude
-          solr_doc['place_of_publication_llsim'] = "#{object.place_of_publication_latitude}, "\
-                                                   "#{object.place_of_publication_longitude}"
+          if geodata && geodata.key?("countryName")
+            solr_doc['place_of_publication_country_ssim'] = geodata["countryName"]
+            if solr_doc.key?("place_of_publication_tesim")
+              solr_doc['place_of_publication_tesim'] << ", #{geodata['countryName']}"
+            else
+              solr_doc['place_of_publication_tesim'] = geodata["countryName"]
+            end
+          end
+          if geodata && geodata.key?("lat") && geodata.key?("lng")
+            solr_doc['place_of_publication_llsim'] = "#{geodata['lat']}, "\
+                                                     "#{geodata['lng']}"
+          end
         end
         if defined? object.publication_date_start
           case object.publication_date_start
@@ -62,5 +65,17 @@ module NewspaperWorks
         end
       end
     end
+
+    private
+
+      def get_geodata(geoname_id)
+        return false if geoname_id.to_i.zero?
+        geoname_user = config.geonames_username || "hive"
+        geoname_url = "http://api.geonames.org/get?geonameId=#{geoname_id}&username=#{geoname_user}"
+        resp = Net::HTTP.get_response(URI.parse(geoname_url))
+        geodata = Hash.from_xml(resp.body)
+        return geodata["geoname"] if geodata.key?("geoname")
+        false
+      end
   end
 end
