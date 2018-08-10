@@ -79,7 +79,8 @@ RSpec.describe NewspaperWorks::TextExtraction::PageOCR do
       expect(parsed['words'].length).to be > 1
       word = ocr.words[0]
       word1 = parsed['words'][0]
-      expect(word1['width']).to eq word[:x_end] - word[:x_start]
+      expect(word1['coordinates'][2]).to eq word[:x_end] - word[:x_start]
+      expect(word1['coordinates'][3]).to eq word[:y_end] - word[:y_start]
     end
   end
 end

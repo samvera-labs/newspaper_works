@@ -1,3 +1,4 @@
+require 'json'
 require 'open3'
 require 'rtesseract'
 
@@ -47,10 +48,12 @@ module NewspaperWorks
       def normalized_coordinate(word)
         {
           word: word[:word],
-          height: (word[:y_end] - word[:y_start]),
-          width: (word[:x_end] - word[:x_start]),
-          x_start: word[:x_start].to_s,
-          y_start: word[:y_start].to_s
+          coordinates: [
+            word[:x_start],
+            word[:y_start],
+            (word[:x_end] - word[:x_start]),
+            (word[:y_end] - word[:y_start])
+          ]
         }
       end
 
