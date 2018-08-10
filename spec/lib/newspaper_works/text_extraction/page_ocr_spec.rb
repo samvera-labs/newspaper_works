@@ -1,3 +1,4 @@
+require 'json'
 require 'nokogiri'
 require 'spec_helper'
 
@@ -68,6 +69,17 @@ RSpec.describe NewspaperWorks::TextExtraction::PageOCR do
       plain = ocr.plain
       expect(plain.class).to be String
       expect(plain.length).to be > 0
+    end
+  end
+
+  describe "JSON word coordinates" do
+    it "makes simple JSON word coordinates" do
+      ocr = described_class.new(example_gray_tiff)
+      parsed = JSON.parse(ocr.word_json)
+      expect(parsed['words'].length).to be > 1
+      word = ocr.words[0]
+      word1 = parsed['words'][0]
+      expect(word1['width']).to eq word[:x_end] - word[:x_start]
     end
   end
 end
