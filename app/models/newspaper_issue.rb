@@ -83,6 +83,11 @@ class NewspaperIssue < ActiveFedora::Base
   # BasicMetadata must be included last
   include ::Hyrax::BasicMetadata
 
+  # for GeoNames autocomplete lookup
+  # TODO: DRY this if possible, used in multiple models
+  self.controlled_properties = [:place_of_publication]
+  accepts_nested_attributes_for :place_of_publication, allow_destroy: true
+
   # relationship methods
   def publication
     result = member_of.select { |v| v.instance_of?(NewspaperTitle) }

@@ -30,43 +30,8 @@ module NewspaperWorks
       property(
         :place_of_publication,
         predicate: ::RDF::Vocab::MARCRelators.pup,
-        multiple: true
-      ) do |index|
-        index.as :stored_searchable
-      end
-
-      #  - Place of Publication (State)
-      property(
-        :place_of_publication_state,
-        predicate: ::RDF::Vocab::SCHEMA.State,
-        multiple: true
-      ) do |index|
-        index.as :symbol
-      end
-
-      #  - Place of Publication (City)
-      property(
-        :place_of_publication_city,
-        predicate: ::RDF::Vocab::SCHEMA.City,
-        multiple: true
-      ) do |index|
-        index.as :symbol
-      end
-
-      #  - Place of Publication (Latitude)
-      property(
-        :place_of_publication_latitude,
-        predicate: ::RDF::Vocab::SCHEMA.latitude,
-        multiple: true
-      ) do |index|
-        index.as :stored_searchable
-      end
-
-      #  - Place of Publication (Longitude)
-      property(
-        :place_of_publication_longitude,
-        predicate: ::RDF::Vocab::SCHEMA.longitude,
-        multiple: true
+        multiple: true,
+        class_name: Hyrax::ControlledVocabularies::Location
       ) do |index|
         index.as :stored_searchable
       end

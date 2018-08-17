@@ -1,8 +1,14 @@
-<% # app/views/records/edit_fields/_place_of_publication_city.html.erb %>
-<%= f.input key, as: :string,
-    required: f.object.required?(key),
-    input_html: { class: 'form-control',
-                  multiple: false,
-                  data: { 'multi-autocomplete': "place_of_publication" }
-                }
-%>
+<%= f.input key,
+            as: :controlled_vocabulary,
+            placeholder: 'Search for a location',
+            input_html: {
+                class: 'form-control',
+                data: { 'autocomplete-url' => "/authorities/search/geonames",
+                        'autocomplete' => key }
+            },
+            ### Required for the ControlledVocabulary javascript:
+            wrapper_html: { data: { 'autocomplete-url' => "/authorities/search/geonames",
+                                    'field-name' => key }},
+            required: f.object.required?(key) %>
+
+<%= javascript_include_tag 'newspaper_works/autocomplete_fix.js' %>
