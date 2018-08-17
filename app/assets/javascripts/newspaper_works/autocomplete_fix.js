@@ -30,17 +30,17 @@
     $("input[data-autocomplete]").each(function() {
       var input = $(this),
           autocomplete;
-      if ($(input).data('autocomplete')) {
+      if (input.data('ui-autocomplete') !== undefined) {
         // remove jqueryui autocomplete previously set up:
-        $(input).autocomplete("destroy");
-        // re-initialize Hyrax autocomplete:
-        autocomplete = new Autocomplete();
-        autocomplete.setup(
-          input,
-          input.attr('data-autocomplete'),
-          input.attr('data-autocomplete-url')
-        );
+        input.autocomplete("destroy");
       }
+      // re-initialize Hyrax autocomplete:
+      autocomplete = new Autocomplete();
+      autocomplete.setup(
+        input,
+        input.attr('data-autocomplete'),
+        input.attr('data-autocomplete-url')
+      );
     });
   }
 
