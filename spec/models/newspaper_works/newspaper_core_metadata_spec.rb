@@ -22,6 +22,10 @@ RSpec.describe NewspaperWorks::NewspaperCoreMetadata do
     expect(work).to respond_to(:held_by)
   end
 
+  it 'uses correct class for place_of_publication' do
+    expect(work.class.properties['place_of_publication'].class_name).to eq Hyrax::ControlledVocabularies::Location
+  end
+
   it 'work can set/get properties' do
     genre_uri = 'http://cv.iptc.org/newscodes/genre/Opinion'
     work.genre = [genre_uri]
