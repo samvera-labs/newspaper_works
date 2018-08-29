@@ -13,6 +13,10 @@
 <%= presenter.attribute_to_html(:issue_number, render_as: :faceted) %>
 <%= presenter.attribute_to_html(:geographic_coverage, render_as: :faceted) %>
 <%= presenter.attribute_to_html(:extent, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:publication_date, render_as: :faceted) %>
+<%# newspaper_page attributes %>
+<%= presenter.attribute_to_html(:height, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:width, render_as: :faceted) %>
 <%# newspaper_title attributes %>
 <%= presenter.attribute_to_html(:edition, render_as: :faceted) %>
 <%= presenter.attribute_to_html(:frequency, render_as: :faceted) %>
@@ -20,6 +24,7 @@
 <%= presenter.attribute_to_html(:succeeded_by, render_as: :faceted) %>
 <%= presenter.attribute_to_html(:publication_date_start, render_as: :linked, search_field: `publication_date_start_dtsim`) %>
 <%= presenter.attribute_to_html(:publication_date_end, render_as: :faceted) %>
+<%# hyrax %>
 <%= presenter.attribute_to_html(:creator, render_as: :faceted) %>
 <%= presenter.attribute_to_html(:contributor, render_as: :faceted) %>
 <%= presenter.attribute_to_html(:subject, render_as: :faceted) %>
