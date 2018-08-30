@@ -23,7 +23,7 @@ module NewspaperWorks
 
       def fileset_id
         filesets = @context.members.select { |m| m.class == FileSet }
-        filesets.empty? ? filesets[0].id : nil
+        filesets.empty? ? nil : filesets[0].id
       end
 
       def path(name)
@@ -36,12 +36,14 @@ module NewspaperWorks
       def with_io(name, &block)
         filepath = path(name)
         return if filepath.nil?
-        File.open(name, 'r', &block)
+        File.open(filepath, 'r', &block)
       end
 
       def data(name)
         result = ''
-        with_io(name) { |io| result += io.read }
+        with_io(name) do |io|
+          result += io.read
+        end
         result
       end
     end
