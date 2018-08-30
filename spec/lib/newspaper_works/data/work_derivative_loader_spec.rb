@@ -43,21 +43,25 @@ RSpec.describe NewspaperWorks::Data::WorkDerivativeLoader do
       path_factory.derivative_path_for_reference(work_file_set(work), 'jp2')
     end
 
-    def mkdir_derivative(work)
+    def mkdir_derivative(work, name)
       # make shared path for derivatives to live, Hyrax ususally does this
       #   for thumbnails, and newspaper_works does this in its derivative
       #   service plugins; here we do same.
       fsid = work_file_set(work).id
-      path = path_factory.derivative_path_for_reference(fsid, 'jp2')
+      path = path_factory.derivative_path_for_reference(fsid, name)
       dir = File.join(path.split('/')[0..-2])
       FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
     end
 
-    def populate_samples(work)
-      mkdir_derivative(work)
+    def mk_jp2_derivative(work)
+      mkdir_derivative(work, 'jp2')
       dst_path = jp2_path(work)
       FileUtils.copy(example_gray_jp2, dst_path)
       expect(File.exist?(dst_path)).to be true
+    end
+
+    def mk_txt_derivative(work)
+      mkdir_derivative(work, 'txt')
       dst_path = text_path(work)
       File.open(dst_path, 'w') { |f| f.write(sample_text) }
       expect(File.exist?(dst_path)).to be true
@@ -65,7 +69,7 @@ RSpec.describe NewspaperWorks::Data::WorkDerivativeLoader do
 
     it "Loads text derivative path" do
       work = sample_work
-      populate_samples(work)
+      mk_txt_derivative(work)
       work.save!(validate: false)
       loader = described_class.new(work)
       expect(File.exist?(loader.path('txt'))).to be true
@@ -73,10 +77,18 @@ RSpec.describe NewspaperWorks::Data::WorkDerivativeLoader do
 
     it "Loads text derivative data" do
       work = sample_work
-      populate_samples(work)
+      mk_txt_derivative(work)
       work.save!(validate: false)
       loader = described_class.new(work)
       expect(loader.data('txt')).to include 'mythical'
+    end
+
+    it "Can access jp2 derivative" do
+      work = sample_work
+      mk_jp2_derivative(work)
+      work.save!(validate: false)
+      loader = described_class.new(work)
+      expect(File.exist?(loader.path('jp2'))).to be true
     end
   end
 end
