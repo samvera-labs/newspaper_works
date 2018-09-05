@@ -12,8 +12,8 @@ RSpec.describe NewspaperPageIndexer do
       work = sample_work
       mk_txt_derivative(work)
       doc = solr_document
-      expect(doc.keys).to include 'full_text_tesi'
-      expect(doc['full_text_tesi']).to eq sample_text
+      expect(doc.keys).to include 'all_text_timv'
+      expect(doc['all_text_timv']).to eq sample_text
     end
   end
 
@@ -24,7 +24,7 @@ RSpec.describe NewspaperPageIndexer do
       # save will trigger indexing
       expect(work.save).to be true
       # ...and we expect full text to be indexed:
-      result = NewspaperPage.where(full_text_tesi: 'enigma')
+      result = NewspaperPage.where(all_text_timv: 'enigma')
       expect(result).to include work
     end
   end
