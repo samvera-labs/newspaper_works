@@ -24,7 +24,7 @@ RSpec.describe NewspaperPageIndexer do
       # save will trigger indexing
       expect(work.save).to be true
       # ...and we expect full text to be indexed:
-      result = NewspaperPage.where(all_text_timv: 'enigma')
+      result = NewspaperPage.where(all_text_timv: 'enigmas')
       expect(result).to include work
     end
   end
