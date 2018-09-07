@@ -71,9 +71,6 @@ module NewspaperWorks
       ) do |index|
         index.as :stored_searchable
       end
-
-      class_attribute :controlled_properties
-      self.controlled_properties = []
     end
   end
 end

@@ -6,6 +6,11 @@ require 'bundler/setup'
 require 'engine_cart'
 EngineCart.load_application!
 
+# test account for Geonames-related specs
+Qa::Authorities::Geonames.username = 'newspaper_works'
+
+require 'rspec/rails'
+
 RSpec.configure do |config|
   # enable FactoryBot:
   require 'factory_bot'

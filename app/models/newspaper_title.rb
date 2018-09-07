@@ -105,9 +105,7 @@ class NewspaperTitle < ActiveFedora::Base
   include ::Hyrax::BasicMetadata
 
   # for GeoNames autocomplete lookup
-  # TODO: DRY this if possible, used in multiple models
-  self.controlled_properties = [:place_of_publication]
-  accepts_nested_attributes_for :place_of_publication, allow_destroy: true
+  include NewspaperWorks::PlaceOfPublicationBehavior
 
   # relationship methods:
   def issues

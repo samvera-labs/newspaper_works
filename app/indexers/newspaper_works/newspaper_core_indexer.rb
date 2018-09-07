@@ -13,7 +13,7 @@ module NewspaperWorks
     def generate_solr_document
       super.tap do |solr_doc|
         if defined? object.place_of_publication
-          index_pup(object.place_of_publication, solr_doc) if object.place_of_publication.present?
+          index_pop(object.place_of_publication, solr_doc) if object.place_of_publication.present?
         end
       end
     end

@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 # Core Metadata Spec Tests
 RSpec.describe NewspaperWorks::NewspaperCoreMetadata do
   class NewspaperishWork < ActiveFedora::Base
