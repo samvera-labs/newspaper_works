@@ -1,4 +1,6 @@
 require 'spec_helper'
+# require rspec/rails here, because putting it spec_helper slows Travis builds
+require 'rspec/rails'
 
 # based on: https://github.com/samvera/hyrax/blob/89ffdb757a7ae545e303919d2277901237a5fd30/spec/views/records/edit_fields/_based_near.html.erb_spec.rb
 RSpec.describe 'records/edit_fields/_place_of_publication.html.erb', type: :view do
