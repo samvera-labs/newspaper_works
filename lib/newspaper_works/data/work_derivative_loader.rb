@@ -3,10 +3,24 @@ require 'hyrax'
 module NewspaperWorks
   module Data
     class WorkDerivativeLoader
+      include Enumerable
+
       def initialize(work)
         @context = work
         # storage for computed paths are memoized as used, here:
         @paths = {}
+      end
+
+      # all paths for work derivatives
+      def paths
+        path_factory.derivatives_for_reference(fileset_id)
+      end
+
+      # enumerates available file extensions
+      def each
+        paths.each do |e|
+          yield(e.split('.')[-1])
+        end
       end
 
       def path_factory

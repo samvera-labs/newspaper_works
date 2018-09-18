@@ -4,6 +4,26 @@ require 'misc_shared'
 RSpec.describe NewspaperWorks::Data::WorkDerivativeLoader do
   include_context "shared setup"
 
+  describe "enumerates available derivatives for work" do
+    it "includes expected derivative path" do
+      work = sample_work
+      mk_txt_derivative(work)
+      work.save!(validate: false)
+      loader = described_class.new(work)
+      ext_found = loader.paths.map { |v| v.split('.')[-1] }
+      expect(ext_found).to include 'txt'
+    end
+
+    it "includes expected derivative extensions" do
+      work = sample_work
+      mk_txt_derivative(work)
+      work.save!(validate: false)
+      loader = described_class.new(work)
+      ext_found = loader.to_a
+      expect(ext_found).to include 'txt'
+    end
+  end
+
   describe "loads derivatives for a work" do
     it "Loads text derivative path" do
       work = sample_work
