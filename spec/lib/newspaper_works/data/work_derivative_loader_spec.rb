@@ -4,8 +4,8 @@ require 'misc_shared'
 RSpec.describe NewspaperWorks::Data::WorkDerivativeLoader do
   include_context "shared setup"
 
-  describe "enumerates available derivatives for work" do
-    it "includes expected derivative path" do
+  describe "enumerates available derivatives" do
+    it "includes expected derivative path for work" do
       work = sample_work
       mk_txt_derivative(work)
       work.save!(validate: false)
@@ -14,11 +14,31 @@ RSpec.describe NewspaperWorks::Data::WorkDerivativeLoader do
       expect(ext_found).to include 'txt'
     end
 
-    it "includes expected derivative extensions" do
+    it "enumerates expected derivative extension for work" do
       work = sample_work
       mk_txt_derivative(work)
       work.save!(validate: false)
       loader = described_class.new(work)
+      ext_found = loader.to_a
+      expect(ext_found).to include 'txt'
+    end
+
+    it "enumerates expected derivative extension for file set" do
+      work = sample_work
+      mk_txt_derivative(work)
+      work.save!(validate: false)
+      file_set = work.members.select { |m| m.class == FileSet }[0]
+      loader = described_class.new(file_set)
+      ext_found = loader.to_a
+      expect(ext_found).to include 'txt'
+    end
+
+    it "enumerates expected derivative extension for file set id" do
+      work = sample_work
+      mk_txt_derivative(work)
+      work.save!(validate: false)
+      file_set = work.members.select { |m| m.class == FileSet }[0]
+      loader = described_class.new(file_set.id)
       ext_found = loader.to_a
       expect(ext_found).to include 'txt'
     end

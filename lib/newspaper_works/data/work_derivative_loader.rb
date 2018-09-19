@@ -6,6 +6,7 @@ module NewspaperWorks
       include Enumerable
 
       def initialize(work)
+        # context usually work, may be FileSet, may be string id of FileSet
         @context = work
         # storage for computed paths are memoized as used, here:
         @paths = {}
@@ -36,6 +37,11 @@ module NewspaperWorks
       end
 
       def fileset_id
+        # if context is itself a string, presume it is a file set id
+        return @context if @context.class == String
+        # context might be a FileSet...
+        return @context if @context.class == FileSet
+        # ...or a work:
         filesets = @context.members.select { |m| m.class == FileSet }
         filesets.empty? ? nil : filesets[0].id
       end
