@@ -24,5 +24,12 @@ module NewspaperWorks
         "\n  mount NewspaperWorks::Engine => '/'\n"
       end
     end
+
+    def add_solr_doc
+      inject_into_file 'app/models/solr_document.rb',
+                       after: "include Hyrax::SolrDocumentBehavior" do
+        "\n  include NewspaperWorks::Solr::Document\n"
+      end
+    end
   end
 end
