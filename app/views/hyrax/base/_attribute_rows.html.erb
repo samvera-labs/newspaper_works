@@ -1,0 +1,40 @@
+<%# newspaper_core_metadata attributes %>
+<%= presenter.attribute_to_html(:alternative_title, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:genre, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:place_of_publication, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:issn, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:lccn, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:oclcnum, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:held_by, render_as: :faceted) %>
+<%# newspaper_article attributes %>
+<%= presenter.attribute_to_html(:author, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:photographer, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:volume, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:issue_number, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:geographic_coverage, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:extent, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:publication_date, render_as: :faceted) %>
+<%# newspaper_page attributes %>
+<%= presenter.attribute_to_html(:height, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:width, render_as: :faceted) %>
+<%# newspaper_title attributes %>
+<%= presenter.attribute_to_html(:edition, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:frequency, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:preceded_by, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:succeeded_by, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:publication_date_start, render_as: :linked, search_field: `publication_date_start_dtsim`) %>
+<%= presenter.attribute_to_html(:publication_date_end, render_as: :faceted) %>
+<%# hyrax %>
+<%= presenter.attribute_to_html(:creator, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:contributor, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:subject, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:publisher, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:language, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:identifier, render_as: :linked, search_field: 'identifier_tesim') %>
+<%= presenter.attribute_to_html(:keyword, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:date_created, render_as: :linked, search_field: 'date_created_tesim') %>
+<%= presenter.attribute_to_html(:based_near_label) %>
+<%= presenter.attribute_to_html(:related_url, render_as: :external_link) %>
+<%= presenter.attribute_to_html(:resource_type, render_as: :faceted) %>
+<%= presenter.attribute_to_html(:source) %>
+<%= presenter.attribute_to_html(:rights_statement, render_as: :rights_statement) %>
