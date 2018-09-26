@@ -7,11 +7,11 @@ module Hyrax
              to: :solr_document
 
     def publication_date_start
-      solr_document["publication_date_start_dtsim"][0]
+      solr_document["publication_date_start_dtsim"]
     end
 
     def publication_date_end
-      solr_document["publication_date_end_dtsim"][0]
+      solr_document["publication_date_end_dtsim"]
     end
   end
 end
