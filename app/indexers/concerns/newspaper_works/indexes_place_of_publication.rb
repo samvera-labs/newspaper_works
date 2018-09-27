@@ -5,8 +5,10 @@ module NewspaperWorks
     #
     # @param place_of_publication [Array] Hyrax::ControlledVocabularies::Location objects
     # @param solr_doc [Hash] the hash of field data to be pushed to Solr
-    def index_pop(place_of_publication, solr_doc)
-      place_of_publication.each do |pop|
+    def index_pop(object, solr_doc)
+      return unless object.respond_to?(place_of_publication)
+      place_of_publication = object.place_of_publication
+      object.place_of_publication.each do |pop|
         next unless pop.is_a?(ActiveTriples::Resource)
         geonames_id = pop.id.match(/[\d]{4,}/).to_s
         geodata = get_geodata(geonames_id)
