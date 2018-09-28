@@ -49,7 +49,9 @@ module NewspaperWorks
       return unless newspaper_issue.is_a?(NewspaperIssue)
       solr_doc['issue_id_ssi'] = newspaper_issue.id
       solr_doc['issue_title_ssi'] = newspaper_issue.title.first
-      solr_doc['issue_pubdate_dtsi'] = "#{newspaper_issue.publication_date}T00:00:00Z"
+      if newspaper_issue.publication_date.present?
+        solr_doc['issue_pubdate_dtsi'] = "#{newspaper_issue.publication_date}T00:00:00Z"
+      end
       solr_doc['issue_volume_ssi'] = newspaper_issue.volume
       solr_doc['issue_edition_ssi'] = newspaper_issue.edition
       solr_doc['issue_number_ssi'] = newspaper_issue.issue_number
