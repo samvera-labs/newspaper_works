@@ -3,11 +3,10 @@ module NewspaperWorks
   module IndexesPlaceOfPublication
     # wrapper for methods for indexing place_of_publication values
     #
-    # @param place_of_publication [Array] Hyrax::ControlledVocabularies::Location objects
+    # @param object [Newspaper*] an instance of a NewspaperWorks model
     # @param solr_doc [Hash] the hash of field data to be pushed to Solr
     def index_pop(object, solr_doc)
-      return unless object.respond_to?(place_of_publication)
-      place_of_publication = object.place_of_publication
+      return unless object.respond_to?(:place_of_publication)
       object.place_of_publication.each do |pop|
         next unless pop.is_a?(ActiveTriples::Resource)
         geonames_id = pop.id.match(/[\d]{4,}/).to_s

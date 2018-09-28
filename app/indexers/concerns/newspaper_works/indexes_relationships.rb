@@ -7,7 +7,7 @@ module NewspaperWorks
     # @param solr_doc [Hash] the hash of field data to be pushed to Solr
     def index_relationships(object, solr_doc)
       index_publication_title(object, solr_doc) unless object.is_a?(NewspaperTitle)
-      case object.class
+      case object
       when NewspaperPage
         index_issue(object, solr_doc)
         index_container(object, solr_doc)
@@ -49,7 +49,7 @@ module NewspaperWorks
       return unless newspaper_issue.is_a?(NewspaperIssue)
       solr_doc['issue_id_ssi'] = newspaper_issue.id
       solr_doc['issue_title_ssi'] = newspaper_issue.title.first
-      solr_doc['issue_pubdate_tsi'] = newspaper_issue.publication_date
+      solr_doc['issue_pubdate_dtsi'] = "#{newspaper_issue.publication_date}T00:00:00Z"
       solr_doc['issue_volume_ssi'] = newspaper_issue.volume
       solr_doc['issue_edition_ssi'] = newspaper_issue.edition
       solr_doc['issue_number_ssi'] = newspaper_issue.issue_number
