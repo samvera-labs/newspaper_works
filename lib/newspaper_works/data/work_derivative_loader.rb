@@ -56,7 +56,7 @@ module NewspaperWorks
       def with_io(name, &block)
         filepath = path(name)
         return if filepath.nil?
-        File.open(filepath, 'r', &block)
+        File.open(filepath, 'rb', &block)
       end
 
       def data(name)
