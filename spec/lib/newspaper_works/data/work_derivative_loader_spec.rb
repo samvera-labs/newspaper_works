@@ -50,6 +50,12 @@ RSpec.describe NewspaperWorks::Data::WorkDerivativeLoader do
       expect(loader.data('txt')).to include 'mythical'
     end
 
+    it "Loads thumbnail derivative data" do
+      mk_thumbnail_derivative(work)
+      loader = described_class.new(work)
+      expect(loader.data('thumbnail').size).to eq 16_743
+    end
+
     it "Can access jp2 derivative" do
       mk_jp2_derivative(work)
       loader = described_class.new(work)

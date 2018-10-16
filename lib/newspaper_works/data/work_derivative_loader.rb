@@ -5,6 +5,14 @@ module NewspaperWorks
     class WorkDerivativeLoader
       include Enumerable
 
+      # mapping of special names Hyrax uses for derivatives, not extension:
+      @remap_names = {
+        'jpg' => 'thumbnail'
+      }
+      class << self
+        attr_accessor :remap_names
+      end
+
       def initialize(work)
         # context usually work, may be FileSet, may be string id of FileSet
         @context = work
@@ -17,10 +25,15 @@ module NewspaperWorks
         path_factory.derivatives_for_reference(fileset_id)
       end
 
+      def path_destination_name(path)
+        ext = path.split('.')[-1]
+        self.class.remap_names[ext] || ext
+      end
+
       # enumerates available file extensions
       def each
         paths.each do |e|
-          yield(e.split('.')[-1])
+          yield(path_destination_name(e))
         end
       end
 

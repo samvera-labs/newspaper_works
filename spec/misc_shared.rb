@@ -10,6 +10,8 @@ RSpec.shared_context "shared setup", shared_context: :metadata do
 
   let(:sample_text) { 'even in a mythical Age there must be some enigmas' }
 
+  let(:sample_thumbnail) { File.join(fixture_path, 'thumbnail.jpg') }
+
   let(:valid_file_set) do
     file_set = FileSet.new
     file_set.save!(validate: false)
@@ -40,6 +42,10 @@ RSpec.shared_context "shared setup", shared_context: :metadata do
     path_factory.derivative_path_for_reference(work_file_set(work), 'jp2')
   end
 
+  def thumbnail_path(work)
+    path_factory.derivative_path_for_reference(work_file_set(work), 'thumbnail')
+  end
+
   def mkdir_derivative(work, name)
     # make shared path for derivatives to live, Hyrax ususally does this
     #   for thumbnails, and newspaper_works does this in its derivative
@@ -61,6 +67,13 @@ RSpec.shared_context "shared setup", shared_context: :metadata do
     mkdir_derivative(work, 'txt')
     dst_path = text_path(work)
     File.open(dst_path, 'w') { |f| f.write(sample_text) }
+    expect(File.exist?(dst_path)).to be true
+  end
+
+  def mk_thumbnail_derivative(work)
+    mkdir_derivative(work, 'thumbnail')
+    dst_path = thumbnail_path(work)
+    FileUtils.copy(sample_thumbnail, dst_path)
     expect(File.exist?(dst_path)).to be true
   end
 end
