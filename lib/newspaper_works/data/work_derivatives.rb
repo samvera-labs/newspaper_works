@@ -53,8 +53,13 @@ module NewspaperWorks
 
         # Load all paths/names to @paths once, upon first access
         def load_paths
+          fsid = fileset_id
+          if fsid.nil?
+            @paths = {}
+            return
+          end
           # list of paths
-          paths = path_factory.derivatives_for_reference(fileset_id)
+          paths = path_factory.derivatives_for_reference(fsid)
           # names from paths
           @paths = paths.map { |e| [path_destination_name(e), e] }.to_h
         end
