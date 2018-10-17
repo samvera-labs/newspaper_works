@@ -1,4 +1,4 @@
-require 'newspaper_works/data/work_derivative_loader'
+require 'newspaper_works/data/work_derivatives'
 
 module NewspaperWorks
   # Module for data access helper / adapter classes supporting, enhancing

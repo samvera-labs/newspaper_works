@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'misc_shared'
 
-RSpec.describe NewspaperWorks::Data::WorkDerivativeLoader do
+RSpec.describe NewspaperWorks::Data::WorkDerivatives do
   include_context "shared setup"
 
   let(:work) do

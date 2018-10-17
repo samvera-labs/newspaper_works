@@ -2,7 +2,7 @@ require 'hyrax'
 
 module NewspaperWorks
   module Data
-    class WorkDerivativeLoader
+    class WorkDerivatives
       # mapping of special names Hyrax uses for derivatives, not extension:
       @remap_names = {
         'jpeg' => 'thumbnail'
