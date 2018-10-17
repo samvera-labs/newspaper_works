@@ -11,10 +11,17 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
     sample_work
   end
 
-  describe "enumerates available derivatives" do
+  describe "enumerates available derivatives like hash" do
     it "includes expected derivative path for work" do
       loader = described_class.new(work)
       expect(loader.keys).to include 'txt'
+    end
+
+    it "can be introspected for quantity of derivatives" do
+      # `size` method without argument is count of derivatives,
+      #   functions equivalently to loader.keys.size
+      loader = described_class.new(work)
+      expect(loader.size).to eq loader.keys.size
     end
 
     it "enumerates expected derivative extension for work" do
@@ -42,6 +49,7 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
     it "Loads text derivative path" do
       loader = described_class.new(work)
       expect(File.exist?(loader.path('txt'))).to be true
+      expect(loader.exist?('txt')).to be true
     end
 
     it "Loads text derivative data" do
@@ -52,13 +60,17 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
     it "Loads thumbnail derivative data" do
       mk_thumbnail_derivative(work)
       loader = described_class.new(work)
+      # get size by loading data
       expect(loader.data('thumbnail').size).to eq 16_743
+      # get size by File.size via .size method
+      expect(loader.size('thumbnail')).to eq 16_743
     end
 
     it "Can access jp2 derivative" do
       mk_jp2_derivative(work)
       loader = described_class.new(work)
       expect(File.exist?(loader.path('jp2'))).to be true
+      expect(loader.exist?('jp2')).to be true
     end
   end
 end

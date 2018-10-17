@@ -72,6 +72,16 @@ module NewspaperWorks
         File.open(filepath, 'rb', &block)
       end
 
+      def size(*args)
+        load_paths if @paths.nil?
+        return @paths.size if args[0].nil?
+        File.size(@paths[args[0]])
+      end
+
+      def exist?(name)
+        keys.include?(name) && File.exist?(self[name])
+      end
+
       def data(name)
         result = ''
         with_io(name) do |io|
