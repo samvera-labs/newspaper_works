@@ -3,11 +3,9 @@ require 'hyrax'
 module NewspaperWorks
   module Data
     class WorkDerivativeLoader
-      include Enumerable
-
       # mapping of special names Hyrax uses for derivatives, not extension:
       @remap_names = {
-        'jpg' => 'thumbnail'
+        'jpeg' => 'thumbnail'
       }
       class << self
         attr_accessor :remap_names
@@ -16,13 +14,16 @@ module NewspaperWorks
       def initialize(work)
         # context usually work, may be FileSet, may be string id of FileSet
         @context = work
-        # storage for computed paths are memoized as used, here:
-        @paths = {}
+        # computed name-to-path mapping, initially nil as sentinel for JIT load
+        @paths = nil
       end
 
-      # all paths for work derivatives
-      def paths
-        path_factory.derivatives_for_reference(fileset_id)
+      # Load all paths/names to @paths once, upon first access
+      def load_paths
+        # list of paths
+        paths = path_factory.derivatives_for_reference(fileset_id)
+        # names from paths
+        @paths = paths.map { |e| [path_destination_name(e), e] }.to_h
       end
 
       def path_destination_name(path)
@@ -30,23 +31,22 @@ module NewspaperWorks
         self.class.remap_names[ext] || ext
       end
 
-      # enumerates available file extensions
-      def each
-        paths.each do |e|
-          yield(path_destination_name(e))
+      def respond_to_missing?(symbol, include_priv = false)
+        {}.respond_to?(symbol, include_priv)
+      end
+
+      def method_missing(method, *args, &block)
+        # if we proxy mapping/hash enumertion methods,
+        #   make sure @paths loaded, then proxy to it.
+        if respond_to_missing?(method)
+          load_paths if @paths.nil?
+          return @paths.send(method, *args, &block)
         end
+        super
       end
 
       def path_factory
         Hyrax::DerivativePath
-      end
-
-      def derivative_path(fsid, name)
-        if @paths[name].nil?
-          result = path_factory.derivative_path_for_reference(fsid, name)
-          @paths[name] = result
-        end
-        @paths[name]
       end
 
       def fileset_id
@@ -60,9 +60,9 @@ module NewspaperWorks
       end
 
       def path(name)
-        fsid = fileset_id
-        return nil if fsid.nil?
-        result = derivative_path(fsid, name)
+        load_paths if @paths.nil?
+        result = @paths[name]
+        return if result.nil?
         File.exist?(result) ? result : nil
       end
 

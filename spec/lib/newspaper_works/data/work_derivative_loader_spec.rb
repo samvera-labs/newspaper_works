@@ -14,27 +14,26 @@ RSpec.describe NewspaperWorks::Data::WorkDerivativeLoader do
   describe "enumerates available derivatives" do
     it "includes expected derivative path for work" do
       loader = described_class.new(work)
-      ext_found = loader.paths.map { |v| v.split('.')[-1] }
-      expect(ext_found).to include 'txt'
+      expect(loader.keys).to include 'txt'
     end
 
     it "enumerates expected derivative extension for work" do
       loader = described_class.new(work)
-      ext_found = loader.to_a
+      ext_found = loader.keys
       expect(ext_found).to include 'txt'
     end
 
     it "enumerates expected derivative extension for file set" do
       file_set = work.members.select { |m| m.class == FileSet }[0]
       loader = described_class.new(file_set)
-      ext_found = loader.to_a
+      ext_found = loader.keys
       expect(ext_found).to include 'txt'
     end
 
     it "enumerates expected derivative extension for file set id" do
       file_set = work.members.select { |m| m.class == FileSet }[0]
       loader = described_class.new(file_set.id)
-      ext_found = loader.to_a
+      ext_found = loader.keys
       expect(ext_found).to include 'txt'
     end
   end
