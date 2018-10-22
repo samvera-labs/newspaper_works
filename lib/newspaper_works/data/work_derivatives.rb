@@ -3,6 +3,8 @@ require 'hyrax'
 module NewspaperWorks
   module Data
     class WorkDerivatives
+      include NewspaperWorks::Data::FilesetHelper
+
       # mapping of special names Hyrax uses for derivatives, not extension:
       @remap_names = {
         'jpeg' => 'thumbnail'
@@ -16,6 +18,34 @@ module NewspaperWorks
         @context = work
         # computed name-to-path mapping, initially nil as sentinel for JIT load
         @paths = nil
+      end
+
+      def attach(file, name)
+        mkdir_pairtree
+        path = path_factory.derivative_path_for_reference(work_fileset, name)
+        # if file argument is path, copy file
+        if file.class == String
+          FileUtils.copy(file, path) if file.class == String
+        else
+          # otherwise, presume file is an IO, read, write it
+          #   note: does not close input file/IO, presume that is caller's
+          #   responsibility.
+          orig_pos = file.tell
+          file.seek(0)
+          File.open(path, 'w') { |dstfile| dstfile.write(file.read) }
+          file.seek(orig_pos)
+        end
+        # finally, reload @paths after mutation
+        load_paths
+      end
+
+      def delete(name, force: nil)
+        path = path_factory.derivative_path_for_reference(work_fileset, name)
+        # will remove file, if it exists; won't remove pairtree, even
+        #   if it becomes empty, as that is excess scope.
+        FileUtils.rm(path, force: force)
+        # finally, reload @paths after mutation
+        load_paths
       end
 
       def path(name)
@@ -87,14 +117,15 @@ module NewspaperWorks
           Hyrax::DerivativePath
         end
 
-        def fileset_id
-          # if context is itself a string, presume it is a file set id
-          return @context if @context.class == String
-          # context might be a FileSet...
-          return @context if @context.class == FileSet
-          # ...or a work:
-          filesets = @context.members.select { |m| m.class == FileSet }
-          filesets.empty? ? nil : filesets[0].id
+        # make shared path for derivatives to live, given
+        def mkdir_pairtree
+          ensure_fileset_exists
+          # Hyrax::DerivativePath has no public method to directly get the
+          #   bare pairtree path for derivatives for a fileset, but we
+          #   can infer it...
+          path = path_factory.derivative_path_for_reference(work_fileset, '')
+          dir = File.join(path.split('/')[0..-2])
+          FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
         end
     end
   end
