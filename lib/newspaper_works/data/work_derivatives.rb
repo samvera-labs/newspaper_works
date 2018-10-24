@@ -15,7 +15,7 @@ module NewspaperWorks
 
       def initialize(work)
         # context usually work, may be FileSet, may be string id of FileSet
-        @context = work
+        @work = work
         # computed name-to-path mapping, initially nil as sentinel for JIT load
         @paths = nil
       end
