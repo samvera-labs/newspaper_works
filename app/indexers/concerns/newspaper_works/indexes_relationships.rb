@@ -84,10 +84,10 @@ module NewspaperWorks
       return unless ordered_page_ids.length > 1
       this_page_index = ordered_page_ids.index(page.id)
       return unless this_page_index
-      unless this_page_index == 0
-        solr_doc['is_following_image_of_ssi'] = ordered_page_ids[this_page_index - 1].presence
+      unless this_page_index.zero?
+        solr_doc['is_following_page_of_ssi'] = ordered_page_ids[this_page_index - 1].presence
       end
-      solr_doc['is_preceding_image_of_ssi'] = ordered_page_ids[this_page_index + 1].presence
+      solr_doc['is_preceding_page_of_ssi'] = ordered_page_ids[this_page_index + 1].presence
     end
 
     # index the articles info
