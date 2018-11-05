@@ -80,14 +80,14 @@ module NewspaperWorks
     def index_siblings(page, solr_doc)
       newspaper_issue = page.issue
       return unless newspaper_issue.is_a?(NewspaperIssue)
-      ordered_page_ids = newspaper_issue.ordered_work_ids
-      return unless ordered_page_ids.length > 1
-      this_page_index = ordered_page_ids.index(page.id)
+      page_ids = newspaper_issue.ordered_page_ids
+      return unless page_ids.length > 1
+      this_page_index = page_ids.index(page.id)
       return unless this_page_index
       unless this_page_index.zero?
-        solr_doc['is_following_page_of_ssi'] = ordered_page_ids[this_page_index - 1].presence
+        solr_doc['is_following_page_of_ssi'] = page_ids[this_page_index - 1].presence
       end
-      solr_doc['is_preceding_page_of_ssi'] = ordered_page_ids[this_page_index + 1].presence
+      solr_doc['is_preceding_page_of_ssi'] = page_ids[this_page_index + 1].presence
     end
 
     # index the articles info
