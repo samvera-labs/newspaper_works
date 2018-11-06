@@ -4,7 +4,7 @@ require 'model_shared'
 RSpec.describe NewspaperWorks::IndexesRelationships do
   # use an instance var so we can create fixtures only once
   # rubocop:disable RSpec/InstanceVariable
-  before(:all) { @page_for_indexrel = model_fixtures(NewspaperPage) }
+  before(:all) { @page_for_indexrel, @page2 = model_fixtures(:newspaper_pages) }
   let(:page_indexer) { NewspaperPageIndexer.new(@page_for_indexrel) }
   let(:solr_doc) { {} }
 
@@ -53,10 +53,16 @@ RSpec.describe NewspaperWorks::IndexesRelationships do
   end
 
   describe '#index_siblings' do
-    before { page_indexer.index_siblings(@page_for_indexrel, solr_doc) }
+    let(:solr_doc_2) { {} }
+    before do
+      page_indexer.index_siblings(@page_for_indexrel, solr_doc)
+      page_indexer.index_siblings(@page2, solr_doc_2)
+    end
     it 'sets the prev/next fields correctly' do
       expect(solr_doc['is_preceding_page_of_ssi']).not_to be_falsey
       expect(solr_doc['is_following_page_of_ssi']).to be_nil
+      expect(solr_doc_2['is_preceding_page_of_ssi']).to be_nil
+      expect(solr_doc_2['is_following_page_of_ssi']).not_to be_falsey
     end
   end
 

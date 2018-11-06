@@ -127,4 +127,7 @@ def model_fixtures(target_type)
   return page1 if target_type == NewspaperPage
   return article2 if target_type == NewspaperArticle
   return container if target_type == NewspaperContainer
+
+  # return multiple objects as needed for testing
+  return [page1, page2] if target_type == :newspaper_pages
 end
