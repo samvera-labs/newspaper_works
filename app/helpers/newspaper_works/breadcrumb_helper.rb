@@ -1,5 +1,9 @@
 module NewspaperWorks
   module BreadcrumbHelper
+    # create an array of links representing the ancestors of the current object
+    #
+    # @param presenter [Newspaper*Presenter] the presenter for the current Newspaper object
+    # @param link_class [String] the class for the breadcrumb links
     def newspaper_breadcrumbs(presenter, link_class = nil)
       breadcrumbs = []
       ancestors = { title: :publication_id, issue: :issue_id, page: :page_ids }
@@ -9,6 +13,11 @@ module NewspaperWorks
       breadcrumbs.flatten
     end
 
+    # create an array of links representing ancestors of the current object
+    #
+    # @param object_type [Symbol] the type of newspaper object, as a symbol (e.g. :issue)
+    # @param presenter [Newspaper*Presenter] the presenter for the current Newspaper object
+    # @param link_class [String] the class for the breadcrumb links
     def create_breadcrumb_link(object_type, presenter, link_class = nil)
       links = []
       case object_type
@@ -26,8 +35,15 @@ module NewspaperWorks
           end
         end
       end
+      links
     end
 
+    # create a link for an ancestor of the current object
+    #
+    # @param object_type [Symbol] the type of newspaper object, as a symbol (e.g. :issue)
+    # @param id [String] the id of the ancestor Newspaper object
+    # @param title [String] the title of the ancestor Newspaper object
+    # @param link_class [String] the class for the breadcrumb links
     def breadcrumb_object_link(object_type, id, title, link_class = nil)
       return [] unless id && title
       link_path = "hyrax_newspaper_#{object_type}_path"
