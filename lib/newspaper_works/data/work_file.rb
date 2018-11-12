@@ -59,7 +59,7 @@ module NewspaperWorks
       # Get filename from stored metadata
       # @return [String] file name stored in repository metadata for file
       def name
-        unwrapped.original_filename
+        unwrapped.original_name
       end
 
       def derivatives
