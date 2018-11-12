@@ -1,5 +1,6 @@
 require 'newspaper_works/data/fileset_helper'
 require 'newspaper_works/data/work_derivatives'
+require 'newspaper_works/data/work_files'
 require 'newspaper_works/data/work_file'
 
 module NewspaperWorks

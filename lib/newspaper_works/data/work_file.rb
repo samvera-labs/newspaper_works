@@ -4,125 +4,82 @@ require 'hyrax'
 
 module NewspaperWorks
   module Data
+    # WorkFile is a read-only convenience wrapper for just-in-time
+    #   file operations, and is the type of values returned by
+    #   NewspaperWorks::Data::WorkFiles (container) adapter.
     class WorkFile
-      include NewspaperWorks::Data::FilesetHelper
+      # accessors for adaptation relationships:
+      attr_accessor :work, :parent, :fileset
+      # delegate these metadata properties to @fileset.original_file:
+      delegate :size, :date_created, :date_modified, :mime_type, to: :unwrapped
 
-      attr_accessor :work, :io, :filename
+      # alternate constructor spelling:
+      def self.of(work, fileset = nil, parent = nil)
+        new(work, fileset, parent)
+      end
 
-      def initialize(work)
+      def initialize(work, fileset = nil, parent = nil)
         @work = work
-        # below set to non-nil values on call of .prepare_source via .attach
-        @io = nil
-        @source_path = nil
-        @working_path = nil
-        @filename = nil
-        # fileset initially nil, if no file attached; accessors may cache
-        #   fileset on any applicable operation
-        @fileset = nil
+        # If fileset is nil, presume *first* fileset of work, as in
+        #   the single-file-per-work use-case:
+        @fileset = fileset.nil? ? first_fileset : fileset
+        # Parent is WorkFiles (container) object, if applciable:
+        @parent = parent
       end
 
-      def attach(file, filename: nil, queue: true, single: true)
-        delete if single
-        prepare_source(file, filename: filename)
-        # work must have depositor for AttachFilesToWorkJob
-        ensure_depositor
-        upload = Hyrax::UploadedFile.create(file: @io)
-        # Note: if attach is asynchronous, creating an @fileset reference
-        #   afterward is impractical, so caching defered to subsequent access
-        job = AttachFilesToWorkJob
-        queue ? job.perform_later(@work, [upload]) : job.perform_now(@work, [upload])
+      # Get original repository object representing file (not fileset).
+      # @return [ActiveFedora::File] repository file persistence object
+      def unwrapped
+        @fileset.original_file
       end
 
-      def delete
-        load_fileset
-        return if @fileset.nil?
-        # FileSetActor-triggered callbacks need user;
-        #   make one that works in browser and non-browser contexts:
-        user = defined?(current_user) ? current_user : User.batch_user
-        # via Hyrax, remove fileset, clean solr cruft, notify :after_destroy
-        Hyrax::Actors::FileSetActor.new(@fileset, user).destroy
-        # set sentinel for empty:
-        @fileset = nil
-      end
-
-      def data
-        fetch_working_copy
-        File.read(@working_path)
-      end
-
+      # Get path to working copy of file on local filesystem;
+      #   checkout file from repository/source as needed.
+      # @return [String] path to working copy of binary
       def path
-        fetch_working_copy
-        @working_path
+        checkout
       end
 
-      def exist?
-        load_fileset
-        @fileset && @fileset.original_file
+      # Read data from working copy of file on local filesystem;
+      #   checkout file from repository/source as needed.
+      # @return [String] byte data of binary/file payload
+      def data
+        File.read(path)
       end
 
-      def size
-        load_fileset
-        @fileset.original_file.size
+      # Run block/proc upon data of file;
+      #   checkout file from repository/source as needed.
+      # @yield [io] read-only IO or File object to block/proc.
+      def with_io(&block)
+        filepath = path
+        return if filepath.nil?
+        File.open(filepath, 'rb', &block)
+      end
+
+      # Get filename from stored metadata
+      # @return [String] file name stored in repository metadata for file
+      def name
+        unwrapped.original_filename
+      end
+
+      def derivatives
+        # TODO: implement this.
       end
 
       private
 
-        def ensure_depositor
-          return unless @work.depositor.nil?
-          user = defined?(current_user) ? current_user : User.batch_user
-          @work.depositor = user.user_key
+        def first_fileset
+          filesets = @work.members.select { |m| m.class == FileSet }
+          filesets.empty? ? nil : filesets[0]
         end
 
-        def load_fileset
-          return @fileset unless @fileset.nil?
-          # NewspaperWorks::FilesetHelper.work_fileset gets, but does not
-          #   cache; also presumes single-file work.
-          @fileset = work_fileset
-        end
-
-        def fetch_working_copy
-          return unless @working_path.nil? && File.exist?(@working_path)
-          # presumes single-file work, with single primary file stored in
-          #   fileset
-          load_fileset
-          fsid = @fileset.id
-          fileid = @fileset.original_file.id
-          @working_path = Hyrax::WorkingPath.find_or_retrieve(fileid, fsid)
-        end
-
-        def prepare_source_path(source)
-          # quick check the file exists and is readable on filesystem:
-          raise ArgumentError, 'File not found or readable' unless
-            File.readable?(source)
-          # path may be relative to Dir.pwd, but no matter for our use
-          @source_path = source.to_s
-          @io = File.open(@source_path)
-          @filename ||= File.split(@source_path)[-1]
-        end
-
-        def prepare_source_io(source)
-          # either an IO with a path, or an IO with filename passed in
-          #   args; presume we need a filename to describe/identify.
-          raise ArgumentError, 'Explicit or inferred file name required' unless
-            source.respond_to?('path') || @filename
-          @io = source
-          @source_path = source.respond_to?('path') ? source.path : nil
-          @filename ||= File.split(@source_path)[-1]
-        end
-
-        def prepare_source(source, filename: nil)
-          # source is a string path, Pathname object, or quacks like an IO
-          unless source.class == String ||
-                 source.class == Pathname ||
-                 source.respond_to?('read')
-            raise ArgumentError, 'Source is neither path nor IO object'
-          end
-          # permit the possibility of a filename identifier metadata distinct
-          #   from the actual path on disk:
-          @filename = filename
-          ispath = source.class == String || source.class == Pathname
-          loader = ispath ? method(:prepare_source_path) : method(:prepare_source_io)
-          loader.call(source)
+        def checkout
+          file = @fileset.original_file
+          # find_or_retrieve returns path to working copy, but only
+          #   fetches from Fedora if no working copy exists on filesystem.
+          # NOTE: there may be some benefit to memoizing to avoid
+          #   call and File.exist? IO operation, but YAGNI for now.
+          Hyrax::WorkingDirectory.find_or_retrieve(file.id, @fileset.id)
         end
     end
   end
