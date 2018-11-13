@@ -8,8 +8,6 @@ RSpec.describe NewspaperWorks::Data::WorkFile do
   static_date = Hyrax::TimeService.time_in_utc
 
   # path fixtures:
-  let(:tiff_path) { File.join(fixture_path, ocr_gray.tiff) }
-  let(:tiff_uri) { 'file://' + File.expand_path(tiff_path) }
   let(:txt_path) { File.join(fixture_path, 'credits.md') }
 
   # sample objects:

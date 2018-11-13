@@ -4,7 +4,7 @@ module NewspaperWorks
   module Data
     class WorkFiles
       attr_accessor :work, :assigned, :unassigned
-      delegate :include, to: :keys
+      delegate :include?, to: :keys
 
       # alternate constructor spelling:
       def self.of(work)
