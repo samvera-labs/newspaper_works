@@ -23,7 +23,7 @@ module NewspaperWorks
 
       def state
         return 'empty' if @assigned.empty? && keys.empty?
-        'dirty' unless @assigned.empty?
+        return 'dirty' unless @assigned.empty?
         # TODO: implement 'pending' as intermediate state between 'dirty'
         #   and saved, where we look for saved state that matches what was
         #   previously assigned in THIS instance.  We can only know that

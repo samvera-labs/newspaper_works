@@ -102,5 +102,34 @@ RSpec.describe NewspaperWorks::Data::WorkFiles do
       work_file = adapter.get(name)
       expect(work_file).to eq adapter.get(first_fileset.id)
     end
+
+    it "verifies inclusion of fileset id key" do
+      adapter = described_class.of(work)
+      fsid = adapter.keys[0]
+      expect(adapter.include?(fsid)).to be true
+    end
+  end
+
+  describe "assignment state" do
+    it "has empty state for work with no files" do
+      bare_work = NewspaperPage.new
+      bare_work.title = ['No files to see here']
+      bare_work.save!
+      adapter = described_class.of(bare_work)
+      expect(adapter.keys.empty?).to be true
+      expect(adapter.state).to eq 'empty'
+    end
+
+    it "has 'dirty' state when files assigned" do
+      adapter = described_class.of(work)
+      expect(adapter.state).to eq 'saved'
+      adapter.assign(tiff_path)
+      # changes to dirty
+      expect(adapter.state).to eq 'dirty'
+      # unassign path again to empty assigned queue:
+      adapter.unassign(tiff_path)
+      # no we are back to 'saved' since no changes are queued now:
+      expect(adapter.state).to eq 'saved'
+    end
   end
 end
