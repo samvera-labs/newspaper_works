@@ -44,7 +44,7 @@ module NewspaperWorks
       #   checkout file from repository/source as needed.
       # @return [String] byte data of binary/file payload
       def data
-        File.read(path)
+        File.read(path, mode: 'rb')
       end
 
       # Run block/proc upon data of file;

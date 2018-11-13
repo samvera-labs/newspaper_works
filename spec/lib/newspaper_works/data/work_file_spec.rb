@@ -85,13 +85,31 @@ RSpec.describe NewspaperWorks::Data::WorkFile do
   end
 
   describe "read binary via transparent repository checkout" do
-    it "gets path" do
+    it "gets path (from checkout)" do
+      fileset = work.members.select { |m| m.class == FileSet }[0]
+      adapter = described_class.of(work, fileset)
+      # Get a path to a working copy
+      path = adapter.path
+      expect(path).to be_a String
+      expect(File.exist?(path)).to be true
+      # size of working copy binary checkout matches size in computed metadata
+      expect(File.size(path)).to eq fileset.original_file.size
     end
 
     it "gets data as bytes" do
+      fileset = work.members.select { |m| m.class == FileSet }[0]
+      adapter = described_class.of(work, fileset)
+      # Get a data from the working copy
+      data = adapter.data
+      expect(data).to be_a String
+      # size of working copy binary checkout matches size in computed metadata
+      expect(data.size).to eq fileset.original_file.size
     end
 
     it "runs block on data as IO" do
+      fileset = work.members.select { |m| m.class == FileSet }[0]
+      adapter = described_class.of(work, fileset)
+      adapter.with_io { |io| expect(io.read.size).to eq File.size(txt_path) }
     end
   end
 end
