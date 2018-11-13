@@ -4,7 +4,7 @@ require 'misc_shared'
 RSpec.describe NewspaperWorks::Data::WorkFiles do
   include_context "shared setup"
 
-  let(:work) { sample_work }
+  let(:work) { work_with_file }
   let(:tiff_path) { File.join(fixture_path, 'ocr_gray.tiff') }
   let(:tiff_uri) { 'file://' + File.expand_path(tiff_path) }
 
@@ -49,6 +49,58 @@ RSpec.describe NewspaperWorks::Data::WorkFiles do
       expect(adapter.assigned).to include tiff_path
       adapter.unassign(tiff_path)
       expect(adapter.assigned).to be_empty
+    end
+  end
+
+  describe "hash/mapping-like file enumeration" do
+    it "has expected WorkFile in values for work" do
+      adapter = described_class.of(work)
+      values = adapter.values
+      expect(values).to be_an Array
+      expect(values.size).to eq 1
+      expect(values[0]).to be_an NewspaperWorks::Data::WorkFile
+      expect(values[0].parent).to be adapter
+      first_fileset = work.members.select { |m| m.class == FileSet }[0]
+      expect(values[0].fileset).to eq first_fileset
+      expect(values[0].unwrapped).to be_a Hydra::PCDM::File
+    end
+
+    it "has expected fileset keys for work" do
+      adapter = described_class.of(work)
+      keys = adapter.keys
+      expect(keys).to be_an Array
+      expect(keys[0]).to be_a String
+      first_fileset = work.members.select { |m| m.class == FileSet }[0]
+      expect(keys[0]).to eq first_fileset.id
+    end
+
+    it "has expected entries for work" do
+      adapter = described_class.of(work)
+      entries = adapter.entries
+      expect(entries).to be_an Array
+      expect(entries[0]).to be_an Array
+      expect(entries[0].size).to eq 2
+      expect(entries[0][0]).to eq adapter.keys[0]
+      expect(entries[0][1]).to eq adapter.values[0]
+    end
+
+    it "gets work file by fileset id" do
+      adapter = described_class.of(work)
+      first_fileset = work.members.select { |m| m.class == FileSet }[0]
+      fsid = adapter.keys[0]
+      expect(fsid).to eq first_fileset.id
+      work_file = adapter.get(fsid)
+      expect(work_file.unwrapped).to eq first_fileset.original_file
+      work_file = adapter[fsid]
+      expect(work_file.unwrapped).to eq first_fileset.original_file
+    end
+
+    it "gets work file by work-local filename" do
+      adapter = described_class.of(work)
+      first_fileset = work.members.select { |m| m.class == FileSet }[0]
+      name = first_fileset.original_file.original_name
+      work_file = adapter.get(name)
+      expect(work_file).to eq adapter.get(first_fileset.id)
     end
   end
 end

@@ -33,6 +33,10 @@ module NewspaperWorks
         @fileset.original_file
       end
 
+      def ==(other)
+        unwrapped.id == other.unwrapped.id
+      end
+
       # Get path to working copy of file on local filesystem;
       #   checkout file from repository/source as needed.
       # @return [String] path to working copy of binary

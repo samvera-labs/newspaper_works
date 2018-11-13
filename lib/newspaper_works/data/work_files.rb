@@ -37,7 +37,7 @@ module NewspaperWorks
       end
 
       def values
-        names
+        keys.map(&method(:get))
       end
 
       def entries
@@ -48,7 +48,7 @@ module NewspaperWorks
       #   or uploaded file name.
       # @return [Array<String>]
       def names
-        filesets.map(&original_name)
+        filesets.map(&method(:original_name))
       end
 
       def get(name_or_id)
@@ -89,7 +89,7 @@ module NewspaperWorks
 
         def get_by_fileset_id(id)
           nil unless keys.include?(id)
-          fileset = FileSet.find_one(id)
+          fileset = FileSet.find(id)
           work_file.of(work, fileset, self)
         end
 
