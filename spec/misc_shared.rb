@@ -5,12 +5,17 @@ RSpec.shared_context "shared setup", shared_context: :metadata do
     )
   end
 
-  # sample image
+  # shared date to be invariant across all tests in a run:
+  date_static = Hyrax::TimeService.time_in_utc
+  let(:static_date) { date_static }
+
+  # path fixtures:
   let(:example_gray_jp2) { File.join(fixture_path, 'ocr_gray.jp2') }
-
-  let(:sample_text) { 'even in a mythical Age there must be some enigmas' }
-
+  let(:txt_path) { File.join(fixture_path, 'credits.md') }
   let(:sample_thumbnail) { File.join(fixture_path, 'thumbnail.jpg') }
+
+  # sample data:
+  let(:sample_text) { 'even in a mythical Age there must be some enigmas' }
 
   let(:valid_file_set) do
     file_set = FileSet.new
@@ -23,6 +28,28 @@ RSpec.shared_context "shared setup", shared_context: :metadata do
     work.title = ['Bombadil']
     work.members.push(valid_file_set)
     work.save!
+    work
+  end
+
+  # sample objects:
+  let(:work_with_file) do
+    # we need a work with not just a valid (but empty) fileset, but also
+    #   a persisted file, so we use the shared work sample, and expand
+    #   on it with actual file data/metadata.
+    work = sample_work
+    fileset = work.members.select { |m| m.class == FileSet }[0]
+    file = Hydra::PCDM::File.create
+    fileset.original_file = file
+    # Set binary content on file via ActiveFedora content= mutator method
+    #   which also makes .size method return valid result for content
+    file.content = File.open(txt_path)
+    # Set some metdata we would expect to otherwise be set upon an upload
+    file.original_name = 'credits.md'
+    file.mime_type = 'text/plain'
+    file.date_modified = static_date
+    file.date_created = static_date
+    # saving fileset also saves file content
+    fileset.save!
     work
   end
 
