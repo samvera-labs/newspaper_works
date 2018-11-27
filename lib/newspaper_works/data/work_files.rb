@@ -109,6 +109,10 @@ module NewspaperWorks
           !path.scan(URI.regexp).empty?
         end
 
+        def path_to_uri(path)
+          isuri?(path) ? path : "file://#{path}"
+        end
+
         def validate_path(path)
           # treat file URIs equivalent to local paths
           path = File.expand_path(path.sub(/^file:\/\//, ''))
@@ -147,8 +151,7 @@ module NewspaperWorks
           ensure_depositor
           ability = Ability.new(user)
           remote_files = @assigned.map do |path|
-            uri = isuri?(path) ? path : path_to_uri(path)
-            { url: uri, file_name: File.basename(f) }
+            { url: path_to_uri(path), file_name: File.basename(path) }
           end
           attrs = { remote_files: remote_files }
           # Create an environment for actor stack:
