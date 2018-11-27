@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'spec_helper'
 require 'misc_shared'
 
@@ -21,6 +23,13 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
   let(:txt2) do
     file = Tempfile.new('txt2.txt')
     file.write('bye')
+    file.close
+    file.path
+  end
+
+  let(:encoded_text) do
+    file = Tempfile.new('txt_encoded.txt', encoding: 'UTF-8')
+    file.write('Gorgonzola Dolce® — on sale for £12.50/kg')
     file.close
     file.path
   end
@@ -71,11 +80,21 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
       expect(adapter.data('txt')).to include 'mythical'
     end
 
+    it "Handles character encoding on read" do
+      adapter = described_class.new(work)
+      # replace fixture text derivative for work with encoded text
+      adapter.attach(encoded_text, 'txt')
+      data = adapter.data('txt')
+      expect(data).to include '—' # em-dash
+      expect(data).to include '£' # gb-pound sign
+      expect(data.encoding.to_s).to eq 'UTF-8'
+    end
+
     it "Loads thumbnail derivative data" do
       mk_thumbnail_derivative(work)
       adapter = described_class.new(work)
       # get size by loading data
-      expect(adapter.data('thumbnail').size).to eq 16_743
+      expect(adapter.data('thumbnail').bytes.size).to eq 16_743
       # get size by File.size via .size method
       expect(adapter.size('thumbnail')).to eq 16_743
     end

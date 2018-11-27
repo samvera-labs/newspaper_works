@@ -56,9 +56,10 @@ module NewspaperWorks
       end
 
       def with_io(name, &block)
+        mode = ['xml', 'txt', 'html'].include?(name) ? 'rb:UTF-8' : 'rb'
         filepath = path(name)
         return if filepath.nil?
-        File.open(filepath, 'rb', &block)
+        File.open(filepath, mode, &block)
       end
 
       def size(*args)
