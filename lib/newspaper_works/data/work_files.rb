@@ -56,12 +56,9 @@ module NewspaperWorks
         get_by_filename(name_or_id)
       end
 
-      def assign(path, target: nil)
+      def assign(path)
         path = normalize_path(path)
         validate_path(path)
-        # there should be a different queuing if replacement of existing
-        #   file is intended:
-        return assign_replacement(path, target) unless target.nil?
         @assigned.push(path)
       end
 
@@ -83,21 +80,17 @@ module NewspaperWorks
 
       private
 
-        def work_file
-          NewspaperWorks::Data::WorkFile
-        end
-
         def get_by_fileset_id(id)
           nil unless keys.include?(id)
           fileset = FileSet.find(id)
-          work_file.of(work, fileset, self)
+          NewspaperWorks::Data::WorkFile.of(work, fileset, self)
         end
 
         # Get one WorkFile object based on filename in metadata
         def get_by_filename(name)
           r = filesets.select { |fs| original_name(fs) == name }
           # checkout first match
-          r.empty? ? nil : work_file.of(work, r[0], self)
+          r.empty? ? nil : NewspaperWorks::Data::WorkFile.of(work, r[0], self)
         end
 
         def normalize_path(path)
@@ -138,24 +131,30 @@ module NewspaperWorks
           @work.depositor = user.user_key
         end
 
-        def assign_replacement(path, target)
-          # TODO: implement
-        end
-
         def commit_unassigned
-          # TODO: implement
+          # for each (name or) id to be removed from work, use actor to destroy
+          @unassigned.each do |id|
+            # "actor" here is simply a multi-adapter of Fileset, User
+            # Calling destroy will:
+            #   1. unlink fileset from work, and save work
+            #   2. Destroy fileset:
+            #     - :before_destroy callback will delegate derivative cleanup
+            #       to derivatives service component(s).
+            #     - Remove fileset from storage/persistence layers
+            #     - Invoke (logging or other) :after_destroy callback
+            Hyrax::Actors::FileSetActor.new(get(id).fileset, user).destroy
+          end
         end
 
         def commit_assigned
           return if @assigned.nil? || @assigned.empty?
           ensure_depositor
-          ability = Ability.new(user)
           remote_files = @assigned.map do |path|
             { url: path_to_uri(path), file_name: File.basename(path) }
           end
           attrs = { remote_files: remote_files }
           # Create an environment for actor stack:
-          env = Hyrax::Actors::Environment.new(@work, ability, attrs)
+          env = Hyrax::Actors::Environment.new(@work, Ability.new(user), attrs)
           # Invoke default Hyrax actor stack middleware:
           Hyrax::CurationConcern.actor.create(env)
         end
