@@ -2,6 +2,8 @@
 #  `rails generate hyrax:work NewspaperIssue`
 module Hyrax
   class NewspaperIssuePresenter < Hyrax::WorkShowPresenter
+    include NewspaperWorks::IiifSearchPresenterBehavior
+
     # @return [Boolean] render the UniversalViewer
     def universal_viewer?
       Hyrax.config.iiif_image_server? && members_include_viewable_page?
