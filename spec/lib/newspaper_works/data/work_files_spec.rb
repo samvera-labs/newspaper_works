@@ -132,4 +132,50 @@ RSpec.describe NewspaperWorks::Data::WorkFiles do
       expect(adapter.state).to eq 'saved'
     end
   end
+
+  describe "commits changes" do
+    # These jobs we need whitelisted to run now, at minimum:
+    do_now_jobs = [IngestLocalFileJob, IngestJob]
+    # These we skip: [CharacterizeJob, CreateDerivativesJob]
+    #   -- skipping these saves 10-15 seconds on attachment example
+
+    def bare_work
+      bare_work = NewspaperPage.new
+      bare_work.title = ['No files to see here']
+      bare_work.save!
+      bare_work
+    end
+
+    it "commits unassign (file deletions)" do
+      adapter = described_class.of(work)
+      expect(adapter.keys.size).to eq 1
+      adapter.unassign(adapter.keys[0])
+      adapter.commit!
+      expect(adapter.keys.size).to eq 0
+      expect(work.members.select { |m| m.class == FileSet }.size).to eq 0
+    end
+
+    it "commit for assignment invokes actor stack" do
+      work = bare_work
+      adapter = described_class.of(work)
+      adapter.assign(tiff_path)
+      allow(Hyrax::CurationConcern.actor).to receive(:create).and_return(true)
+      expect(Hyrax::CurationConcern.actor).to receive(:create)
+      expect(adapter.commit!).to be true
+    end
+
+    it "commits successful file attachment", perform_enqueued: do_now_jobs do
+      work = bare_work
+      adapter = described_class.of(work)
+      adapter.assign(tiff_path)
+      adapter.commit!
+      # whitelisted jobs (do_now_jobs) performed as effect of commit!
+      #   are configured to effectively run inline. Reloading work
+      #   should refresh the work.members, and by consequence adapter.keys
+      work.reload
+      expect(adapter.keys.size).to eq 1
+      expect(work.members.select { |m| m.class == FileSet }.size).to eq 1
+      expect(adapter.names).to include 'ocr_gray.tiff'
+    end
+  end
 end
