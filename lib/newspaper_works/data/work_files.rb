@@ -143,6 +143,7 @@ module NewspaperWorks
             #     - Remove fileset from storage/persistence layers
             #     - Invoke (logging or other) :after_destroy callback
             Hyrax::Actors::FileSetActor.new(get(id).fileset, user).destroy
+            work.reload
           end
         end
 
