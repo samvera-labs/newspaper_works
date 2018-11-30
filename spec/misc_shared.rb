@@ -1,8 +1,11 @@
 RSpec.shared_context "shared setup", shared_context: :metadata do
   let(:fixture_path) do
-    File.join(
+    path = File.join(
       NewspaperWorks::GEM_PATH, 'spec', 'fixtures', 'files'
     )
+    whitelist = Hyrax.config.whitelisted_ingest_dirs
+    whitelist.push(path) unless whitelist.include?(path)
+    path
   end
 
   # shared date to be invariant across all tests in a run:
