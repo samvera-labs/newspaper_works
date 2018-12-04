@@ -14,7 +14,7 @@ module NewspaperWorks
           "  config.register_curation_concern :newspaper_issue\n" \
           "  config.register_curation_concern :newspaper_page\n" \
           "  config.register_curation_concern :newspaper_title\n" \
-          '  # == END GENERATED newspaper_works CONFIG == '
+          '  # == END GENERATED newspaper_works CONFIG == \n\n'
       end
     end
 
@@ -23,6 +23,18 @@ module NewspaperWorks
                        after: "Rails.application.routes.draw do\n" do
         "\n  mount NewspaperWorks::Engine => '/'\n"
       end
+    end
+
+    def verify_biiif_installed
+      return if IO.read('app/controllers/catalog_controller.rb').include?('include BlacklightIiifSearch::Controller')
+      say_status('info',
+                 'BLACKLIGHT IIIF SEARCH NOT INSTALLED; INSTALLING BLACKLIGHT IIIF SEARCH',
+                 :blue)
+      generate 'blacklight_iiif_search:install'
+    end
+
+    def iiif_configuration
+      generate 'newspaper_works:blacklight_iiif_search'
     end
   end
 end

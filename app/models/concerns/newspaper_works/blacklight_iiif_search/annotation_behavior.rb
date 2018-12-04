@@ -28,16 +28,21 @@ module NewspaperWorks
         # local implementation expected, value returned below is just a placeholder
         # @return [String]
         def coordinates
-          return '' unless query
-          coords_file = NewspaperWorks::Data::WorkDerivativeLoader.new(file_set_id).data('json')
-          return '' unless coords_file
-          coords_json = JSON.parse(coords_file)
-          return '#xywh=0,0,0,0' unless coords_json['words']
+          default_coords = '#xywh=0,0,0,0'
+          coords_data = coordinates_raw
+          return default_coords if query.blank? || coords_data.blank?
+          coords_json = JSON.parse(coords_data)
+          return default_coords unless coords_json['words']
           matches = coords_json['words'].select do |k, _v|
             k['word'].downcase =~ /#{query.downcase}/
           end
+          return default_coords if matches.blank?
           coords_array = matches[hl_index]['coordinates']
           "#xywh=#{coords_array.join(',')}"
+        end
+
+        def coordinates_raw
+          NewspaperWorks::Data::WorkDerivativeLoader.new(file_set_id).data('json')
         end
 
         def base_url
@@ -48,7 +53,7 @@ module NewspaperWorks
 
         def file_set_id
           file_set_ids = document['file_set_ids_ssim']
-          raise "#{name}: NO FILE SET ID" if file_set_ids.blank?
+          raise "#{self.class}: NO FILE SET ID" if file_set_ids.blank?
           file_set_ids.first
         end
     end

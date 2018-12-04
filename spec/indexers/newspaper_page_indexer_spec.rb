@@ -1,3 +1,7 @@
+# DEPRECATED. SINCE FULL TEXT INDEXING HAS BEEN MOVED TO NewspaperWorks::IndexesFullText
+# LEAVING HERE FOR THE MOMENT DUE TO ISSUES WITH LOCAL TEXT ENV
+# WILL REMOVE AFTER SUCCESSFUL CI BUILD -- Eben
+=begin
 require 'spec_helper'
 require 'misc_shared'
 
@@ -29,3 +33,4 @@ RSpec.describe NewspaperPageIndexer do
     end
   end
 end
+=end
