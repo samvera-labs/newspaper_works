@@ -30,12 +30,12 @@ module NewspaperWorks
 
     def inject_search_behavior
       copy_file 'search_behavior.rb',
-                'app/models/concerns/newspaper_works/blacklight_iiif_search/search_behavior.rb'
+                'app/models/concerns/blacklight_iiif_search/search_behavior.rb'
     end
 
     def inject_annotation_behavior
       copy_file 'annotation_behavior.rb',
-                'app/models/concerns/newspaper_works/blacklight_iiif_search/annotation_behavior.rb'
+                'app/models/concerns/blacklight_iiif_search/annotation_behavior.rb'
     end
   end
 end
