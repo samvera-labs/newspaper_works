@@ -1,8 +1,8 @@
-require 'uri'
-
 module NewspaperWorks
   module Data
     class WorkFiles
+      include NewspaperWorks::Data::PathHelper
+
       attr_accessor :work, :assigned, :unassigned
       delegate :include?, to: :keys
 
@@ -91,26 +91,6 @@ module NewspaperWorks
           r = filesets.select { |fs| original_name(fs) == name }
           # checkout first match
           r.empty? ? nil : NewspaperWorks::Data::WorkFile.of(work, r[0], self)
-        end
-
-        def normalize_path(path)
-          path = path.to_s
-          isuri?(path) ? path : File.expand_path(path)
-        end
-
-        def isuri?(path)
-          !path.scan(URI.regexp).empty?
-        end
-
-        def path_to_uri(path)
-          isuri?(path) ? path : "file://#{path}"
-        end
-
-        def validate_path(path)
-          # treat file URIs equivalent to local paths
-          path = File.expand_path(path.sub(/^file:\/\//, ''))
-          # make sure file exists
-          raise IOError, "Not found: #{path}" unless File.exist?(path)
         end
 
         def original_name(fileset)
