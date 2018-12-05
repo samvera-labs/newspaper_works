@@ -63,12 +63,18 @@ module NewspaperWorks
         'saved'
       end
 
+      # Assign a path to assigned queue for attachment
+      # @param path [String] Path to source file
       def assign(path)
         path = normalize_path(path)
         validate_path(path)
         @assigned.push(path)
       end
 
+      # Assign a destination name to unassigned queue for deletion -- OR --
+      #   remove a path from queue of assigned items
+      # @param name_or_id [String] Destination name (file extension),
+      #   or source path
       def unassign(name)
         # if name is queued path, remove from @assigned queue:
         @assigned.delete(name) if @assigned.include?(name)
@@ -76,6 +82,8 @@ module NewspaperWorks
         @unassigned.push(name) if exist?(name)
       end
 
+      # commit pending changes to work files
+      #   beginning with removals, then with new assignments
       def commit!
         @unassigned.each { |name| delete(name) }
         @assigned.each do |path|
@@ -86,6 +94,9 @@ module NewspaperWorks
         @unassigned = []
       end
 
+      # attach a single derivative file to work
+      # @param file [String, IO] path to file or IO object
+      # @param name [String] destination name, usually file extension
       def attach(file, name)
         mkdir_pairtree
         path = path_factory.derivative_path_for_reference(fileset, name)
@@ -105,6 +116,8 @@ module NewspaperWorks
         load_paths
       end
 
+      # attach a single derivative file to work
+      # @param name [String] destination name, usually file extension
       def delete(name, force: nil)
         path = path_factory.derivative_path_for_reference(fileset, name)
         # will remove file, if it exists; won't remove pairtree, even
@@ -114,6 +127,9 @@ module NewspaperWorks
         load_paths
       end
 
+      # path to existing derivative file for destination name
+      # @param name [String] destination name, usually file extension
+      # @return [String, NilClass] path (or nil)
       def path(name)
         load_paths if @paths.nil?
         result = @paths[name]
@@ -121,6 +137,9 @@ module NewspaperWorks
         File.exist?(result) ? result : nil
       end
 
+      # Run a block in context of the opened derivative file for reading
+      # @param name [String] destination name, usually file extension
+      # @param block [Proc] block/proc to run in context of file IO
       def with_io(name, &block)
         mode = ['xml', 'txt', 'html'].include?(name) ? 'rb:UTF-8' : 'rb'
         filepath = path(name)
@@ -128,16 +147,26 @@ module NewspaperWorks
         File.open(filepath, mode, &block)
       end
 
+      # Get number of derivatives or, if a destination name argument
+      #   is provided, the size of derivative file
+      # @param name [String] optional destination name, usually file extension
+      # @return [Integer] size in bytes
       def size(*args)
         load_paths if @paths.nil?
         return @paths.size if args[0].nil?
         File.size(@paths[args[0]])
       end
 
+      # Check if derivative file exists for destination name
+      # @param name [String] optional destination name, usually file extension
+      # @return [TrueClass, FalseClass] boolean
       def exist?(name)
         keys.include?(name) && File.exist?(self[name])
       end
 
+      # Get raw binary or encoded text data of file as a String
+      # @param name [String] destination name, usually file extension
+      # @return [String] Raw bytes, or if text file, a UTF-8 encoded String
       def data(name)
         result = ''
         with_io(name) do |io|

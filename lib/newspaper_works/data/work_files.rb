@@ -49,12 +49,14 @@ module NewspaperWorks
       end
 
       # List of WorkFile for each primary file
-      # @return [NewspaperWorks::Data::WorkFile] adapter for persisted
+      # @return [Array<NewspaperWorks::Data::WorkFile>] adapter for persisted
       #   primary file
       def values
         keys.map(&method(:get))
       end
 
+      # Array of [id, WorkFile] for each primary file
+      # @return [Array<Array>] key/value pairs for primary files of work
       def entries
         filesets.map { |fs| [fs.id, self[fs.id]] }
       end
@@ -66,17 +68,26 @@ module NewspaperWorks
         filesets.map(&method(:original_name))
       end
 
+      # Get a WorkFile adapter representing primary file, either by name or id
+      # @param name_or_id [String] Fileset id or work-local file name
+      # @return [NewspaperWorks::Data::WorkFile] adapter for persisted
+      #   primary file
       def get(name_or_id)
         return get_by_fileset_id(name_or_id) if keys.include?(name_or_id)
         get_by_filename(name_or_id)
       end
 
+      # Assign a path to assigned queue for attachment
+      # @param path [String] Path to source file
       def assign(path)
         path = normalize_path(path)
         validate_path(path)
         @assigned.push(path)
       end
 
+      # Assign a name or id to unassigned queue for deletion -- OR -- remove a
+      #   path from queue of assigned items
+      # @param name_or_id [String] Fileset id, local file name, or source path
       def unassign(name_or_id)
         # if name_or_id is queued path, remove from @assigned queue:
         @assigned.delete(name_or_id) if @assigned.include?(name_or_id)
