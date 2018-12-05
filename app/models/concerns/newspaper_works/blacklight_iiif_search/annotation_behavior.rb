@@ -41,16 +41,25 @@ module NewspaperWorks
           "#xywh=#{coords_array.join(',')}"
         end
 
+        ##
+        # return the JSON word-coordinates file contents
+        # @return [String]
         def coordinates_raw
           NewspaperWorks::Data::WorkDerivativeLoader.new(file_set_id).data('json')
         end
 
+        ##
+        # the base URL for the Newspaper object
+        # use polymorphic_url, since we deal with multiple object types
+        # @return [String]
         def base_url
           host = controller.request.base_url
-          Rails.application.routes.url_helpers.polymorphic_url(parent_document,
-                                                               host: host)
+          controller.polymorphic_url(parent_document, host: host, locale: nil)
         end
 
+        ##
+        # return the first file set id
+        # @return [String]
         def file_set_id
           file_set_ids = document['file_set_ids_ssim']
           raise "#{self.class}: NO FILE SET ID" if file_set_ids.blank?
