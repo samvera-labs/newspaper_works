@@ -17,13 +17,22 @@ module NewspaperWorks
         @unassigned = []
       end
 
+      # Derivatives for first fileset only, use of this only makes sense
+      #   as a convenience for the common case of single-file work.
+      #   The `WorkDerivatives` adapter as assign/commmit! semantics just
+      #   like `WorkFiles`, and also acts like a hash/mapping of
+      #   destination names (usually file extension) to path of saved
+      #   derviative.
+      # @return [NewspaperWorks::Data::WorkDerviatives] derivatives adatper
       def derivatives
-        # TODO: implement this access to WorkDerivatives
+        NewspaperWorks::Data::WorkDerivatives.of(work)
       end
 
+      # Assignment state
+      # @return [String] A label describing the state of assignment queues
       def state
-        return 'empty' if @assigned.empty? && keys.empty?
-        return 'dirty' unless @assigned.empty?
+        return 'dirty' unless @assigned.empty? && @unassigned.empty?
+        return 'empty' if keys.empty?
         # TODO: implement 'pending' as intermediate state between 'dirty'
         #   and saved, where we look for saved state that matches what was
         #   previously assigned in THIS instance.  We can only know that
@@ -32,10 +41,17 @@ module NewspaperWorks
         'saved'
       end
 
+      # List of fileset (not file) id keys, presumes system like Hyrax
+      #   is only keeping a 1:1 between fileset and contained PCDM file,
+      #   because derivatives are not stored in the FileSet.
+      # @return [String] fileset ids
       def keys
         filesets.map(&:id)
       end
 
+      # List of WorkFile for each primary file
+      # @return [NewspaperWorks::Data::WorkFile] adapter for persisted
+      #   primary file
       def values
         keys.map(&method(:get))
       end

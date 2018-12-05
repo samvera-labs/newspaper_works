@@ -12,7 +12,21 @@ module NewspaperWorks
       include NewspaperWorks::Data::FilesetHelper
       include NewspaperWorks::Data::PathHelper
 
-      attr_accessor :work, :fileset
+      # Work is primary adapted context
+      # @return [ActiveFedora::Base] Hyrax work-type object
+      attr_accessor :work
+
+      # FileSet is secondary adapted context
+      # @return [FileSet] fileset for work, with regard to these derivatives
+      attr_accessor :fileset
+
+      # Assigned attachment queue (of paths)
+      # @return [Array<String>] list of paths queued for attachment
+      attr_accessor :assigned
+
+      # Assigned deletion queue (of destination names)
+      # @return [Array<String>] list of destination names queued for deletion
+      attr_accessor :unassigned
 
       # mapping of special names Hyrax uses for derivatives, not extension:
       @remap_names = {
@@ -22,6 +36,7 @@ module NewspaperWorks
         attr_accessor :remap_names
       end
 
+      # Adapt work and either specific or first fileset
       def initialize(work, fileset: nil)
         # adapted context usually work, may be string id of FileSet
         @work = work
@@ -34,9 +49,12 @@ module NewspaperWorks
         @unassigned = []
       end
 
+      # Assignment state
+      # @return [String] A label describing the state of assignment queues
       def state
-        return 'empty' if @assigned.empty? && @paths.keys.empty?
-        return 'dirty' unless @assigned.empty?
+        load_paths
+        return 'dirty' unless @unassigned.empty? && @assigned.empty?
+        return 'empty' if @paths.keys.empty?
         'saved'
       end
 

@@ -6,6 +6,13 @@ require 'misc_shared'
 RSpec.describe NewspaperWorks::Data::WorkDerivatives do
   include_context "shared setup"
 
+  let(:bare_work) do
+    work = NewspaperPage.new
+    work.title = ['Another one']
+    work.save!
+    work
+  end
+
   let(:work) do
     # sample work comes from shared setup, but we need derivative, save...
     mk_txt_derivative(sample_work)
@@ -108,6 +115,29 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
   end
 
   describe "create, update, delete derivatives" do
+    it "will queue derivative file assignment" do
+      adapter = described_class.new(bare_work)
+      adapter.assign(example_gray_jp2)
+      expect(adapter.assigned).to include example_gray_jp2
+    end
+
+    it "will remove file assignment from queue" do
+      adapter = described_class.new(bare_work)
+      expect(adapter.state).to eq 'empty'
+      adapter.assign(example_gray_jp2)
+      expect(adapter.assigned).to include example_gray_jp2
+      expect(adapter.state).to eq 'dirty'
+      adapter.unassign(example_gray_jp2)
+      expect(adapter.assigned).not_to include example_gray_jp2
+      expect(adapter.state).to eq 'empty'
+    end
+
+    # it "will queue a deletion" do
+    # end
+    #
+    # it "will flush a removal and addition on commit!" do
+    # end
+
     it "can attach derivative from file" do
       adapter = described_class.new(work)
       expect(adapter.keys).not_to include 'jp2'
