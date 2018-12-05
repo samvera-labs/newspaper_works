@@ -132,11 +132,33 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
       expect(adapter.state).to eq 'empty'
     end
 
-    # it "will queue a deletion" do
-    # end
-    #
-    # it "will flush a removal and addition on commit!" do
-    # end
+    it "will queue a deletion" do
+      # Given a work with a derivative (txt) already assigned
+      adapter = described_class.new(work)
+      expect(adapter.state).to eq 'saved'
+      # unassigning path...
+      adapter.unassign('txt')
+      # will lead to queued unassignment (intent to delete)...
+      expect(adapter.unassigned).to include 'txt'
+      # and a 'dirty' adapter state (unflushed changes):
+      expect(adapter.state).to eq 'dirty'
+    end
+
+    it "will flush a removal and addition on commit!" do
+      # Given a work with a derivative (txt) already assigned
+      adapter = described_class.new(work)
+      expect(adapter.keys).to include 'txt'
+      expect(adapter.keys).not_to include 'jp2'
+      # unassigning path...
+      adapter.unassign('txt')
+      # and assigning another attachment:
+      adapter.assign(example_gray_jp2)
+      # ...committing these will flush the changes (synchronously):
+      adapter.commit!
+      expect(adapter.keys).not_to include 'txt'
+      expect(adapter.keys).to include 'jp2'
+      expect(adapter.size('jp2')).to eq 27_703
+    end
 
     it "can attach derivative from file" do
       adapter = described_class.new(work)
