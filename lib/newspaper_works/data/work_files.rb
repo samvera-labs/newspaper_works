@@ -17,15 +17,14 @@ module NewspaperWorks
         @unassigned = []
       end
 
-      # Derivatives for first fileset only, use of this only makes sense
-      #   as a convenience for the common case of single-file work.
+      # Derivatives for specified fileset or first fileset found.
       #   The `WorkDerivatives` adapter as assign/commmit! semantics just
       #   like `WorkFiles`, and also acts like a hash/mapping of
       #   destination names (usually file extension) to path of saved
       #   derviative.
-      # @return [NewspaperWorks::Data::WorkDerviatives] derivatives adatper
-      def derivatives
-        NewspaperWorks::Data::WorkDerivatives.of(work)
+      # @return [NewspaperWorks::Data::WorkDerviatives] derivatives adapter
+      def derivatives(fileset: nil)
+        NewspaperWorks::Data::WorkDerivatives.of(work, fileset)
       end
 
       # Assignment state

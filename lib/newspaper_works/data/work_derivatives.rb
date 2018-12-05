@@ -36,8 +36,13 @@ module NewspaperWorks
         attr_accessor :remap_names
       end
 
+      # alternate constructor spelling:
+      def self.of(work, fileset = nil)
+        new(work, fileset)
+      end
+
       # Adapt work and either specific or first fileset
-      def initialize(work, fileset: nil)
+      def initialize(work, fileset = nil)
         # adapted context usually work, may be string id of FileSet
         @work = work
         @fileset = fileset.nil? ? first_fileset : fileset

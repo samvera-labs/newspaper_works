@@ -178,4 +178,15 @@ RSpec.describe NewspaperWorks::Data::WorkFiles do
       expect(adapter.names).to include 'ocr_gray.tiff'
     end
   end
+
+  describe "derivative access" do
+    it "gets derivatives for first fileset" do
+      fileset = work.members.select { |m| m.class == FileSet }[0]
+      adapter = described_class.of(work)
+      expect(adapter.derivatives.fileset).to be fileset
+      expect(adapter.derivatives.work).to be work
+      expect(adapter.derivatives.class).to eq \
+        NewspaperWorks::Data::WorkDerivatives
+    end
+  end
 end

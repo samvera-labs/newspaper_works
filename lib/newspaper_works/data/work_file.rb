@@ -66,8 +66,10 @@ module NewspaperWorks
         unwrapped.original_name
       end
 
+      # Derivatives for fileset associated with this primary file object
+      # @return [NewspaperWorks::Data::WorkDerviatives] derivatives adapter
       def derivatives
-        # TODO: implement this.
+        NewspaperWorks::Data::WorkDerivatives.of(work, fileset)
       end
 
       private
