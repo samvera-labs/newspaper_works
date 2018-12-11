@@ -20,6 +20,8 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
     sample_work
   end
 
+  let(:adapter) { described_class.new(work) }
+
   let(:txt1) do
     file = Tempfile.new('txt1.txt')
     file.write('hello')
@@ -43,19 +45,16 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
 
   describe "enumerates available derivatives like hash" do
     it "includes expected derivative path for work" do
-      adapter = described_class.new(work)
       expect(adapter.keys).to include 'txt'
     end
 
     it "can be introspected for quantity of derivatives" do
       # `size` method without argument is count of derivatives,
       #   functions equivalently to adapter.keys.size
-      adapter = described_class.new(work)
       expect(adapter.size).to eq adapter.keys.size
     end
 
     it "enumerates expected derivative extension for work" do
-      adapter = described_class.new(work)
       ext_found = adapter.keys
       expect(ext_found).to include 'txt'
     end
@@ -77,18 +76,15 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
 
   describe "loads derivatives for a work" do
     it "Loads text derivative path" do
-      adapter = described_class.new(work)
       expect(File.exist?(adapter.path('txt'))).to be true
       expect(adapter.exist?('txt')).to be true
     end
 
     it "Loads text derivative data" do
-      adapter = described_class.new(work)
       expect(adapter.data('txt')).to include 'mythical'
     end
 
     it "Handles character encoding on read" do
-      adapter = described_class.new(work)
       # replace fixture text derivative for work with encoded text
       adapter.attach(encoded_text, 'txt')
       data = adapter.data('txt')
@@ -99,7 +95,6 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
 
     it "Loads thumbnail derivative data" do
       mk_thumbnail_derivative(work)
-      adapter = described_class.new(work)
       # get size by loading data
       expect(adapter.data('thumbnail').bytes.size).to eq 16_743
       # get size by File.size via .size method
@@ -108,7 +103,6 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
 
     it "Can access jp2 derivative" do
       mk_jp2_derivative(work)
-      adapter = described_class.new(work)
       expect(File.exist?(adapter.path('jp2'))).to be true
       expect(adapter.exist?('jp2')).to be true
     end
@@ -134,7 +128,6 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
 
     it "will queue a deletion" do
       # Given a work with a derivative (txt) already assigned
-      adapter = described_class.new(work)
       expect(adapter.state).to eq 'saved'
       # unassigning path...
       adapter.unassign('txt')
@@ -146,7 +139,6 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
 
     it "will flush a removal and addition on commit!" do
       # Given a work with a derivative (txt) already assigned
-      adapter = described_class.new(work)
       expect(adapter.keys).to include 'txt'
       expect(adapter.keys).not_to include 'jp2'
       # unassigning path...
@@ -161,7 +153,6 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
     end
 
     it "can attach derivative from file" do
-      adapter = described_class.new(work)
       expect(adapter.keys).not_to include 'jp2'
       adapter.attach(example_gray_jp2, 'jp2')
       expect(adapter.exist?('jp2')).to be true
@@ -173,7 +164,6 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
     end
 
     it "can replace a derivative with new attachment" do
-      adapter = described_class.new(work)
       adapter.attach(txt1, 'txt')
       expect(adapter.data('txt')).to eq 'hello'
       adapter.attach(txt2, 'txt')
@@ -181,7 +171,6 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
     end
 
     it "can delete an attached derivative" do
-      adapter = described_class.new(work)
       adapter.attach(txt1, 'txt')
       expect(adapter.keys).to include 'txt'
       expect(adapter.data('txt')).to eq 'hello'
