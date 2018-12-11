@@ -116,7 +116,7 @@ module NewspaperWorks
         load_paths
       end
 
-      # attach a single derivative file to work
+      # Delete a derivative file from work, by destination name
       # @param name [String] destination name, usually file extension
       def delete(name, force: nil)
         path = path_factory.derivative_path_for_reference(fileset, name)
