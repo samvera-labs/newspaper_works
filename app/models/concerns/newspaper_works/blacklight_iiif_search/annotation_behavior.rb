@@ -45,7 +45,7 @@ module NewspaperWorks
         # return the JSON word-coordinates file contents
         # @return [String]
         def coordinates_raw
-          NewspaperWorks::Data::WorkDerivativeLoader.new(file_set_id).data('json')
+          NewspaperWorks::Data::WorkDerivatives.new(file_set_id).data('json')
         end
 
         ##
