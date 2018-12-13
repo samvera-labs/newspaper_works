@@ -61,10 +61,34 @@ class NewspaperWorks::PluggableDerivativeService
       services = plugins.map { |plugin| plugin.new(file_set) }.select(&:valid?)
       # run all valid services, in order:
       services.each do |plugin|
+        dest = nil
+        dest = plugin.class.target_ext if plugin.class.respond_to?(:target_ext)
+        next if skip_destination?(name, dest)
         plugin.send(name, *args)
       end
     else
       super
     end
   end
+
+  private
+
+    def skip_destination?(method_name, destination_name)
+      return false if file_set.id.nil? || destination_name.nil?
+      return false unless method_name == :create_derivatives
+      # skip :create_derivatives if existing --> do not re-create
+      existing_derivative?(destination_name)
+    end
+
+    def existing_derivative?(name)
+      path = derivative_path_factory.derivative_path_for_reference(
+        file_set,
+        name
+      )
+      File.exist?(path)
+    end
+
+    def derivative_path_factory
+      Hyrax::DerivativePath
+    end
 end

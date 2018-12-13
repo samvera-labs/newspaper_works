@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'spec_helper'
 
 RSpec.describe NewspaperWorks::PluggableDerivativeService do
@@ -43,6 +44,10 @@ RSpec.describe NewspaperWorks::PluggableDerivativeService do
       @cleanup_called = 0
       class << self
         attr_accessor :create_called, :cleanup_called
+
+        def target_ext
+          'txt'
+        end
       end
 
       def initialize(fileset)
@@ -64,12 +69,33 @@ RSpec.describe NewspaperWorks::PluggableDerivativeService do
       end
     end
 
+    def touch_fake_derivative_file(file_set, ext)
+      path = Hyrax::DerivativePath.derivative_path_for_reference(file_set, ext)
+      FileUtils.mkdir_p(File.join(path.split('/')[0..-2]))
+      FileUtils.touch(path)
+    end
+
     it "calls each plugin on create" do
-      expect(FakeDerivativeService.create_called).to eq 0
+      create_calls = FakeDerivativeService.create_called
       described_class.plugins = [FakeDerivativeService, FakeDerivativeService]
       service = described_class.new(FileSet.new)
       service.create_derivatives('not_a_real_filename')
-      expect(FakeDerivativeService.create_called).to eq 2
+      expect(FakeDerivativeService.create_called).to eq create_calls + 2
+    end
+
+    it "does not re-create existing derivative" do
+      create_calls = FakeDerivativeService.create_called
+      described_class.plugins = [FakeDerivativeService]
+      service = described_class.new(persisted_file_set)
+      expect(persisted_file_set.id).not_to be_nil
+      # Fake is configured to have 'txt' destination_path, let's create a
+      #   destination file in Hyrax's opinionated plate for dest. name.
+      touch_fake_derivative_file(persisted_file_set, 'txt')
+      service.create_derivatives('/nonsense/source/path/ignored')
+      # create calls logged by fake should not increment,
+      #   as PluggableDerivativeService should have skipped calling
+      #   plugin's create_derivatives method w/ presence of existing derivative
+      expect(FakeDerivativeService.create_called).to eq create_calls
     end
 
     it "calls each plugin on cleanup" do
