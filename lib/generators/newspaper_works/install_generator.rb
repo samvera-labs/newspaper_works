@@ -3,7 +3,11 @@ require 'rails/generators'
 module NewspaperWorks
   # Install Generator Class
   class InstallGenerator < Rails::Generators::Base
-    source_root File.expand_path('../templates', __FILE__)
+    source_root File.expand_path('templates', __FILE__)
+
+    def copy_migrations
+      rake "newspaper_works:install:migrations"
+    end
 
     def register_worktypes
       inject_into_file 'config/initializers/hyrax.rb',
