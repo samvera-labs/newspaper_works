@@ -98,6 +98,7 @@ module NewspaperWorks
       # @param file [String, IO] path to file or IO object
       # @param name [String] destination name, usually file extension
       def attach(file, name)
+        log_attachment(file, name)
         mkdir_pairtree
         path = path_factory.derivative_path_for_reference(fileset, name)
         # if file argument is path, copy file
@@ -176,6 +177,14 @@ module NewspaperWorks
       end
 
       private
+
+        def log_attachment(path, name)
+          NewspaperWorks::DerivativeAttachment.create(
+            fileset_id: fileset_id,
+            path: path,
+            destination_name: name
+          )
+        end
 
         # Load all paths/names to @paths once, upon first access
         def load_paths

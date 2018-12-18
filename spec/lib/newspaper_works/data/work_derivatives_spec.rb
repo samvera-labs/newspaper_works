@@ -178,5 +178,15 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
       expect(adapter.path('txt')).to be nil
       expect(adapter.keys).not_to include 'txt'
     end
+
+    it "persists log of attachment to RDBMS" do
+      adapter.attach(txt1, 'superthing')
+      result = NewspaperWorks::DerivativeAttachment.find_by(
+        fileset_id: adapter.fileset.id,
+        path: txt1,
+        destination_name: 'superthing'
+      )
+      expect(result).not_to be_nil
+    end
   end
 end
