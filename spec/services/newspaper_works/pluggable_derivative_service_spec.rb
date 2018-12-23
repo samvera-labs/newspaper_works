@@ -172,5 +172,35 @@ RSpec.describe NewspaperWorks::PluggableDerivativeService do
       expect(extensions).to include 'jpeg'
     end
   end
+
+  describe "ingest integration" do
+    def log_attachment(file_set)
+      # create a log entry for the fileset given destination name 'jp2'
+      NewspaperWorks::DerivativeAttachment.create(
+        fileset_id: file_set.id,
+        path: '/some/arbitrary/path/to.jp2',
+        destination_name: 'jp2'
+      )
+    end
+
+    def jp2_plugin?(plugins)
+      r = plugins.select { |p| p.class == NewspaperWorks::JP2DerivativeService }
+      !r.empty?
+    end
+
+    it "will not attempt creating over pre-made derivative" do
+      service = described_class.new(persisted_file_set)
+      # this should be respected, evaluate by obtaining filtered
+      #   services list, which must omit JP2DerivativeService
+      plugins = service.services(:create_derivatives)
+      # initially has jp2 plugin
+      expect(jp2_plugin?(plugins)).to be true
+      # blacklist jp2 by effect of log entry of pre-made attachment
+      log_attachment(service.file_set)
+      # omits, after logging intent of previous attachment:
+      plugins = service.services(:create_derivatives)
+      expect(jp2_plugin?(plugins)).to be false
+    end
+  end
   # rubocop:enable RSpec/InstanceVariable
 end
