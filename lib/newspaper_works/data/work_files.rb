@@ -15,16 +15,19 @@ module NewspaperWorks
         @work = work
         @assigned = []
         @unassigned = []
+        @derivatives = nil
       end
 
       # Derivatives for specified fileset or first fileset found.
       #   The `WorkDerivatives` adapter as assign/commmit! semantics just
       #   like `WorkFiles`, and also acts like a hash/mapping of
       #   destination names (usually file extension) to path of saved
-      #   derviative.
+      #   derviative.  Always returns same instance (memoized after first
+      #   use) of `WorkDerivatives`.
       # @return [NewspaperWorks::Data::WorkDerviatives] derivatives adapter
       def derivatives(fileset: nil)
-        NewspaperWorks::Data::WorkDerivatives.of(work, fileset)
+        return @derivatives unless @derivatives.nil?
+        @derivatives = NewspaperWorks::Data::WorkDerivatives.of(work, fileset)
       end
 
       # Assignment state

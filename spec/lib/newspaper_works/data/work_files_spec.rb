@@ -183,6 +183,9 @@ RSpec.describe NewspaperWorks::Data::WorkFiles do
     it "gets derivatives for first fileset" do
       fileset = work.members.select { |m| m.class == FileSet }[0]
       adapter = described_class.of(work)
+      # is the same instance across access:
+      expect(adapter.derivatives).to be adapter.derivatives
+      # adapts same context(s):
       expect(adapter.derivatives.fileset).to be fileset
       expect(adapter.derivatives.work).to be work
       expect(adapter.derivatives.class).to eq \
