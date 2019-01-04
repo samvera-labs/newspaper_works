@@ -20,6 +20,10 @@ module NewspaperWorks
       # @return [FileSet] fileset for work, with regard to these derivatives
       attr_accessor :fileset
 
+      # Parent pointer to WorkFile object representing fileset
+      # @return [NewspaperWorks::Data::WorkFile] WorkFile for fileset, work pair
+      attr_accessor :parent
+
       # Assigned attachment queue (of paths)
       # @return [Array<String>] list of paths queued for attachment
       attr_accessor :assigned
@@ -37,12 +41,12 @@ module NewspaperWorks
       end
 
       # alternate constructor spelling:
-      def self.of(work, fileset = nil)
-        new(work, fileset)
+      def self.of(work, fileset = nil, parent = nil)
+        new(work, fileset, parent)
       end
 
       # Adapt work and either specific or first fileset
-      def initialize(work, fileset = nil)
+      def initialize(work, fileset = nil, parent = nil)
         # adapted context usually work, may be string id of FileSet
         @work = work
         @fileset = fileset.nil? ? first_fileset : fileset
@@ -52,6 +56,8 @@ module NewspaperWorks
         @assigned = []
         # un-assignments for deletion
         @unassigned = []
+        # parent is NewspaperWorks::Data::WorkFile object for derivatives
+        @parent = parent
       end
 
       # Assignment state

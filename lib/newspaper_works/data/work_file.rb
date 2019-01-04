@@ -69,7 +69,7 @@ module NewspaperWorks
       # Derivatives for fileset associated with this primary file object
       # @return [NewspaperWorks::Data::WorkDerviatives] derivatives adapter
       def derivatives
-        NewspaperWorks::Data::WorkDerivatives.of(work, fileset)
+        NewspaperWorks::Data::WorkDerivatives.of(work, fileset, self)
       end
 
       private

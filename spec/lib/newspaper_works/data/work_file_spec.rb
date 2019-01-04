@@ -94,6 +94,7 @@ RSpec.describe NewspaperWorks::Data::WorkFile do
         NewspaperWorks::Data::WorkDerivatives
       expect(adapter.derivatives.fileset).to be fileset
       expect(adapter.derivatives.work).to be work
+      expect(adapter.derivatives.parent).to be adapter
     end
   end
 end

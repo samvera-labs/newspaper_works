@@ -190,6 +190,9 @@ RSpec.describe NewspaperWorks::Data::WorkFiles do
       expect(adapter.derivatives.work).to be work
       expect(adapter.derivatives.class).to eq \
         NewspaperWorks::Data::WorkDerivatives
+      # transitive parent/child relationship, can traverse to adapter from
+      # derivatives:
+      expect(adapter.derivatives.parent.parent).to be adapter
     end
   end
 end
