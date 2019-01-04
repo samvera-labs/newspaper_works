@@ -186,7 +186,7 @@ RSpec.describe NewspaperWorks::Data::WorkFiles do
       # is the same instance across access:
       expect(adapter.derivatives).to be adapter.derivatives
       # adapts same context(s):
-      expect(adapter.derivatives.fileset).to be fileset
+      expect(adapter.derivatives.fileset.id).to eq fileset.id
       expect(adapter.derivatives.work).to be work
       expect(adapter.derivatives.class).to eq \
         NewspaperWorks::Data::WorkDerivatives

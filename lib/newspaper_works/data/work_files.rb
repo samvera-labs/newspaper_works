@@ -27,7 +27,8 @@ module NewspaperWorks
       # @return [NewspaperWorks::Data::WorkDerviatives] derivatives adapter
       def derivatives(fileset: nil)
         return @derivatives unless @derivatives.nil?
-        @derivatives = NewspaperWorks::Data::WorkDerivatives.of(work, fileset)
+        # Delegate actual construction to WorkFile.derivatives:
+        @derivatives = values[0].derivatives
       end
 
       # Assignment state
