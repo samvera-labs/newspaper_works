@@ -188,5 +188,19 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
       )
       expect(result).not_to be_nil
     end
+
+    it "persists a log of path relation to primary file" do
+      # this is an integration test by practical necessity, with
+      #   WorkFiles adapting a bare work with no fileset.
+      work_files = NewspaperWorks::Data::WorkFiles.of(bare_work)
+      work_files.assign(example_gray_jp2)
+      adapter = work_files.derivatives
+      adapter.assign(txt1)
+      result = NewspaperWorks::IngestFileRelation.find_by(
+        derivative_path: txt1,
+        file_path: example_gray_jp2
+      )
+      expect(result).not_to be_nil
+    end
   end
 end

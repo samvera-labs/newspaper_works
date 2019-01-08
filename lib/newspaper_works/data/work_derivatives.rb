@@ -191,12 +191,40 @@ module NewspaperWorks
 
       private
 
+        def primary_file_path
+          if fileset.nil?
+            # if there is a nil fileset, we look for *intent* in the form
+            #   of the first assigned file path for single-file work.
+            work_file = parent
+            return if work_file.nil?
+            work_files = work_file.parent
+            return if work_files.nil?
+            work_files.assigned[0]
+          else
+            file_url_to_path(fileset.import_url) unless fileset.import_url.nil?
+          end
+        end
+
+        def file_url_to_path(url)
+          url.gsub('file://')
+        end
+
+        def log_primary_file_relation(path)
+          file_path = primary_file_path
+          return if file_path.nil?
+          NewspaperWorks::IngestFileRelation.create(
+            file_path: file_path,
+            derivative_path: path
+          )
+        end
+
         def log_assignment(path, name)
           NewspaperWorks::DerivativeAttachment.create(
             fileset_id: fileset_id,
             path: path,
             destination_name: name
           )
+          log_primary_file_relation(path)
         end
 
         def unlog_assignment(path, name)
@@ -212,6 +240,8 @@ module NewspaperWorks
               destination_name: name
             ).destroy_all
           end
+          # note: there is deliberately no attempt to "unlog" primary
+          #   file relation, as leaving it should have no side-effect.
         end
 
         # Load all paths/names to @paths once, upon first access
