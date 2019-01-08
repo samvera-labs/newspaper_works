@@ -104,6 +104,7 @@ module NewspaperWorks
       # @param file [String, IO] path to file or IO object
       # @param name [String] destination name, usually file extension
       def attach(file, name)
+        raise RuntimeError('Cannot save for nil fileset') if fileset.nil?
         log_attachment(file, name)
         mkdir_pairtree
         path = path_factory.derivative_path_for_reference(fileset, name)
@@ -126,6 +127,7 @@ module NewspaperWorks
       # Delete a derivative file from work, by destination name
       # @param name [String] destination name, usually file extension
       def delete(name, force: nil)
+        raise RuntimeError('Cannot save for nil fileset') if fileset.nil?
         path = path_factory.derivative_path_for_reference(fileset, name)
         # will remove file, if it exists; won't remove pairtree, even
         #   if it becomes empty, as that is excess scope.
