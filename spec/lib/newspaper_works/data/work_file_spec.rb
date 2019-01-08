@@ -8,11 +8,10 @@ RSpec.describe NewspaperWorks::Data::WorkFile do
   let(:work) { work_with_file }
 
   describe "adapter composition" do
-    it "adapts work with implied fileset" do
+    it "adapts work with nil fileset" do
       adapter = described_class.new(work)
       expect(adapter.work).to be work
-      fileset = work.members.select { |m| m.class == FileSet }[0]
-      expect(adapter.fileset).to be fileset
+      expect(adapter.fileset).to be_nil
     end
 
     it "adapts work with 'of' alt constructor" do
