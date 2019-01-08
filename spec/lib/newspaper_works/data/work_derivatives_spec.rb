@@ -23,7 +23,7 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
   let(:adapter) { described_class.new(work) }
 
   let(:txt1) do
-    file = Tempfile.new('txt1.txt')
+    file = Tempfile.new(['txt1', '.txt'])
     file.write('hello')
     file.close
     file.path
@@ -180,11 +180,11 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
     end
 
     it "persists log of attachment to RDBMS" do
-      adapter.attach(txt1, 'superthing')
+      adapter.assign(txt1)
       result = NewspaperWorks::DerivativeAttachment.find_by(
         fileset_id: adapter.fileset.id,
         path: txt1,
-        destination_name: 'superthing'
+        destination_name: 'txt'
       )
       expect(result).not_to be_nil
     end

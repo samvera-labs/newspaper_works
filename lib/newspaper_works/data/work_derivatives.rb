@@ -75,6 +75,9 @@ module NewspaperWorks
         path = normalize_path(path)
         validate_path(path)
         @assigned.push(path)
+        # We are keeping assignment both in ephemeral, transient @assigned
+        #   and mirroring to db to share context with other components:
+        log_assignment(path, path_destination_name(path))
       end
 
       # Assign a destination name to unassigned queue for deletion -- OR --
@@ -83,7 +86,10 @@ module NewspaperWorks
       #   or source path
       def unassign(name)
         # if name is queued path, remove from @assigned queue:
-        @assigned.delete(name) if @assigned.include?(name)
+        if @assigned.include?(name)
+          @assigned.delete(name)
+          unlog_assignment(name, path_destination_name(name))
+        end
         # if name is known destination name, remove
         @unassigned.push(name) if exist?(name)
       end
@@ -105,7 +111,6 @@ module NewspaperWorks
       # @param name [String] destination name, usually file extension
       def attach(file, name)
         raise RuntimeError('Cannot save for nil fileset') if fileset.nil?
-        log_attachment(file, name)
         mkdir_pairtree
         path = path_factory.derivative_path_for_reference(fileset, name)
         # if file argument is path, copy file
@@ -186,12 +191,27 @@ module NewspaperWorks
 
       private
 
-        def log_attachment(path, name)
+        def log_assignment(path, name)
           NewspaperWorks::DerivativeAttachment.create(
             fileset_id: fileset_id,
             path: path,
             destination_name: name
           )
+        end
+
+        def unlog_assignment(path, name)
+          if fileset_id.nil?
+            NewspaperWorks::DerivativeAttachment.where(
+              path: path,
+              destination_name: name
+            ).destroy_all
+          else
+            NewspaperWorks::DerivativeAttachment.where(
+              fileset_id: fileset_id,
+              path: path,
+              destination_name: name
+            ).destroy_all
+          end
         end
 
         # Load all paths/names to @paths once, upon first access
