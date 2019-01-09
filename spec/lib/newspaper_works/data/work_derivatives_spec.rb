@@ -25,7 +25,6 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
   let(:txt1) do
     file = Tempfile.new(['txt1', '.txt'])
     file.write('hello')
-    file.close
     file.path
   end
 
@@ -202,5 +201,33 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
       )
       expect(result).not_to be_nil
     end
+
+    # rubocop:disable RSpec/ExampleLength
+    it "commits queued derivatives" do
+      NewspaperWorks::IngestFileRelation.where(file_path: example_gray_jp2).delete_all
+      work_files = NewspaperWorks::Data::WorkFiles.of(bare_work)
+      work_files.assign(example_gray_jp2)
+      adapter = work_files.derivatives
+      adapter.assign(txt1)
+      expect(adapter.keys.size).to eq 0
+      # we need a fileset, saved with import_url, attached to work:
+      fileset = valid_file_set
+      fileset.import_url = 'file://' + example_gray_jp2
+      fileset.save!
+      bare_work.members.push(fileset)
+      bare_work.save!
+      # with a new adapter instance...
+      adapter2 = described_class.of(bare_work)
+      # call .commit_queued! with our fileset...
+      adapter2.commit_queued!(fileset)
+      # ...which should result in saved, reloaded derivative...
+      expect(adapter2.keys.size).to eq 1
+      expect(File.size(adapter2.values[0])).to eq File.size(txt1)
+      # ...also found via Hyrax::DerviativePath:
+      found = Hyrax::DerivativePath.derivatives_for_reference(fileset.id)
+      expect(found.size).to eq 1
+      expect(File.size(found[0])).to eq File.size(txt1)
+    end
+    # rubocop:enable RSpec/ExampleLength
   end
 end

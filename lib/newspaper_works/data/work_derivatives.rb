@@ -106,6 +106,27 @@ module NewspaperWorks
         @unassigned = []
       end
 
+      # Given a fileset meeting both of the following conditions:
+      #   1. a non-nil import_url value;
+      #   2. is attached to a work (persisted in Fedora, if not yet in Solr)...
+      # ...this method gets associated derivative paths queued and attach all.
+      # @param file_set [FileSet] saved file set, attached to work,
+      #   with identifier, and a non-nil import_url
+      def commit_queued!(file_set)
+        raise ArgumentError('No FileSet import_url') if file_set.import_url.nil?
+        import_path = file_url_to_path(file_set.import_url)
+        work = file_set.member_of.select(&:work?)[0]
+        raise ArgumentError('Work not found for fileset') if work.nil?
+        derivatives = WorkDerivatives.of(work, file_set)
+        IngestFileRelation.derivatives_for_file(import_path).each do |path|
+          next unless File.exist?(path)
+          attachment_record = DerivativeAttachment.where(path: path).first
+          derivatives.attach(path, attachment_record.destination_name)
+        end
+        @fileset ||= file_set
+        load_paths
+      end
+
       # attach a single derivative file to work
       # @param file [String, IO] path to file or IO object
       # @param name [String] destination name, usually file extension
@@ -206,20 +227,20 @@ module NewspaperWorks
         end
 
         def file_url_to_path(url)
-          url.gsub('file://')
+          url.gsub('file://', '')
         end
 
         def log_primary_file_relation(path)
           file_path = primary_file_path
           return if file_path.nil?
-          NewspaperWorks::IngestFileRelation.create(
+          NewspaperWorks::IngestFileRelation.create!(
             file_path: file_path,
             derivative_path: path
           )
         end
 
         def log_assignment(path, name)
-          NewspaperWorks::DerivativeAttachment.create(
+          NewspaperWorks::DerivativeAttachment.create!(
             fileset_id: fileset_id,
             path: path,
             destination_name: name
