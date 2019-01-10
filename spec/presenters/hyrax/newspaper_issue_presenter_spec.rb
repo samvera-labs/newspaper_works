@@ -6,7 +6,7 @@ RSpec.describe Hyrax::NewspaperIssuePresenter do
 
   let(:attributes) do
     { "volume" => '888888',
-      "edition" => ['1st issue'],
+      "edition" => '1st issue',
       "issue_number" => ['1st issue'],
       "extent" => ["1st"],
       "publication_date" => ["2017-08-25"] }
