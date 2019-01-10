@@ -25,6 +25,7 @@ RSpec.describe NewspaperWorks::Data::WorkDerivatives do
   let(:txt1) do
     file = Tempfile.new(['txt1', '.txt'])
     file.write('hello')
+    file.flush
     file.path
   end
 

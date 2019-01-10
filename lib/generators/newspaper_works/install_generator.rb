@@ -9,6 +9,7 @@ module NewspaperWorks
       rake "newspaper_works:install:migrations"
     end
 
+    # rubocop:disable Metrics/MethodLength
     def register_worktypes
       inject_into_file 'config/initializers/hyrax.rb',
                        after: "Hyrax.config do |config|\n" do
@@ -18,9 +19,15 @@ module NewspaperWorks
           "  config.register_curation_concern :newspaper_issue\n" \
           "  config.register_curation_concern :newspaper_page\n" \
           "  config.register_curation_concern :newspaper_title\n" \
-          '  # == END GENERATED newspaper_works CONFIG == '
+          "\n" \
+          "  config.callback.set(:after_create_fileset) do |file_set, user|\n" \
+          "    require 'newspaper_works'\n" \
+          "    NewspaperWorks::Data.handle_after_create_fileset(file_set, user)\n" \
+          "  end\n" \
+          "  #== END GENERATED newspaper_works CONFIG ==\n\n"
       end
     end
+    # rubocop:enable Metrics/MethodLength
 
     def inject_routes
       inject_into_file 'config/routes.rb',

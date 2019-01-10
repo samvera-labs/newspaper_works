@@ -117,6 +117,13 @@ _More here soon!_
     be edited to make uploads optional for (all) work types, by setting
     `config.work_requires_files = false`.
 
+  * NewspaperWorks overrides Hyrax's default `:after_create_fileset` event
+    handler.  Because the Hyrax callback registry only allows single
+    subscribers to any event, application developers who overwrite
+    this handler, or integrate other gems that do likewise, must take care
+    to create a custom composition that ensures all work and queued jobs
+    desired run after this object lifecycle event.
+
 ## Development and Testing with Vagrant
 * clone samvera-vagrant
 
