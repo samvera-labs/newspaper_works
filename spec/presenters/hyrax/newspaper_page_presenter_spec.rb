@@ -2,6 +2,11 @@ require 'spec_helper'
 RSpec.describe Hyrax::NewspaperPagePresenter do
   let(:solr_document) { SolrDocument.new(attributes) }
 
+  let(:attributes) do
+    { "height" => "1000px",
+      "width" => "800px" }
+  end
+
   subject { described_class.new(double, double) }
 
   it { is_expected.to delegate_method(:height).to(:solr_document) }

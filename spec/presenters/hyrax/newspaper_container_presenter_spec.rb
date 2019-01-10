@@ -2,6 +2,12 @@ require 'spec_helper'
 RSpec.describe Hyrax::NewspaperContainerPresenter do
   let(:solr_document) { SolrDocument.new(attributes) }
 
+  let(:attributes) do
+    { "extent" => ["1st"],
+      "publication_date_start" => ["2017-08-25"],
+      "publication_date_end" => ["2017-08-30"] }
+  end
+
   subject { described_class.new(double, double) }
 
   it { is_expected.to delegate_method(:extent).to(:solr_document) }

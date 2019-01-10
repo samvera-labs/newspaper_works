@@ -2,6 +2,13 @@ require 'spec_helper'
 RSpec.describe Hyrax::NewspaperTitlePresenter do
   let(:solr_document) { SolrDocument.new(attributes) }
 
+  let(:attributes) do
+    { "edition" => "1st",
+      "frequency" => ["often"],
+      "preceded_by" => ["Something"],
+      "succeeded_by" => ["Something Else"] }
+  end
+
   subject { described_class.new(double, double) }
 
   # def publication_date_start
