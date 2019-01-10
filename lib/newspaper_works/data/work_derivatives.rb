@@ -122,6 +122,9 @@ module NewspaperWorks
           next unless File.exist?(path)
           attachment_record = DerivativeAttachment.where(path: path).first
           derivatives.attach(path, attachment_record.destination_name)
+          # update previously nil fileset id
+          attachment_record.fileset_id = file_set.id
+          attachment_record.save!
         end
         @fileset ||= file_set
         load_paths
