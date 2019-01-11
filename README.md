@@ -118,7 +118,13 @@ _More here soon!_
     `config.work_requires_files = false`.
 
   * NewspaperWorks overrides Hyrax's default `:after_create_fileset` event
-    handler.  Because the Hyrax callback registry only allows single
+    handler, in order to attach pre-existing derivatives in some ingest
+    use cases.  The file attachment adapters for NewspaperWorks use this
+    callback to allow programmatic assignment of pre-existing derivative
+    files before the primary file's file set has been created for a new
+    work.  The callback ensures that derivative files are attached,
+    stored using Hyrax file/path naming conventions, once the file set
+    has been created.  Because the Hyrax callback registry only allows single
     subscribers to any event, application developers who overwrite
     this handler, or integrate other gems that do likewise, must take care
     to create a custom composition that ensures all work and queued jobs

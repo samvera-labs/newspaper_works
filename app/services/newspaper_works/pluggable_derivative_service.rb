@@ -72,9 +72,6 @@ class NewspaperWorks::PluggableDerivativeService
       # services = plugins.map { |plugin| plugin.new(file_set) }.select(&:valid?)
       # run all valid services, in order:
       services(name).each do |plugin|
-        # dest = nil
-        # dest = plugin.class.target_ext if plugin.class.respond_to?(:target_ext)
-        # next if skip_destination?(name, dest)
         plugin.send(name, *args)
       end
     else
