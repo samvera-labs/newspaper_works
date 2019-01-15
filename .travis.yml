@@ -17,6 +17,7 @@ addons:
     - libreoffice
     - poppler-utils
     - tesseract-ocr
+    - libopenjp2-7
 cache:
   bundler: true
 
