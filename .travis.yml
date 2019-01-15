@@ -17,6 +17,7 @@ addons:
     - poppler-utils
     - tesseract-ocr
     - libopenjp2-7
+    - libopenjp2-tools
 cache:
   bundler: true
 
