@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'presenter_shared'
+require_relative '../newspaper_works/scanned_media_presenter_spec'
 
 RSpec.describe Hyrax::NewspaperPagePresenter do
   let(:solr_document) { SolrDocument.new(attributes) }

@@ -1,5 +1,6 @@
 require 'spec_helper'
-require 'presenter_shared'
+require_relative '../newspaper_works/newspaper_core_presenter_spec'
+require_relative '../newspaper_works/scanned_media_presenter_spec'
 
 RSpec.describe Hyrax::NewspaperArticlePresenter do
   let(:attributes) do
