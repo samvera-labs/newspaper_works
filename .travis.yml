@@ -1,6 +1,10 @@
 language: ruby
 dist: xenial
 
+jdk:
+  - oraclejdk8
+  - openjdk8
+
 addons:
   chrome: stable
   apt:
@@ -49,7 +53,3 @@ env:
 services:
   - redis
 #before_script:
-#  - jdk_switcher use oraclejdk8
-
-jdk:
-  - oraclejdk8
