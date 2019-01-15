@@ -47,6 +47,9 @@ env:
     - "RAILS_VERSION=5.0.7"
 
 services:
-  - redis-server
-before_script:
-- jdk_switcher use oraclejdk8
+  - redis
+#before_script:
+#  - jdk_switcher use oraclejdk8
+
+jdk:
+  - oraclejdk8
