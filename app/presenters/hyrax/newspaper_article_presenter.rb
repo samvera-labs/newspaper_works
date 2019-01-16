@@ -4,6 +4,7 @@ module Hyrax
   class NewspaperArticlePresenter < Hyrax::WorkShowPresenter
     include NewspaperWorks::NewspaperCorePresenter
     include NewspaperWorks::ScannedMediaPresenter
+    include NewspaperWorks::IiifSearchPresenterBehavior
     delegate :author, :photographer, :volume, :edition, :issue_number,
              :geographic_coverage, :extent, :publication_date,
              to: :solr_document
