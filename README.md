@@ -121,6 +121,19 @@ _More here soon!_
     be edited to enable a IIIF viewer, by setting
     `config.iiif_image_server = true`.    
 
+  * NewspaperWorks overrides Hyrax's default `:after_create_fileset` event
+    handler, in order to attach pre-existing derivatives in some ingest
+    use cases.  The file attachment adapters for NewspaperWorks use this
+    callback to allow programmatic assignment of pre-existing derivative
+    files before the primary file's file set has been created for a new
+    work.  The callback ensures that derivative files are attached,
+    stored using Hyrax file/path naming conventions, once the file set
+    has been created.  Because the Hyrax callback registry only allows single
+    subscribers to any event, application developers who overwrite
+    this handler, or integrate other gems that do likewise, must take care
+    to create a custom composition that ensures all work and queued jobs
+    desired run after this object lifecycle event.
+
 ## Development and Testing with Vagrant
 * clone samvera-vagrant
 
@@ -143,14 +156,14 @@ cd samvera-vagrant && vagrant up
 * First shell (start fcrepo_wrapper)
 
 ```
-cd /home/ubuntu/newspaper_works
+cd /home/vagrant/newspaper_works
 fcrepo_wrapper --config config/fcrepo_wrapper_test.yml
 ```
 
 * Second shell (start solr_wrapper)
 
 ```
-cd /home/ubuntu/newspaper_works
+cd /home/vagrant/newspaper_works
 solr_wrapper --config config/solr_wrapper_test.yml
 ```
 
@@ -159,14 +172,14 @@ solr_wrapper --config config/solr_wrapper_test.yml
 * Run spec tests
 
 ```
-cd /home/ubuntu/newspaper_works
+cd /home/vagrant/newspaper_works
 rake spec
 ```
 
 * Run rails console
 
 ```
-cd /home/ubuntu/newspaper_works
+cd /home/vagrant/newspaper_works
 rails s
 ```
 
