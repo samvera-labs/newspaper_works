@@ -6,6 +6,8 @@ class NewspaperIssue < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
   include NewspaperWorks::NewspaperCoreMetadata
 
+  belongs_to :newspaper_title, predicate: ActiveFedora::RDF::Fcrepo::RelsExt.isPartOf
+
   self.indexer = NewspaperIssueIndexer
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
