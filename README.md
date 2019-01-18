@@ -123,14 +123,14 @@ git clone https://github.com/marriott-library/samvera-vagrant.git
 * Shell into vagrant box **three times** `vagrant ssh`
 
 * First shell (start fcrepo_wrapper)
-`cd /home/ubuntu/newspaper_works && fcrepo_wrapper --config config fcrepo_wrapper_test.yml`
+`cd /home/ubuntu/newspaper_works && fcrepo_wrapper --config config/fcrepo_wrapper_test.yml`
 
 * Second shell (start solr_wrapper)
-` cd /home/ubuntu/newspaper_works && solr_wrapper --config config/solr_wrapper_test.yml`
+`cd /home/ubuntu/newspaper_works && solr_wrapper --config config/solr_wrapper_test.yml`
 * Third shell testing and development
 
 * Run spec tests
-` cd /home/ubuntu/newspaper_works && rake spec`
+`cd /home/ubuntu/newspaper_works && rake spec`
 
 * Run rails console
 `cd /home/ubuntu/newspaper_works && rails s`
