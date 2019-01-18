@@ -111,6 +111,27 @@ and configure that username in the
 
 - This will help fields such as "Place of Publication" provide autocomplete using the Geonames service/vocabulary.
 
+  * NewspaperWorks requires that your application's `config/initializers/hyrax.rb`
+    be edited to make uploads optional for (all) work types, by setting
+    `config.work_requires_files = false`.
+    
+  * NewspaperWorks expects that your application's `config/initializers/hyrax.rb`
+    be edited to enable a IIIF viewer, by setting
+    `config.iiif_image_server = true`.    
+
+  * NewspaperWorks overrides Hyrax's default `:after_create_fileset` event
+    handler, in order to attach pre-existing derivatives in some ingest
+    use cases.  The file attachment adapters for NewspaperWorks use this
+    callback to allow programmatic assignment of pre-existing derivative
+    files before the primary file's file set has been created for a new
+    work.  The callback ensures that derivative files are attached,
+    stored using Hyrax file/path naming conventions, once the file set
+    has been created.  Because the Hyrax callback registry only allows single
+    subscribers to any event, application developers who overwrite
+    this handler, or integrate other gems that do likewise, must take care
+    to create a custom composition that ensures all work and queued jobs
+    desired run after this object lifecycle event.
+
 ## Development and Testing with Vagrant
 * clone samvera-vagrant
 

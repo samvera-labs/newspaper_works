@@ -83,6 +83,9 @@ class NewspaperIssue < ActiveFedora::Base
   # BasicMetadata must be included last
   include ::Hyrax::BasicMetadata
 
+  # for GeoNames autocomplete lookup
+  include NewspaperWorks::PlaceOfPublicationBehavior
+
   # relationship methods
   def publication
     result = member_of.select { |v| v.instance_of?(NewspaperTitle) }
@@ -95,5 +98,13 @@ class NewspaperIssue < ActiveFedora::Base
 
   def pages
     members.select { |v| v.instance_of?(NewspaperPage) }
+  end
+
+  def ordered_pages
+    ordered_members.to_a.select { |v| v.instance_of?(NewspaperPage) }
+  end
+
+  def ordered_page_ids
+    ordered_pages.map(&:id)
   end
 end

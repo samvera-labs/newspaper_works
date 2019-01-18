@@ -3,8 +3,13 @@ require 'rails/generators'
 module NewspaperWorks
   # Install Generator Class
   class InstallGenerator < Rails::Generators::Base
-    source_root File.expand_path('../templates', __FILE__)
+    source_root File.expand_path('templates', __FILE__)
 
+    def copy_migrations
+      rake "newspaper_works:install:migrations"
+    end
+
+    # rubocop:disable Metrics/MethodLength
     def register_worktypes
       inject_into_file 'config/initializers/hyrax.rb',
                        after: "Hyrax.config do |config|\n" do
@@ -14,15 +19,32 @@ module NewspaperWorks
           "  config.register_curation_concern :newspaper_issue\n" \
           "  config.register_curation_concern :newspaper_page\n" \
           "  config.register_curation_concern :newspaper_title\n" \
-          '  # == END GENERATED newspaper_works CONFIG == '
+          "  config.callback.set(:after_create_fileset) do |file_set, user|\n" \
+          "    require 'newspaper_works'\n" \
+          "    NewspaperWorks::Data.handle_after_create_fileset(file_set, user)\n" \
+          "  end\n" \
+          "  #== END GENERATED newspaper_works CONFIG ==\n\n"
       end
     end
+    # rubocop:enable Metrics/MethodLength
 
     def inject_routes
       inject_into_file 'config/routes.rb',
                        after: "Rails.application.routes.draw do\n" do
         "\n  mount NewspaperWorks::Engine => '/'\n"
       end
+    end
+
+    def verify_biiif_installed
+      return if IO.read('app/controllers/catalog_controller.rb').include?('include BlacklightIiifSearch::Controller')
+      say_status('info',
+                 'BLACKLIGHT IIIF SEARCH NOT INSTALLED; INSTALLING BLACKLIGHT IIIF SEARCH',
+                 :blue)
+      generate 'blacklight_iiif_search:install'
+    end
+
+    def iiif_configuration
+      generate 'newspaper_works:blacklight_iiif_search'
     end
   end
 end
