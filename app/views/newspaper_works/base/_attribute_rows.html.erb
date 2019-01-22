@@ -10,21 +10,23 @@
 <%# newspaper_article attributes %>
 <%= presenter.attribute_to_html(:author, render_as: :faceted, html_dl: true) %>
 <%= presenter.attribute_to_html(:photographer, render_as: :faceted, html_dl: true) %>
-<%= presenter.attribute_to_html(:volume, render_as: :faceted, html_dl: true) %>
-<%= presenter.attribute_to_html(:issue_number, render_as: :faceted, html_dl: true) %>
+<%= presenter.attribute_to_html(:volume) %>
+<%= presenter.attribute_to_html(:issue_number) %>
 <%= presenter.attribute_to_html(:geographic_coverage, render_as: :faceted, html_dl: true) %>
-<%= presenter.attribute_to_html(:extent, render_as: :faceted, html_dl: true) %>
-<%= presenter.attribute_to_html(:publication_date, render_as: :faceted, html_dl: true) %>
+<%= presenter.attribute_to_html(:extent) %>
+<%= presenter.attribute_to_html(:publication_date, render_as: :date, html_dl: true) %>
 <%# newspaper_page attributes %>
 <%= presenter.attribute_to_html(:height, render_as: :faceted, html_dl: true) %>
 <%= presenter.attribute_to_html(:width, render_as: :faceted, html_dl: true) %>
+<%= presenter.attribute_to_html(:page_number) %>
+<%= presenter.attribute_to_html(:section) %>
 <%# newspaper_title attributes %>
-<%= presenter.attribute_to_html(:edition, render_as: :faceted, html_dl: true) %>
-<%= presenter.attribute_to_html(:frequency, render_as: :faceted, html_dl: true) %>
+<%= presenter.attribute_to_html(:edition) %>
+<%= presenter.attribute_to_html(:frequency) %>
 <%= presenter.attribute_to_html(:preceded_by, render_as: :faceted, html_dl: true) %>
 <%= presenter.attribute_to_html(:succeeded_by, render_as: :faceted, html_dl: true) %>
-<%= presenter.attribute_to_html(:publication_date_start, html_dl: true) %>
-<%= presenter.attribute_to_html(:publication_date_end, html_dl: true) %>
+<%= presenter.attribute_to_html(:publication_date_start, render_as: :date, html_dl: true) %>
+<%= presenter.attribute_to_html(:publication_date_end, render_as: :date, html_dl: true) %>
 <%# hyrax %>
 <%= presenter.attribute_to_html(:creator, render_as: :faceted, html_dl: true) %>
 <%= presenter.attribute_to_html(:contributor, render_as: :faceted, html_dl: true) %>
