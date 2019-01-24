@@ -7,6 +7,10 @@
 <%= presenter.attribute_to_html(:lccn, render_as: :faceted, html_dl: true) %>
 <%= presenter.attribute_to_html(:oclcnum, render_as: :faceted, html_dl: true) %>
 <%= presenter.attribute_to_html(:held_by, render_as: :faceted, html_dl: true) %>
+<%# scanned_media_metadata attributes %>
+<%= presenter.attribute_to_html(:text_direction) %>
+<%= presenter.attribute_to_html(:page_number) %>
+<%= presenter.attribute_to_html(:section) %>
 <%# newspaper_article attributes %>
 <%= presenter.attribute_to_html(:author, render_as: :faceted, html_dl: true) %>
 <%= presenter.attribute_to_html(:photographer, render_as: :faceted, html_dl: true) %>
@@ -18,8 +22,6 @@
 <%# newspaper_page attributes %>
 <%= presenter.attribute_to_html(:height, render_as: :faceted, html_dl: true) %>
 <%= presenter.attribute_to_html(:width, render_as: :faceted, html_dl: true) %>
-<%= presenter.attribute_to_html(:page_number) %>
-<%= presenter.attribute_to_html(:section) %>
 <%# newspaper_title attributes %>
 <%= presenter.attribute_to_html(:edition) %>
 <%= presenter.attribute_to_html(:frequency) %>

@@ -4,12 +4,15 @@ module Hyrax
   class NewspaperIssuePresenter < Hyrax::WorkShowPresenter
     include NewspaperWorks::NewspaperCorePresenter
     include NewspaperWorks::IiifSearchPresenterBehavior
-    delegate :volume, :edition, :issue_number, :extent, :publication_date,
-             to: :solr_document
+    delegate :volume, :edition, :issue_number, :extent, to: :solr_document
 
     # @return [Boolean] render the UniversalViewer
     def universal_viewer?
       Hyrax.config.iiif_image_server? && members_include_viewable_page?
+    end
+
+    def publication_date
+      solr_document["publication_date_dtsim"]
     end
 
     private
