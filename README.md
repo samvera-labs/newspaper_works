@@ -56,7 +56,7 @@ This gem is currently under development. The development team is actively workin
 ## Requirements
 
   * [Ruby](https://rubyonrails.org/) 2.4+
-  * [Rails](https://rubyonrails.org/) 5.0.
+  * [Rails](https://rubyonrails.org/) 5.0.*
   * [Bundler](http://bundler.io/)
   * [Hyrax](https://github.com/samvera/hyrax) 2.3.3
     - ..._and various [Samvera dependencies](https://github.com/samvera/hyrax#getting-started) that entails_.
@@ -84,6 +84,7 @@ This model was greatly informed by earlier efforts from National Library of Wale
 
 # Installation/Testing
 Integrating Newspaper_Works in your application.
+
 Your Hyrax 2.3.3 based application can extend and utilize `newspaper_works`
 
 ## Extending, Using
@@ -91,6 +92,7 @@ Your Hyrax 2.3.3 based application can extend and utilize `newspaper_works`
 * Add `gem 'newspaper_works', :git => 'https://github.com/marriott-library/newspaper_works.git'`
 	to your Gemfile.
 * Run `bundle install`
+* Run `rake newspaper_works:generate`
 
 ### Ingest, Application Interface
 
