@@ -26,5 +26,5 @@ RSpec.describe Hyrax::NewspaperArticlePresenter do
   it { is_expected.to delegate_method(:issue_number).to(:solr_document) }
   it { is_expected.to delegate_method(:geographic_coverage).to(:solr_document) }
   it { is_expected.to delegate_method(:extent).to(:solr_document) }
-  it { is_expected.to delegate_method(:publication_date).to(:solr_document) }
+  it { is_expected.to respond_to(:publication_date) }
 end

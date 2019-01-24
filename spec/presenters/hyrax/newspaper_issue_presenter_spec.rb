@@ -22,7 +22,7 @@ RSpec.describe Hyrax::NewspaperIssuePresenter do
   it { is_expected.to delegate_method(:edition).to(:solr_document) }
   it { is_expected.to delegate_method(:issue_number).to(:solr_document) }
   it { is_expected.to delegate_method(:extent).to(:solr_document) }
-  it { is_expected.to delegate_method(:publication_date).to(:solr_document) }
+  it { is_expected.to respond_to(:publication_date) }
 
   describe '#universal_viewer?' do
     let(:current_ability) { ability }
