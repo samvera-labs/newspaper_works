@@ -53,5 +53,15 @@ module NewspaperWorks
     def iiif_configuration
       generate 'newspaper_works:blacklight_iiif_search'
     end
+
+    def inject_resource_types
+      inject_into_file 'config/authorities/resource_types.yml',
+                       after: "term: Masters Thesis\n" do
+        "  - id: Microfilm\n" \
+        "    term: Microfilm\n" \
+        "  - id: Newspaper\n" \
+        "    term: Newspaper\n"
+      end
+    end
   end
 end
