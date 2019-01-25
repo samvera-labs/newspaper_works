@@ -78,7 +78,6 @@ def model_fixtures(target_type)
   issue1 = NewspaperIssue.new
   issue1.title = ['December 7, 1941']
   issue1.resource_type = ["newspaper"]
-  issue1.genre = ["text"]
   issue1.language = ["eng"]
   issue1.held_by = "Marriott Library"
   # issue1.save
