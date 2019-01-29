@@ -1,0 +1,7 @@
+<%# based on hyrax/app/views/records/edit_fields/_rights_statement.html.erb %>
+<% genres = Hyrax::ArticleGenreService.new %>
+<%= f.input :genre,
+            collection: genres.select_active_options,
+            include_blank: false,
+            item_helper: genres.method(:include_current_value),
+            input_html: { class: 'form-control' } %>

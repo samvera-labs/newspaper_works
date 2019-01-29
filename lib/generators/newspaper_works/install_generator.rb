@@ -3,7 +3,7 @@ require 'rails/generators'
 module NewspaperWorks
   # Install Generator Class
   class InstallGenerator < Rails::Generators::Base
-    source_root File.expand_path('templates', __FILE__)
+    source_root File.expand_path('../templates', __FILE__)
 
     def copy_migrations
       rake "newspaper_works:install:migrations"
@@ -54,7 +54,7 @@ module NewspaperWorks
       generate 'newspaper_works:blacklight_iiif_search'
     end
 
-    def inject_resource_types
+    def inject_authorities
       inject_into_file 'config/authorities/resource_types.yml',
                        after: "term: Masters Thesis\n" do
         "  - id: Microfilm\n" \
@@ -62,6 +62,7 @@ module NewspaperWorks
         "  - id: Newspaper\n" \
         "    term: Newspaper\n"
       end
+      copy_file "config/authorities/newspaper_article_genres.yml"
     end
   end
 end
