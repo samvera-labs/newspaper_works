@@ -13,6 +13,5 @@ module NewspaperWorks
         }
       ]
     end
-
   end
 end

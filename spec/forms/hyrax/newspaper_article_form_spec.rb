@@ -24,10 +24,9 @@ RSpec.describe Hyrax::NewspaperArticleForm do
       is_expected.to eq [:creator, :contributor, :description, :license,
                          :rights_statement, :publisher, :subject, :identifier,
                          :place_of_publication, :issn, :lccn, :oclcnum,
-                         :alternative_title, :author, :photographer,
+                         :alternative_title, :genre, :author, :photographer,
                          :publication_date, :volume, :edition, :issue_number,
-                         :geographic_coverage, :extent, :page_number,
-                         :section, :genre]
+                         :geographic_coverage, :extent, :page_number, :section]
     end
   end
 end
