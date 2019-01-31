@@ -11,7 +11,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h1><%= @user_collections %></h1>
-        <h1><%=  %></h1>
+        <hr><h1><%= @presenter.member_publication_dates %></h1><hr>
         <%= render 'work_title', presenter: @presenter %>
       </div>
       <div class="panel-body">
