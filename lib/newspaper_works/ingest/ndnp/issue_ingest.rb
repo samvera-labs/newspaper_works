@@ -5,12 +5,14 @@ module NewspaperWorks
         include Enumerable
         include NewspaperWorks::Ingest::NDNP::NDNPMetsHelper
 
-        attr_accessor :path, :doc
+        attr_accessor :path, :doc, :dmdids
 
         def initialize(path)
           @path = path
           @doc = nil
           @metadata = nil
+          # Enumeration based on list of DMDID loaded by load_doc
+          @dmdids = nil
           load_doc
         end
 
@@ -27,15 +29,27 @@ module NewspaperWorks
         end
 
         def page_by_dmdid(dmdid)
+          NewspaperWorks::Ingest::NDNP::PageIngest.new(@path, dmdid)
         end
 
         def page_by_sequence_number(n)
+          page_by_dmdid(
+            doc.xpath(
+              "//mods:extent//mods:start[text()='#{n}']",
+              mets: 'http://www.loc.gov/METS/',
+              mods: 'http://www.loc.gov/mods/v3'
+            ).first.ancestors('dmdSec').first['ID']
+          )
         end
 
-        def each(&block)
+        def each
+          @dmdids.each do |dmdid|
+            yield page_by_dmdid(dmdid)
+          end
         end
 
         def size
+          @dmdids.size
         end
 
         def metadata
@@ -47,6 +61,11 @@ module NewspaperWorks
 
           def load_doc
             @doc = Nokogiri::XML(File.open(path)) if @doc.nil?
+            page_divs = doc.xpath(
+              "//mets:structMap//mets:div[@TYPE='np:page']",
+              mets: 'http://www.loc.gov/METS/'
+            )
+            @dmdids = page_divs.map { |div| div.attr('DMDID') }
           end
       end
     end
