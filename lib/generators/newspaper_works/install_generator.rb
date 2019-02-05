@@ -68,22 +68,22 @@ module NewspaperWorks
     def add_facets_to_catalog_controller
       marker = 'config.add_facet_field solr_name("generic_type", :facetable), if: false'
       inject_into_file 'app/controllers/catalog_controller.rb', after: marker do
-        "\n    # NewspaperWorks facet fields\n"\
-        "    config.add_facet_field 'place_of_publication_city_ssim', label: 'Place of publication' limit: 5\n"\
-        "    config.add_facet_field 'publication_title_ssi', label: 'Publication title' limit: 5\n"\
-        "    config.add_facet_field solr_name('genre', :facetable), label: 'Article type' limit: 5\n\n"\
+        "\n\n    # NewspaperWorks facet fields\n"\
+        "    config.add_facet_field solr_name('place_of_publication_city', :facetable), label: 'Place of publication', limit: 5\n"\
+        "    config.add_facet_field 'publication_title_ssi', label: 'Publication title', limit: 5\n"\
+        "    config.add_facet_field solr_name('genre', :facetable), label: 'Article type', limit: 5\n\n"\
         "    # additional NewspaperWorks fields not displayed in the facet list,\n"\
         "    # but below definitions give labels to filters for linked metadata\n"\
-        "    config.add_facet_field solr_name('place_of_publication_label', :facetable)', if: false\n"\
-        "    config.add_facet_field solr_name('issn', :facetable), if: false\n"\
-        "    config.add_facet_field solr_name('lccn', :facetable), if: false\n"\
-        "    config.add_facet_field solr_name('oclcnum', :facetable), if: false\n"\
-        "    config.add_facet_field solr_name('held_by', :facetable), if: false\n"\
-        "    config.add_facet_field solr_name('author', :facetable), if: false\n"\
-        "    config.add_facet_field solr_name('photographer', :facetable), if: false\n"\
-        "    config.add_facet_field solr_name('geographic_coverage', :facetable), if: false\n"\
-        "    config.add_facet_field solr_name('preceded_by', :facetable), if: false\n"\
-        "    config.add_facet_field solr_name('succeeded_by', :facetable), if: false\n\n"
+        "    config.add_facet_field solr_name('place_of_publication_label', :facetable), label: 'Place of publication', if: false\n"\
+        "    config.add_facet_field solr_name('issn', :facetable), label: 'ISSN', if: false\n"\
+        "    config.add_facet_field solr_name('lccn', :facetable), label: 'LCCN', if: false\n"\
+        "    config.add_facet_field solr_name('oclcnum', :facetable), label: 'OCLC #', if: false\n"\
+        "    config.add_facet_field solr_name('held_by', :facetable), label: 'Held by', if: false\n"\
+        "    config.add_facet_field solr_name('author', :facetable), label: 'Author', if: false\n"\
+        "    config.add_facet_field solr_name('photographer', :facetable), label: 'Photographer', if: false\n"\
+        "    config.add_facet_field solr_name('geographic_coverage', :facetable), label: 'Geographic coverage', if: false\n"\
+        "    config.add_facet_field solr_name('preceded_by', :facetable), label: 'Preceded by', if: false\n"\
+        "    config.add_facet_field solr_name('succeeded_by', :facetable), label: 'Succeeded by', if: false\n"
       end
     end
   end
