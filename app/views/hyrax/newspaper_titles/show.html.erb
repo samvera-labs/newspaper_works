@@ -10,11 +10,43 @@
   <div itemscope itemtype="http://schema.org/CreativeWork" class="col-xs-12">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h1><%= @user_collections %></h1>
-        <hr><h1><%= @presenter.member_publication_dates %></h1><hr>
         <%= render 'work_title', presenter: @presenter %>
       </div>
       <div class="panel-body">
+
+        <div class="row">
+          <% year = 2019 %>
+          <h2 align="center">Issues: <%= year %></h2>
+          <% issues = @presenter.issues %>
+          <% for i in 1..12 %>
+            <div class="clndr-month col-xs-12 col-md-2 no-padding">
+              <h2 style="text-align: center;"><%= Date::MONTHNAMES[i] %></h2>
+              <% for wd in 0..6 %>
+                <div style="display: inline-block; width: 17px; height: 10px; text-align: center;">
+                  <%= Date::DAYNAMES[wd][0..1] %>
+                </div>
+              <% end %>
+            <% month_start = Date.new(year, i) %>
+            <% month_end = ((month_start>>1)-1) %>
+            <% month_start_print = month_start - month_start.wday %>
+            <% month_end_print = (month_end + 6) - (month_end.wday) %>
+            <% (month_start_print).upto(month_end_print) do |d| %>
+              <div style="<%= "color: gray;" if d.month != i  %> display: inline-block; width: 17px; height: 10px; text-align: center;" class="day <%= "adjacent_month" if d.month != i %> <%= "cal-#{d.strftime("%Y-%m-%d")}" %>">
+                <% issue = issues.select {|issue| issue["publication_date"] == d.strftime("%Y-%m-%d") }.first %>
+                <% if issue %>
+                  <strong><%= link_to d.day, main_app.hyrax_newspaper_issue_path(issue) %></strong>
+                <% else %>
+                  <%= d.day %>
+                <% end %>
+              </div>
+              <% if d.wday == 6 %>
+                <br>
+              <% end %>
+            <% end %>
+            </div>
+          <% end %>
+        </div>
+
         <div class="row">
           <%= render 'workflow_actions_widget', presenter: @presenter %>
           <% if @presenter.universal_viewer? %>
