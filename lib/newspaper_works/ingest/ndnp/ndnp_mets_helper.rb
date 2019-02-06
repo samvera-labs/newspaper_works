@@ -5,13 +5,18 @@ module NewspaperWorks
     module NDNP
       # Mixin for mets-specific XPath and traversal of issue/page data
       module NDNPMetsHelper
+        XML_NS = {
+          mets: 'http://www.loc.gov/METS/',
+          mods: 'http://www.loc.gov/mods/v3',
+          MODS: 'http://www.loc.gov/mods/v3'
+        }.freeze
+
         # DRY XPath without repeatedly specifying default namespace urlmap
         def xpath(expr, context = nil)
           context ||= doc
           context.xpath(
             expr,
-            mets: 'http://www.loc.gov/METS/',
-            mods: 'http://www.loc.gov/mods/v3'
+            **XML_NS
           )
         end
 

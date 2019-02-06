@@ -4,6 +4,7 @@ module NewspaperWorks
   module Ingest
     module NDNP
       class PageMetadata
+        # mixin convenience methods for NDNP XML, plus XML_NS hash
         include NewspaperWorks::Ingest::NDNP::NDNPMetsHelper
 
         attr_accessor :path, :dmdid, :doc
@@ -29,24 +30,31 @@ module NewspaperWorks
         # Printed page number, if printed; optional field in NDNP spec.
         #   "Number" is used liberaly, and may contain both alpha
         #   and numeric characters.  As such, return value is String.
+        #
+        #   Recommendation: callers may (strongly recommended) fall back to:
+        #   `page.page_number || page.page_sequence_number.to_s`,
+        #   however, this is not implemented automatically by this class.
+        #
         # @return [String, NilClass] Page "number" string
         def page_number
           detail = dmd_node.xpath(
-            ".//mods:mods//mods:detail[@type='page number']"
+            ".//mods:mods//mods:detail[@type='page number']",
+            **XML_NS
           )
           return nil if detail.size.zero?
-          detail.xpath("mods:number").first.text
+          detail.xpath("mods:number", **XML_NS).first.text
         end
 
-        # Mandatory page sequcnce number, indexical to order in issue.
+        # Mandatory page sequence number, indexical to order in issue.
         #   "Number" here is one-indexed positive integer, position in
         #   issue.
         # @return [Integer] Page sequence number, positive integer
         def page_sequence_number
           detail = dmd_node.xpath(
-            ".//mods:mods//mods:extent[@unit='pages']"
+            ".//mods:mods//mods:extent[@unit='pages']",
+            **XML_NS
           )
-          detail.xpath("mods:start").first.text.to_i
+          detail.xpath("mods:start", **XML_NS).first.text.to_i
         end
 
         # Extract identifier from page ALTO, based on file name.
