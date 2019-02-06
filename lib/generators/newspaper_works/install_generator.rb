@@ -9,7 +9,6 @@ module NewspaperWorks
       rake "newspaper_works:install:migrations"
     end
 
-    # rubocop:disable Metrics/MethodLength
     def register_worktypes
       inject_into_file 'config/initializers/hyrax.rb',
                        after: "Hyrax.config do |config|\n" do
@@ -26,7 +25,6 @@ module NewspaperWorks
           "  #== END GENERATED newspaper_works CONFIG ==\n\n"
       end
     end
-    # rubocop:enable Metrics/MethodLength
 
     def inject_routes
       inject_into_file 'config/routes.rb',
@@ -65,8 +63,9 @@ module NewspaperWorks
       copy_file "config/authorities/newspaper_article_genres.yml"
     end
 
+    # rubocop:disable Metrics/MethodLength
     def add_facets_to_catalog_controller
-      marker = 'config.add_facet_field solr_name("generic_type", :facetable), if: false'
+      marker = 'configure_blacklight do |config|'
       inject_into_file 'app/controllers/catalog_controller.rb', after: marker do
         "\n\n    # NewspaperWorks facet fields\n"\
         "    config.add_facet_field solr_name('place_of_publication_city', :facetable), label: 'Place of publication', limit: 5\n"\
@@ -86,5 +85,6 @@ module NewspaperWorks
         "    config.add_facet_field solr_name('succeeded_by', :facetable), label: 'Succeeded by', if: false\n"
       end
     end
+    # rubocop:enable Metrics/MethodLength
   end
 end
