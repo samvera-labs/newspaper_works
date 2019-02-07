@@ -5,6 +5,7 @@ RSpec.shared_context "ndnp fixture setup", shared_context: :metadata do
     File.join(NewspaperWorksFixtures.file_fixtures, 'ndnp')
   end
 
+  # `batch_local` example issue:
   let(:issue1) do
     File.join(
       ndnp_fixture_path,
@@ -12,6 +13,7 @@ RSpec.shared_context "ndnp fixture setup", shared_context: :metadata do
     )
   end
 
+  # `batch_test_ver01` example issue:
   let(:issue2) do
     File.join(
       ndnp_fixture_path,
