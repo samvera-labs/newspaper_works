@@ -54,7 +54,10 @@ module NewspaperWorks
 
         def metadata
           return @metadata unless @metadata.nil?
-          @metadata = NewspaperWorks::Ingest::NDNP::IssueMetadata.new(path)
+          @metadata = NewspaperWorks::Ingest::NDNP::IssueMetadata.new(
+            path,
+            self
+          )
         end
 
         private

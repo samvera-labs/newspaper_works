@@ -6,8 +6,9 @@ module NewspaperWorks
 
         attr_accessor :path, :doc
 
-        def initialize(path)
+        def initialize(path, parent = nil)
           @path = path
+          @parent = parent
           @doc = nil
           load_doc
         end
@@ -72,6 +73,7 @@ module NewspaperWorks
         private
 
           def load_doc
+            @doc = @parent.doc unless @parent.nil?
             @doc = Nokogiri::XML(File.open(path)) if @doc.nil?
           end
       end
