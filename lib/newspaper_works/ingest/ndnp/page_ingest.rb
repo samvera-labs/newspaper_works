@@ -6,11 +6,12 @@ module NewspaperWorks
 
         attr_accessor :path, :dmdid, :doc
 
-        def initialize(path = nil, dmdid = nil)
+        def initialize(path = nil, dmdid = nil, parent = nil)
           raise ArgumentError('No path provided') if path.nil?
           @path = path
           @dmdid = dmdid
           @doc = nil
+          @parent = parent
           @metadata = nil
           load_doc
         end
@@ -40,6 +41,7 @@ module NewspaperWorks
         private
 
           def load_doc
+            @doc = @parent.doc unless @parent.nil?
             @doc = Nokogiri::XML(File.open(path)) if @doc.nil?
           end
       end

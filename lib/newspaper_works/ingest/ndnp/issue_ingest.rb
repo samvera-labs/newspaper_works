@@ -29,7 +29,7 @@ module NewspaperWorks
         end
 
         def page_by_dmdid(dmdid)
-          NewspaperWorks::Ingest::NDNP::PageIngest.new(@path, dmdid)
+          NewspaperWorks::Ingest::NDNP::PageIngest.new(@path, dmdid, self)
         end
 
         def page_by_sequence_number(n)
