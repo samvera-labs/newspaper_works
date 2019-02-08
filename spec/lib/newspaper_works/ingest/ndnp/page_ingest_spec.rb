@@ -4,10 +4,6 @@ require 'ndnp_shared'
 RSpec.describe NewspaperWorks::Ingest::NDNP::PageIngest do
   include_context "ndnp fixture setup"
 
-  def construct(path, dmdid)
-    described_class.new(path, dmdid)
-  end
-
   def file_type?(path, ext)
     path.split('/')[-1].split('.')[-1].casecmp(ext).zero?
   end
@@ -29,29 +25,29 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::PageIngest do
   end
 
   describe "sample fixture 'batch_local'" do
+    let(:page) { described_class.new(issue1, 'pageModsBib8') }
+
     it "gets metadata" do
-      page = construct(issue1, 'pageModsBib8')
       expect(page.metadata).to be_a NewspaperWorks::Ingest::NDNP::PageMetadata
       # uses same Nokogiri document context:
       expect(page.metadata.doc).to be page.doc
     end
 
     it "gets expected files" do
-      page = construct(issue1, 'pageModsBib8')
       check_expected_files(page, ['tif', 'jp2', 'pdf', 'xml'])
     end
   end
 
   describe "sample fixture 'batch_test_ver01'" do
+    let(:page) { described_class.new(issue2, 'pageModsBib1') }
+
     it "gets metadata" do
-      page = construct(issue2, 'pageModsBib1')
       expect(page.metadata).to be_a NewspaperWorks::Ingest::NDNP::PageMetadata
       # uses same Nokogiri document context:
       expect(page.metadata.doc).to be page.doc
     end
 
     it "gets expected files" do
-      page = construct(issue2, 'pageModsBib1')
       check_expected_files(page, ['tif', 'jp2', 'pdf', 'xml'])
     end
   end
