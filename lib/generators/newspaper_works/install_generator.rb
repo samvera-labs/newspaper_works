@@ -64,5 +64,27 @@ module NewspaperWorks
       end
       copy_file "config/authorities/newspaper_article_genres.yml"
     end
+
+    def add_facets_to_catalog_controller
+      marker = 'config.add_facet_field solr_name("generic_type", :facetable), if: false'
+      inject_into_file 'app/controllers/catalog_controller.rb', after: marker do
+        "\n    # NewspaperWorks facet fields\n"\
+        "    config.add_facet_field 'place_of_publication_city_ssim', label: 'Place of publication' limit: 5\n"\
+        "    config.add_facet_field 'publication_title_ssi', label: 'Publication title' limit: 5\n"\
+        "    config.add_facet_field solr_name('genre', :facetable), label: 'Article type' limit: 5\n\n"\
+        "    # additional NewspaperWorks fields not displayed in the facet list,\n"\
+        "    # but below definitions give labels to filters for linked metadata\n"\
+        "    config.add_facet_field solr_name('place_of_publication_label', :facetable)', if: false\n"\
+        "    config.add_facet_field solr_name('issn', :facetable), if: false\n"\
+        "    config.add_facet_field solr_name('lccn', :facetable), if: false\n"\
+        "    config.add_facet_field solr_name('oclcnum', :facetable), if: false\n"\
+        "    config.add_facet_field solr_name('held_by', :facetable), if: false\n"\
+        "    config.add_facet_field solr_name('author', :facetable), if: false\n"\
+        "    config.add_facet_field solr_name('photographer', :facetable), if: false\n"\
+        "    config.add_facet_field solr_name('geographic_coverage', :facetable), if: false\n"\
+        "    config.add_facet_field solr_name('preceded_by', :facetable), if: false\n"\
+        "    config.add_facet_field solr_name('succeeded_by', :facetable), if: false\n\n"
+      end
+    end
   end
 end
