@@ -1,3 +1,8 @@
+<% year = @presenter.year %>
+<% prev_year = @presenter.prev_year %>
+<% next_year = @presenter.next_year %>
+<% issues = @presenter.issues %>
+
 <% provide :page_title, @presenter.page_title %>
 
 <%= render 'shared/citations' %>
@@ -14,29 +19,25 @@
       </div>
       <div class="panel-body">
         <div class="row">
-          <% year = @presenter.year %>
-          <% prev_year = @presenter.prev_year %>
-          <% next_year = @presenter.next_year %>
           <h2 align="center">
             <%= link_to("<<", main_app.hyrax_newspaper_title_path(params[:id], year: prev_year)) if prev_year %>
             Issues: <%= year %>
             <%= link_to(">>", main_app.hyrax_newspaper_title_path(params[:id], year: next_year)) if next_year %>
           </h2>
-          <% issues = @presenter.issues %>
-          <% for i in 1..12 %>
+          <% for month in 1..12 %>
             <div class="clndr-month col-xs-12 col-md-2 no-padding">
-              <h2 style="text-align: center;"><%= Date::MONTHNAMES[i] %></h2>
-              <% for wd in 0..6 %>
+              <h2 style="text-align: center;"><%= Date::MONTHNAMES[month] %></h2>
+              <% for day_name in 0..6 %>
                 <div style="display: inline-block; width: 17px; height: 10px; text-align: center;">
-                  <%= Date::DAYNAMES[wd][0..1] %>
+                  <%= Date::DAYNAMES[day_name][0..1] %>
                 </div>
               <% end %>
-            <% month_start = Date.new(year, i) %>
+            <% month_start = Date.new(year, month) %>
             <% month_end = ((month_start>>1)-1) %>
             <% month_start_print = month_start - month_start.wday %>
             <% month_end_print = (month_end + 6) - (month_end.wday) %>
             <% (month_start_print).upto(month_end_print) do |d| %>
-              <div style="<%= "color: gray;" if d.month != i  %> display: inline-block; width: 17px; height: 10px; text-align: center;" class="day <%= "adjacent_month" if d.month != i %> <%= "cal-#{d.strftime("%Y-%m-%d")}" %>">
+              <div style="<%= "color: gray;" if d.month != month  %> display: inline-block; width: 17px; height: 10px; text-align: center;" class="day <%= "adjacent_month" if d.month != month %> <%= "cal-#{d.strftime("%Y-%m-%d")}" %>">
                 <% issue = issues.select {|issue| issue["publication_date"] == d.strftime("%Y-%m-%d") }.first %>
                 <% if issue %>
                   <strong><%= link_to d.day, main_app.hyrax_newspaper_issue_path(issue) %></strong>
@@ -51,30 +52,28 @@
             </div>
           <% end %>
         </div>
-        <br>&nbsp;<br>&nbsp;<br>
-        <div class="row">
-          <%= render 'workflow_actions_widget', presenter: @presenter %>
-          <% if @presenter.universal_viewer? %>
-            <div class="col-sm-12">
-              <%= render 'representative_media', presenter: @presenter, viewer: true %>
+        <div class="col-sm-12">
+          <%= render 'relationships', presenter: @presenter %>
+          <%= render 'items', presenter: @presenter %>
+        </div>
+        <% if false %>
+          <div class="row">
+            <%= render 'workflow_actions_widget', presenter: @presenter %>
+            <% if @presenter.universal_viewer? %>
+              <div class="col-sm-12">
+                <%= render 'representative_media', presenter: @presenter, viewer: true %>
+              </div>
+            <% end %>
+            <div class="col-sm-3 text-center">
+              <%= render 'representative_media', presenter: @presenter, viewer: false unless @presenter.universal_viewer? %>
+              <%= render 'citations', presenter: @presenter %>
+              <%= render 'social_media' %>
+            </div>
+            <div class="col-sm-9">
+              <%= render 'work_description', presenter: @presenter %>
+              <%= render 'metadata', presenter: @presenter %>
             </div>
           <% end %>
-          <div class="col-sm-3 text-center">
-            <%= render 'representative_media', presenter: @presenter, viewer: false unless @presenter.universal_viewer? %>
-            <%= render 'citations', presenter: @presenter %>
-            <%= render 'social_media' %>
-          </div>
-          <div class="col-sm-9">
-            <%= render 'work_description', presenter: @presenter %>
-            <%= render 'metadata', presenter: @presenter %>
-          </div>
-          <div class="col-sm-12">
-            <%= render 'relationships', presenter: @presenter %>
-            <%= render 'items', presenter: @presenter %>
-            <%# TODO: we may consider adding these partials in the future %>
-            <%# = render 'sharing_with', presenter: @presenter %>
-            <%# = render 'user_activity', presenter: @presenter %>
-          </div>
         </div>
       </div>
     </div>

@@ -5,8 +5,13 @@ module Hyrax
     include NewspaperWorks::NewspaperCorePresenter
     delegate :edition, :frequency, :preceded_by, :succeeded_by, to: :solr_document
 
+    def initialize(solr_document, current_ability, request = nil)
+      super(solr_document, current_ability, request)
+      @all_issues = all_title_issues
+    end
+
     def issues
-      all_title_issues.select { |issue| Date.parse(issue.publication_date).year == year }
+      @all_issues.select { |issue| Date.parse(issue.publication_date).year == year }
     end
 
     def issue_dates
@@ -19,7 +24,7 @@ module Hyrax
 
     def prev_year
       index = issue_years.index(year) - 1
-      return nil if index < 0
+      return nil if index.negative?
       issue_years[index]
     end
 
@@ -47,7 +52,7 @@ module Hyrax
       end
 
       def all_title_issue_dates
-        all_title_issues.pluck(:publication_date)
+        @all_issues.pluck(:publication_date)
       end
 
       def number_or_nil(string)
