@@ -13,10 +13,15 @@
         <%= render 'work_title', presenter: @presenter %>
       </div>
       <div class="panel-body">
-
         <div class="row">
-          <% year = 2019 %>
-          <h2 align="center">Issues: <%= year %></h2>
+          <% year = @presenter.year %>
+          <% prev_year = @presenter.prev_year %>
+          <% next_year = @presenter.next_year %>
+          <h2 align="center">
+            <%= link_to("<<", main_app.hyrax_newspaper_title_path(params[:id], year: prev_year)) if prev_year %>
+            Issues: <%= year %>
+            <%= link_to(">>", main_app.hyrax_newspaper_title_path(params[:id], year: next_year)) if next_year %>
+          </h2>
           <% issues = @presenter.issues %>
           <% for i in 1..12 %>
             <div class="clndr-month col-xs-12 col-md-2 no-padding">
@@ -46,7 +51,7 @@
             </div>
           <% end %>
         </div>
-
+        <br>&nbsp;<br>&nbsp;<br>
         <div class="row">
           <%= render 'workflow_actions_widget', presenter: @presenter %>
           <% if @presenter.universal_viewer? %>
