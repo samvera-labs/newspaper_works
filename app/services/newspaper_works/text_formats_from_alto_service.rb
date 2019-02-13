@@ -23,7 +23,17 @@ module NewspaperWorks
     def nonempty_file?(path)
       return false if path.nil?
       return false unless File.exist?(path)
-      !File.size.zero?
+      !File.size(path).zero?
+    end
+
+    # if there was no derivative yet, there might be one in-transit from
+    #   an ingest, so check for that, and use its source if applicable:
+    def incoming_alto_path
+      path = NewspaperWorks::DerivativeAttachment.where(
+        fileset_id: @file_set.id,
+        destination_name: 'xml'
+      ).pluck(:path).uniq.first
+      path if nonempty_file?(path)
     end
 
     def alto_path
@@ -33,13 +43,7 @@ module NewspaperWorks
         'xml'
       )
       return path if nonempty_file?(path)
-      # if there was no derivative yet, there might be one in-transit from
-      #   an ingest, so check for that, and use its source if applicable:
-      path = NewspaperWorks::DerivativeAttachment.where(
-        fileset_id: @file_set.id,
-        destination_name: 'xml'
-      ).pluck(:path).uniq.first
-      path if nonempty_file?(path)
+      incoming_alto_path
     end
 
     def alto
@@ -52,9 +56,9 @@ module NewspaperWorks
       source_file = alto
       return if source_file.nil?
       # ALTOReader is responsible for transcoding, this class just saves result
-      reader = NewspaperWorks::TextExtraction::ALTOReader.new(source_file)
+      reader = NewspaperWorks::TextExtraction::AltoReader.new(source_file)
       save_derivative('json', reader.json)
-      save_derviative('txt', reader.text)
+      save_derivative('txt', reader.text)
     end
 
     def cleanup_derivatives(*args)
