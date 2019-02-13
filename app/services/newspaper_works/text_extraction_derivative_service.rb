@@ -7,11 +7,11 @@ module NewspaperWorks
     end
 
     def create_derivatives(src)
-      from_alto = NewspaperWorks::TextFormsFromExistingALTOService.new(
+      from_alto = NewspaperWorks::TextFormatsFromALTOService.new(
         file_set
       )
       return from_alto.create_derivatives(src) unless from_alto.alto_path.nil?
-      create_derivatives_from_ocr(filename)
+      create_derivatives_from_ocr(src)
     end
 
     def create_derivatives_from_ocr(filename)

@@ -21,6 +21,7 @@ module NewspaperWorks
     end
 
     def nonempty_file?(path)
+      return false if path.nil?
       return false unless File.exist?(path)
       !File.size.zero?
     end
@@ -29,7 +30,7 @@ module NewspaperWorks
       # check first for existing, non-empty derivative data:
       path = derivative_path_factory.derivative_path_for_reference(
         @file_set,
-        destination
+        'xml'
       )
       return path if nonempty_file?(path)
       # if there was no derivative yet, there might be one in-transit from
@@ -37,7 +38,7 @@ module NewspaperWorks
       path = NewspaperWorks::DerivativeAttachment.where(
         fileset_id: @file_set.id,
         destination_name: 'xml'
-      ).pluck(:path).uniq
+      ).pluck(:path).uniq.first
       path if nonempty_file?(path)
     end
 
