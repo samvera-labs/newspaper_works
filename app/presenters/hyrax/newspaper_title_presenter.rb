@@ -23,12 +23,14 @@ module Hyrax
     end
 
     def prev_year
+      return nil if issue_years.empty?
       index = issue_years.index(year) - 1
       return nil if index.negative?
       issue_years[index]
     end
 
     def next_year
+      return nil if issue_years.empty?
       issue_years[issue_years.index(year) + 1]
     end
 
@@ -41,6 +43,7 @@ module Hyrax
     end
 
     def year
+      return nil if issue_years.empty?
       number_or_nil(request.params[:year]) || issue_years.first
     end
 

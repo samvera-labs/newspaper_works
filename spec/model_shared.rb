@@ -81,6 +81,7 @@ def model_fixtures(target_type)
   issue1.genre = ["text"]
   issue1.language = ["eng"]
   issue1.held_by = "Marriott Library"
+  publication.members.push << issue1
   # issue1.save
   publication.members.push issue1
   page1 = NewspaperPage.new
