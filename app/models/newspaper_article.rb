@@ -44,7 +44,7 @@ class NewspaperArticle < ActiveFedora::Base
     predicate: ::RDF::Vocab::EDM.hasType,
     multiple: true
   ) do |index|
-    index.as :stored_searchable
+    index.as :stored_searchable, :facetable
   end
 
   # - Author
