@@ -36,6 +36,11 @@ module NewspaperWorks
       # Register actor to handle any NewspaperWorks upload behaviors before
       #   CreateWithFilesActor gets to them:
       Hyrax::CurationConcern.actor_factory.insert_before Hyrax::Actors::CreateWithFilesActor, NewspaperWorks::Actors::NewspaperWorksUploadActor
+
+      # PDF ingest may save page images to /tmp (via Dir.tmpdir), which
+      # needs whitelisting for use by NewspaperWorks::Data::WorkFiles.commit!
+      # via Hyrax CreateWithRemoteFilesActor:
+      Hyrax.config.whitelisted_ingest_dirs.push(Dir.tmpdir)
     end
   end
 end
