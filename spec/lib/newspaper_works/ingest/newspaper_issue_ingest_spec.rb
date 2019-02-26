@@ -8,14 +8,34 @@ RSpec.describe NewspaperWorks::Ingest::NewspaperIssueIngest do
     File.join(fixtures, 'sample-4page-issue.pdf')
   end
 
+  let(:path2) do
+    fixtures = File.join(NewspaperWorks::GEM_PATH, 'spec/fixtures/files')
+    File.join(fixtures, 'ndnp-sample1.pdf')
+  end
+
   it_behaves_like('ingest adapter IO')
 
   describe "file import and attachment" do
+    do_now_jobs = [IngestLocalFileJob, IngestJob]
+
     it "ingests work and creates child page works" do
       adapter = build(:newspaper_issue_ingest)
       adapter.ingest(path)
       child_pages = adapter.work.members.select { |w| w.class == NewspaperPage }
       expect(child_pages.length).to eq 4
+    end
+
+    # For created child pages, date and permission attributes are side-effect
+    #   of file attachment process (`NewspaperWorks::Data::WorkFiles`)
+    #   manipulating the work through the Hyrax actor stack create pipeline.
+    it "sets work attributes on created pages via file attachment",
+       peform_enqueued: do_now_jobs do
+      adapter = build(:newspaper_issue_ingest)
+      adapter.ingest(path2)
+      child_pages = adapter.work.members.select { |w| w.class == NewspaperPage }
+      page = child_pages[0]
+      expect(page.date_uploaded).not_to be nil
+      expect(page.date_modified).not_to be nil
     end
   end
 end
