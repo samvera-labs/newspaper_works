@@ -16,7 +16,36 @@ RSpec.describe NewspaperWorks::Ingest::NewspaperIssueIngest do
   it_behaves_like('ingest adapter IO')
 
   describe "file import and attachment" do
-    do_now_jobs = [IngestLocalFileJob, IngestJob]
+    do_now_jobs = [
+      IngestJob,
+      IngestLocalFileJob,
+      InheritPermissionsJob,
+      VisibilityCopyJob
+    ]
+
+    PERMISSION_METHODS = [
+      :edit_users,
+      :read_users,
+      :discover_users,
+      :edit_groups,
+      :read_groups,
+      :discover_groups
+    ].freeze
+
+    def check_equivalent_permissions(obj1, obj2)
+      PERMISSION_METHODS.each do |m|
+        expect(obj1.send(m)).to match_array obj2.send(m)
+      end
+      expect(obj1.visibility).to eq obj2.visibility
+    end
+
+    def assign_custom_permissions(work)
+      # adjust read_groups to affect issue visibility by effect:
+      work.read_groups = ['public']
+      # add a permission to issue, that is not default:
+      work.read_users = ['peanutbutter@example.com']
+      work.save!
+    end
 
     it "ingests work and creates child page works" do
       adapter = build(:newspaper_issue_ingest)
@@ -31,11 +60,14 @@ RSpec.describe NewspaperWorks::Ingest::NewspaperIssueIngest do
     it "sets work attributes on created pages via file attachment",
        peform_enqueued: do_now_jobs do
       adapter = build(:newspaper_issue_ingest)
+      assign_custom_permissions(adapter.work)
       adapter.ingest(path2)
       child_pages = adapter.work.members.select { |w| w.class == NewspaperPage }
       page = child_pages[0]
       expect(page.date_uploaded).not_to be nil
       expect(page.date_modified).not_to be nil
+      # permissions:
+      check_equivalent_permissions(adapter.work, page)
     end
   end
 end
