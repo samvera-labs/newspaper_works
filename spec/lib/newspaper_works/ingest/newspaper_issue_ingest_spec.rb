@@ -39,6 +39,13 @@ RSpec.describe NewspaperWorks::Ingest::NewspaperIssueIngest do
       expect(obj1.visibility).to eq obj2.visibility
     end
 
+    def check_page_metadata(page)
+      expect(page.date_uploaded).not_to be nil
+      expect(page.date_modified).not_to be nil
+      # title: issue title plus page qualifier expected:
+      expect(page.title).to contain_exactly "Here and There: Page 1"
+    end
+
     def assign_custom_permissions(work)
       # adjust read_groups to affect issue visibility by effect:
       work.read_groups = ['public']
@@ -64,8 +71,7 @@ RSpec.describe NewspaperWorks::Ingest::NewspaperIssueIngest do
       adapter.ingest(path2)
       child_pages = adapter.work.members.select { |w| w.class == NewspaperPage }
       page = child_pages[0]
-      expect(page.date_uploaded).not_to be nil
-      expect(page.date_modified).not_to be nil
+      check_page_metadata(page)
       # permissions:
       check_equivalent_permissions(adapter.work, page)
     end

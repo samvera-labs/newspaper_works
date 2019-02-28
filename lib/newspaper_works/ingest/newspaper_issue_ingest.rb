@@ -38,7 +38,7 @@ module NewspaperWorks
 
       def new_child_page_with_file(tiffpath, idx)
         page = NewspaperPage.new
-        page.title = [format("Page %<pagenum>i", pagenum: idx + 1)]
+        page.title = ["#{@work.title.first}: Page #{idx + 1}"]
         # Set depositor and admin-set id:
         page.depositor = @work.depositor
         page.admin_set_id = @work.admin_set_id
