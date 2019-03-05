@@ -4,9 +4,9 @@ module NewspaperWorks
     # create link anchor to be read by UniversalViewer
     # in order to show keyword search
     # @param query [String]
-    # @return [String] anchor
+    # @return [String] or [nil] anchor
     def iiif_search_anchor(query)
-      return nil unless query
+      return nil if query.blank?
       "?h=#{query}"
     end
 
@@ -24,8 +24,7 @@ module NewspaperWorks
                      document,
                      image_options)
               elsif blacklight_config.view_config(document_index_view_type).thumbnail_field
-                url = thumbnail_url(document)
-                image_tag url if url.present?
+                image_tag blacklight_config.view_config(document_index_view_type).thumbnail_field
               end
       if value
         case document[blacklight_config.index.display_type_field.to_sym].first
@@ -34,7 +33,7 @@ module NewspaperWorks
                                                    anchor: iiif_search_anchor(query)))
         when 'NewspaperArticle'
           link_to(value, hyrax_newspaper_article_path(document.id,
-                                                   anchor: iiif_search_anchor(query)))
+                                                      anchor: iiif_search_anchor(query)))
         else
           link_to_document document, value
         end
