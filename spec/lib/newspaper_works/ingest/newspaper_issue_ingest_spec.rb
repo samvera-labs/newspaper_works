@@ -47,7 +47,7 @@ RSpec.describe NewspaperWorks::Ingest::NewspaperIssueIngest do
     end
 
     def assign_custom_permissions(work)
-      # adjust read_groups to affect issue visibility by effect:
+      # read_groups ['public'] <==> "open" visibility
       work.read_groups = ['public']
       # add a permission to issue, that is not default:
       work.read_users = ['peanutbutter@example.com']

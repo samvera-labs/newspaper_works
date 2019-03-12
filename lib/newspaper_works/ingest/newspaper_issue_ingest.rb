@@ -42,9 +42,7 @@ module NewspaperWorks
         # Set depositor and admin-set id:
         page.depositor = @work.depositor
         page.admin_set_id = @work.admin_set_id
-        # copying visibility affects only read_groups permissions
-        page.visibility = @work.visibility
-        # we need to copy other permissions too:
+        # copying permissions also by effect copies visibility:
         page.permissions_attributes = @work.permissions.map(&:to_hash)
         NewspaperPageIngest.new(page).ingest(tiffpath)
         page.save!
