@@ -2,21 +2,123 @@ require 'spec_helper'
 require_relative '../newspaper_works/newspaper_core_presenter_spec'
 
 RSpec.describe Hyrax::NewspaperTitlePresenter do
-  let(:solr_document) { SolrDocument.new(attributes) }
-
-  let(:attributes) do
-    { "edition" => "1st",
-      "frequency" => ["often"],
-      "preceded_by" => ["Something"],
-      "succeeded_by" => ["Something Else"] }
+  let!(:publication) do
+    publication = NewspaperTitle.new
+    publication.title = ["Wall Street Journal"]
+    publication.save
+    publication
   end
 
-  it_behaves_like "a newspaper core presenter"
+  let!(:issues) do
+    issues = []
+    issue1 = NewspaperIssue.new
+    issue1.title = ['February 13, 2016']
+    issue1.resource_type = ["newspaper"]
+    issue1.genre = ["text"]
+    issue1.language = ["eng"]
+    issue1.held_by = "Marriott Library"
+    issue1.publication_date = '2016-02-13'
+    publication.members.push << issue1
+    issues.push(issue1)
+    issue2 = NewspaperIssue.new
+    issue2.title = ['February 13, 2019']
+    issue2.resource_type = ["newspaper"]
+    issue2.genre = ["text"]
+    issue2.language = ["eng"]
+    issue2.held_by = "Marriott Library"
+    issue2.publication_date = '2019-02-13'
+    publication.members.push << issue2
+    issues.push(issue2)
+    issue3 = NewspaperIssue.new
+    issue3.title = ['March 5, 2019']
+    issue3.resource_type = ["newspaper"]
+    issue3.genre = ["text"]
+    issue3.language = ["eng"]
+    issue3.held_by = "Marriott Library"
+    issue3.publication_date = '2019-03-05'
+    publication.members.push << issue3
+    issues.push(issue3)
+    issues
+  end
 
-  subject { described_class.new(double, double) }
+  let(:solr_document) { SolrDocument.find(publication.id) }
+  let(:request) { double(host: 'example.org', base_url: 'http://example.org', params: {}) }
+  let(:user_key) { 'a_user_key' }
+  let(:ability) { double Ability }
+  let(:presenter) { described_class.new(solr_document, ability, request) }
+
+  it { is_expected.to delegate_method(:alternative_title).to(:solr_document) }
+  it { is_expected.to delegate_method(:genre).to(:solr_document) }
+  it { is_expected.to delegate_method(:issn).to(:solr_document) }
+  it { is_expected.to delegate_method(:lccn).to(:solr_document) }
+  it { is_expected.to delegate_method(:oclcnum).to(:solr_document) }
+  it { is_expected.to delegate_method(:held_by).to(:solr_document) }
+
+  # subject { described_class.new(double, double) }
+  subject { described_class.new(solr_document, ability, request) }
 
   it { is_expected.to delegate_method(:edition).to(:solr_document) }
   it { is_expected.to delegate_method(:frequency).to(:solr_document) }
   it { is_expected.to delegate_method(:preceded_by).to(:solr_document) }
   it { is_expected.to delegate_method(:succeeded_by).to(:solr_document) }
+
+  describe '#issues' do
+    subject { presenter.issues }
+    it 'will return a all member issues for the earliest year if no year param' do
+      is_expected.to eq [issues[0]]
+    end
+
+    it 'will return all member issues for a year if a year param is provided' do
+      allow(request).to receive(:params).and_return(year: 2019)
+      is_expected.to contain_exactly(issues[2], issues[1])
+    end
+  end
+
+  describe '#issue_dates' do
+    subject { presenter.issue_dates }
+    it "will return a all member issue dates for the earliest year if no year param" do
+      is_expected.to eq [issues[0].publication_date]
+    end
+
+    it "will return all member issue dates for a year if a year param is provided" do
+      allow(request).to receive(:params).and_return(year: 2019)
+      is_expected.to contain_exactly(issues[2].publication_date, issues[1].publication_date)
+    end
+  end
+
+  describe '#prev_year' do
+    subject { presenter.prev_year }
+    it "will return nil if the current year is earliest" do
+      is_expected.to be nil
+    end
+
+    it "will return the previous year if the current year isn't earliest" do
+      allow(request).to receive(:params).and_return(year: 2019)
+      is_expected.to eq 2016
+    end
+  end
+
+  describe '#next_year' do
+    subject { presenter.next_year }
+    it "will return the next year if the current year isn't latest" do
+      is_expected.to be 2019
+    end
+
+    it "will return nil if the current year is latest" do
+      allow(request).to receive(:params).and_return(year: 2019)
+      is_expected.to eq nil
+    end
+  end
+
+  describe '#year' do
+    subject { presenter.year }
+    it "will return the earliest issue year if no year is provided" do
+      is_expected.to eq 2016
+    end
+
+    it "will return the param year if provided" do
+      allow(request).to receive(:params).and_return(year: 2019)
+      is_expected.to eq 2019
+    end
+  end
 end
