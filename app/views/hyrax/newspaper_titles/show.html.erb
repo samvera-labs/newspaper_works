@@ -18,7 +18,7 @@
         <%= render 'work_title', presenter: @presenter %>
       </div>
       <div class="panel-body">
-        <% if @presenter.year %>
+        <% if year %>
           <div class="row">
             <h2 align="center">
               <%= link_to("<<", main_app.hyrax_newspaper_title_path(params[:id], year: prev_year)) if prev_year %>
