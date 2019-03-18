@@ -3,6 +3,7 @@ require 'newspaper_works/ingest/ndnp/page_ingest'
 require 'newspaper_works/ingest/ndnp/page_metadata'
 require 'newspaper_works/ingest/ndnp/issue_ingest'
 require 'newspaper_works/ingest/ndnp/issue_metadata'
+require 'newspaper_works/ingest/ndnp/container_metadata'
 
 module NewspaperWorks
   module Ingest

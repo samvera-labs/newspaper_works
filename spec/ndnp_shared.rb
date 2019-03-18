@@ -20,4 +20,11 @@ RSpec.shared_context "ndnp fixture setup", shared_context: :metadata do
       'batch_test_ver01/data/sn85025202/00279557281/1857021401/1857021401.xml'
     )
   end
+
+  let(:reel1) do
+    File.join(
+      ndnp_fixture_path,
+      'batch_test_ver01/data/sn84038814/00279557177/00279557177.xml'
+    )
+  end
 end
