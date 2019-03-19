@@ -37,11 +37,21 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::BatchXMLIngest do
       expect(issue_ids.size).to eq 4
     end
 
-    it "enumerates issues" do
+    it "enumerates issues via method" do
       issues = batch.issues
       expect(issues).to be_an Array
       expect(issues.size).to eq 4
       expect(issues[0]).to be_a NewspaperWorks::Ingest::NDNP::IssueIngest
+    end
+
+    it "makes batch fixed-size enumerable of issues" do
+      expect(batch.size).to eq batch.issue_paths.size
+      issues = batch.to_a # implied .each
+      expect(issues.size).to eq batch.size
+      expect(issues.size).to eq 4
+      issues.each do |issue|
+        expect(issue).to be_a NewspaperWorks::Ingest::NDNP::IssueIngest
+      end
     end
 
     it "enumerates containers" do

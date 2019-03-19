@@ -4,8 +4,12 @@ module NewspaperWorks
   module Ingest
     module NDNP
       class BatchXMLIngest
+        include Enumerable
         include NewspaperWorks::Ingest::NDNP::NDNPMetsHelper
+
         attr_accessor :container_paths, :issue_paths, :path
+
+        delegate :size, to: :issue_paths
 
         def initialize(path)
           @path = path
@@ -33,6 +37,12 @@ module NewspaperWorks
 
         def containers
           container_paths.map { |path| get(path) }
+        end
+
+        def each
+          @issue_paths.each do |path|
+            yield get_issue(path)
+          end
         end
 
         private
