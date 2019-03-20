@@ -11,7 +11,7 @@ module Hyrax
     end
 
     def issues
-      @all_issues.select { |issue| Date.parse(issue.publication_date).year == year }
+      @all_issues.select { |issue| year_or_nil(issue.publication_date) == year }
     end
 
     def issue_dates
@@ -19,7 +19,7 @@ module Hyrax
     end
 
     def issue_years
-      all_title_issue_dates.map { |issue| Date.parse(issue).year }.uniq.sort
+      all_title_issue_dates.map { |issue| year_or_nil(issue) }.compact.uniq.sort
     end
 
     def prev_year
@@ -61,6 +61,12 @@ module Hyrax
       def number_or_nil(string)
         Integer(string || '')
       rescue ArgumentError
+        nil
+      end
+
+      def year_or_nil(string)
+        Date.parse(string).year
+      rescue TypeError
         nil
       end
   end
