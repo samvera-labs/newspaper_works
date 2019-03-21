@@ -1,0 +1,27 @@
+<% for month in 1..12 %>
+  <div class="clndr-month col-xs-12 col-md-2 no-padding">
+    <h2 style="text-align: center;"><%= Date::MONTHNAMES[month] %></h2>
+    <% for day_name in 0..6 %>
+      <div style="display: inline-block; width: 17px; height: 10px; text-align: center;">
+        <%= Date::DAYNAMES[day_name][0..1] %>
+      </div>
+    <% end %>
+  <% month_start = Date.new(year, month) %>
+  <% month_end = ((month_start>>1)-1) %>
+  <% month_start_print = month_start - month_start.wday %>
+  <% month_end_print = (month_end + 6) - (month_end.wday) %>
+  <% (month_start_print).upto(month_end_print) do |d| %>
+    <div style="<%= "color: gray;" if d.month != month  %> display: inline-block; width: 17px; height: 10px; text-align: center;" class="day <%= "adjacent_month" if d.month != month %> <%= "cal-#{d.strftime("%Y-%m-%d")}" %>">
+      <% issue = issues.select {|issue| issue["publication_date"] == d.strftime("%Y-%m-%d") }.first %>
+      <% if issue %>
+        <strong><%= link_to d.day, main_app.hyrax_newspaper_issue_path(issue) %></strong>
+      <% else %>
+        <%= d.day %>
+      <% end %>
+    </div>
+    <% if d.wday == 6 %>
+      <br>
+    <% end %>
+  <% end %>
+  </div>
+<% end %>

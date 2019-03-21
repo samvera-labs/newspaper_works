@@ -87,46 +87,12 @@ RSpec.describe 'hyrax/newspaper_titles/show.html.erb', type: :view do
     stub_template '_work_title' => ''
     stub_template '_work_type' => ''
     stub_template '_masthead.html.erb' => ''
+    stub_template '_issues_calendar.html.erb' => ''
     assign(:presenter, presenter)
     render template: 'hyrax/newspaper_titles/show.html.erb', layout: 'layouts/hyrax/1_column'
   end
 
-  context "title has issues" do
-    it 'displays the year' do
-      expect(page).to have_content "Issues: 2019"
-    end
-
-    it 'shows calendar' do
-      expect(page).to have_content 'January'
-    end
-
-    it 'has link on dates with issues' do
-      links = {}
-      issues.each do |issue|
-        links[Date.parse(issue.publication_date).strftime("%-d")] = hyrax_newspaper_issue_path(issue)
-      end
-      links.each do |day, path|
-        expect(page).to have_link(day, href: path)
-      end
-    end
-  end
-
-  context "title has no issues" do
-    before do
-      allow(presenter).to receive(:issue_years).and_return({})
-      allow(presenter).to receive(:year).and_return(nil)
-      assign(:presenter, presenter)
-      render
-    end
-
-    xit "doesn't show a calendar" do
-      allow(presenter).to receive(:issue_years).and_return({})
-      allow(presenter).to receive(:year).and_return(nil)
-      assign(:presenter, presenter)
-      render
-      puts "-------------"
-      puts "year = #{presenter.year.nil?}"
-      expect(rendered).not_to have_content 'January'
-    end
+  it 'displays the year' do
+    expect(page).to have_content "Issues: 2019"
   end
 end
