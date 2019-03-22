@@ -1,7 +1,3 @@
-<% year = @presenter.year %>
-<% prev_year = @presenter.prev_year %>
-<% next_year = @presenter.next_year %>
-
 <% provide :page_title, @presenter.page_title %>
 
 <%= render 'shared/citations' %>
@@ -17,18 +13,12 @@
         <%= render 'work_title', presenter: @presenter %>
       </div>
       <div class="panel-body">
-        <% if year %>
-          <div class="row">
-            <h2 align="center">
-              <%= link_to("<<", main_app.hyrax_newspaper_title_path(params[:id], year: prev_year)) if prev_year %>
-              Issues: <%= year %>
-              <%= link_to(">>", main_app.hyrax_newspaper_title_path(params[:id], year: next_year)) if next_year %>
-            </h2>
-            <div id="issues_calendar">
-              <%= render partial: "issues_calendar", locals: {issues: @presenter.issues, year: year } %>
-            </div>
+        <% if @presenter.year %>
+          <div id="issues_calendar" class="row">
+            <% years = { current: @presenter.year, previous: @presenter.prev_year, next: @presenter.next_year } %>
+            <%= render partial: "issues_calendar", locals: { issues: @presenter.issues, years: years } %>
           </div>
-          <% end %>
+        <% end %>
         <div class="col-sm-12">
           <%= render 'relationships', presenter: @presenter %>
           <%= render 'items', presenter: @presenter %>
