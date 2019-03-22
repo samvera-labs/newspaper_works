@@ -6,8 +6,6 @@ class NewspaperTitle < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
   include NewspaperWorks::NewspaperCoreMetadata
 
-  has_many :newspaper_issues
-
   self.indexer = NewspaperTitleIndexer
 
   # containment/aggregation:
