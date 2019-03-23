@@ -121,6 +121,14 @@ and configure that username in the
     be edited to enable a IIIF viewer, by setting
     `config.iiif_image_server = true`.    
 
+  * NewspaperWorks expects that your application's `config/initializers/hyrax.rb`
+    be edited to set the FITS path, by setting
+    `config.fits_path = /location/of/fits.sh`
+
+  * NewspaperWorks expects that your application's `config/environments/production.rb`
+    be edited to set file server to public, by setting
+    `config.public_file_server.enabled = true`
+
   * NewspaperWorks overrides Hyrax's default `:after_create_fileset` event
     handler, in order to attach pre-existing derivatives in some ingest
     use cases.  The file attachment adapters for NewspaperWorks use this
