@@ -20,15 +20,17 @@ RSpec.describe 'hyrax/newspaper_titles/_issue_calendar.html.erb', type: :view do
     [issue1, issue2]
   end
 
-  let(:year) { 2019 }
+  let(:years) do
+    { current: 2019, previous: nil, next: nil }
+  end
 
   it 'shows calendar' do
-    render partial: "issues_calendar.html.erb", locals: { issues: issues, year: year }
+    render partial: "issues_calendar.html.erb", locals: { issues: issues, years: years }
     expect(rendered).to have_content 'January'
   end
 
   it 'has link on dates with issues' do
-    render partial: "issues_calendar.html.erb", locals: { issues: issues, year: year }
+    render partial: "issues_calendar.html.erb", locals: { issues: issues, years: years }
     links = {}
     issues.each do |issue|
       links[Date.parse(issue.publication_date).strftime("%-d")] = hyrax_newspaper_issue_path(issue)
@@ -36,5 +38,10 @@ RSpec.describe 'hyrax/newspaper_titles/_issue_calendar.html.erb', type: :view do
     links.each do |day, path|
       expect(rendered).to have_link(day, href: path)
     end
+  end
+
+  it 'displays the year' do
+    render partial: "issues_calendar.html.erb", locals: { issues: issues, years: years }
+    expect(rendered).to have_content "Issues: 2019"
   end
 end

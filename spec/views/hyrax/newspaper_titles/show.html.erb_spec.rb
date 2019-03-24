@@ -92,7 +92,4 @@ RSpec.describe 'hyrax/newspaper_titles/show.html.erb', type: :view do
     render template: 'hyrax/newspaper_titles/show.html.erb', layout: 'layouts/hyrax/1_column'
   end
 
-  it 'displays the year' do
-    expect(page).to have_content "Issues: 2019"
-  end
 end
