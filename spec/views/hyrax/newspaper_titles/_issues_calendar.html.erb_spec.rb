@@ -17,7 +17,7 @@ RSpec.describe 'hyrax/newspaper_titles/_issue_calendar.html.erb', type: :view do
     issue2.held_by = "Marriott Library"
     issue2.publication_date = '2019-03-05'
     issue2.save
-    [issue1, issue2]
+    [issue1.to_solr, issue2.to_solr]
   end
 
   let(:years) do
@@ -33,7 +33,7 @@ RSpec.describe 'hyrax/newspaper_titles/_issue_calendar.html.erb', type: :view do
     render partial: "issues_calendar.html.erb", locals: { issues: issues, years: years }
     links = {}
     issues.each do |issue|
-      links[Date.parse(issue.publication_date).strftime("%-d")] = hyrax_newspaper_issue_path(issue)
+      links[Date.parse(issue["publication_date_dtsim"].first).strftime("%-d")] = hyrax_newspaper_issue_path(issue)
     end
     links.each do |day, path|
       expect(rendered).to have_link(day, href: path)

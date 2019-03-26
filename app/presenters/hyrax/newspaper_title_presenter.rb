@@ -5,17 +5,12 @@ module Hyrax
     include NewspaperWorks::NewspaperCorePresenter
     delegate :edition, :frequency, :preceded_by, :succeeded_by, to: :solr_document
 
-    def initialize(solr_document, current_ability, request = nil)
-      super(solr_document, current_ability, request)
-      @all_issues = all_title_issues
-    end
-
     def issues
-      @all_issues.select { |issue| year_or_nil(issue.publication_date) == year }
+      all_title_issues.select { |issue| year_or_nil(issue["publication_date_dtsim"]) == year }
     end
 
     def issue_dates
-      issues.pluck(:publication_date)
+      issues.pluck("publication_date_dtsim")
     end
 
     def issue_years
@@ -47,15 +42,21 @@ module Hyrax
       number_or_nil(request.params[:year]) || issue_years.first
     end
 
-    private
+    def all_title_issues
+      solr_document["member_ids_ssim"].map { |id| find_or_nil(id) }.compact
+                                      .select { |doc| doc["has_model_ssim"] = "NewspaperIssue" }
+    end
 
-      def all_title_issues
-        members = NewspaperTitle.find(solr_document.id).members
-        members.select { |member| member.class == NewspaperIssue }
-      end
+    # private
 
       def all_title_issue_dates
-        @all_issues.pluck(:publication_date)
+        all_title_issues.pluck("publication_date_dtsim")
+      end
+
+      def find_or_nil(string)
+        ::SolrDocument.find(string)
+      rescue Blacklight::Exceptions::RecordNotFound
+        nil
       end
 
       def number_or_nil(string)
@@ -64,8 +65,9 @@ module Hyrax
         nil
       end
 
-      def year_or_nil(string)
-        Date.parse(string).year
+      def year_or_nil(date_array)
+        return nil if date_array == nil
+        Date.parse(date_array.first).year
       rescue TypeError
         nil
       end
