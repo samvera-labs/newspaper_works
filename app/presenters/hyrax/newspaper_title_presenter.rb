@@ -47,7 +47,7 @@ module Hyrax
                                       .select { |doc| doc["has_model_ssim"] = "NewspaperIssue" }
     end
 
-    # private
+    private
 
       def all_title_issue_dates
         all_title_issues.pluck("publication_date_dtsim")
@@ -66,7 +66,7 @@ module Hyrax
       end
 
       def year_or_nil(date_array)
-        return nil if date_array == nil
+        return nil unless date_array.array?
         Date.parse(date_array.first).year
       rescue TypeError
         nil
