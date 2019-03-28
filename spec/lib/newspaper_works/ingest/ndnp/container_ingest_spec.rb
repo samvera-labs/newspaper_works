@@ -16,7 +16,7 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::ContainerIngest do
       expect(reel.identifier).to eq reel.metadata.reel_number
     end
 
-    it "gets page by dmdid" do
+    it "gets control image as PageIngest, by dmdid" do
       page = reel.page_by_dmdid('targetModsBib1')
       expect(page).to be_a NewspaperWorks::Ingest::NDNP::PageIngest
       expect(page.dmdid).to eq 'targetModsBib1'
@@ -27,17 +27,18 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::ContainerIngest do
       expect(page.doc).to be reel.doc
     end
 
-    it "enumerates expected pages" do
+    it "enumerates expected issues" do
       # enumerate by casting reel to Array
-      pages = reel.to_a
-      expect(pages.size).to eq 2
-      expect(pages[0]).to be_a NewspaperWorks::Ingest::NDNP::PageIngest
+      issues = reel.to_a
+      expect(issues.size).to eq 2
+      expect(issues[0]).to be_a NewspaperWorks::Ingest::NDNP::IssueIngest
+      expect(issues[0].path).to eq reel.issue_paths[0]
     end
 
-    it "gets size, in page count" do
-      pages = reel.to_a
-      expect(reel.size).to eq pages.size
-      expect(reel.size).to eq reel.dmdids.size
+    it "gets size, in issue count" do
+      issues = reel.to_a
+      expect(reel.size).to eq issues.size
+      expect(reel.size).to eq reel.issue_paths.size
     end
   end
 end
