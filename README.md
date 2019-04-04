@@ -1,4 +1,4 @@
-probanewspaper_works — Newspaper Works for Samvera
+Newspaper Works for Samvera
 ===================================================
 Code:
 [![Build Status](https://travis-ci.org/marriott-library/newspaper_works.svg?branch=master)](https://travis-ci.org/marriott-library/newspaper_works)
