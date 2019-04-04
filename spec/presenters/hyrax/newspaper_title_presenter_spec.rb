@@ -5,7 +5,7 @@ RSpec.describe Hyrax::NewspaperTitlePresenter do
   let!(:publication) do
     publication = NewspaperTitle.new
     publication.title = ["Wall Street Journal"]
-    publication.save
+    # publication.save
     publication
   end
 
@@ -20,6 +20,7 @@ RSpec.describe Hyrax::NewspaperTitlePresenter do
     issue1.publication_date = '2016-02-13'
     publication.members.push << issue1
     issues.push(issue1)
+
     issue2 = NewspaperIssue.new
     issue2.title = ['February 13, 2019']
     issue2.resource_type = ["newspaper"]
@@ -29,6 +30,7 @@ RSpec.describe Hyrax::NewspaperTitlePresenter do
     issue2.publication_date = '2019-02-13'
     publication.members.push << issue2
     issues.push(issue2)
+
     issue3 = NewspaperIssue.new
     issue3.title = ['March 5, 2019']
     issue3.resource_type = ["newspaper"]
@@ -38,6 +40,12 @@ RSpec.describe Hyrax::NewspaperTitlePresenter do
     issue3.publication_date = '2019-03-05'
     publication.members.push << issue3
     issues.push(issue3)
+
+    issue1.save!
+    issue2.save!
+    issue3.save!
+    publication.save!
+
     issues
   end
 
@@ -65,24 +73,37 @@ RSpec.describe Hyrax::NewspaperTitlePresenter do
   describe '#issues' do
     subject { presenter.issues }
     it 'will return a all member issues for the earliest year if no year param' do
-      is_expected.to eq [issues[0]]
+      # is_expected.to eq [issues[0].to_solr]
+      issue_query = Blacklight.default_index.search(q: "id:#{issues[0].id}",
+                                                    rows: 50_000,
+                                                    fl: "id, publication_date_dtsim")
+      expect(subject.count).to eq 1
+      expect(subject.first["id"]).to eq issue_query.documents.first["id"]
     end
 
     it 'will return all member issues for a year if a year param is provided' do
       allow(request).to receive(:params).and_return(year: 2019)
-      is_expected.to contain_exactly(issues[2], issues[1])
+      solr_query = "has_model_ssim:NewspaperIssue AND publication_id_ssi:#{presenter.id} AND visibility_ssi:#{solr_document.visibility} AND "\
+                   "publication_date_dtsim:[#{request.params[:year]}-01-01T00:00:00Z TO #{request.params[:year]}-12-31T23:59:59Z]"
+      issue_query = Blacklight.default_index.search(q: solr_query,
+                                                    rows: 50_000,
+                                                    fl: "id, publication_date_dtsim")
+      expect(subject.count).to eq 2
+      expect(subject.first["id"]).to be_in [issue_query.documents[0]["id"], issue_query.documents[1]["id"]]
+      expect(subject.second["id"]).to be_in [issue_query.documents[0]["id"], issue_query.documents[1]["id"]]
     end
   end
 
   describe '#issue_dates' do
     subject { presenter.issue_dates }
     it "will return a all member issue dates for the earliest year if no year param" do
-      is_expected.to eq [issues[0].publication_date]
+      issue_date = issues[0].to_solr["publication_date_dtsim"]
+      is_expected.to eq [issue_date]
     end
 
     it "will return all member issue dates for a year if a year param is provided" do
       allow(request).to receive(:params).and_return(year: 2019)
-      is_expected.to contain_exactly(issues[2].publication_date, issues[1].publication_date)
+      is_expected.to contain_exactly(issues[2].to_solr["publication_date_dtsim"], issues[1].to_solr["publication_date_dtsim"])
     end
   end
 

@@ -43,8 +43,10 @@ module Hyrax
     end
 
     def all_title_issues
-      solr_document["member_ids_ssim"].map { |id| find_or_nil(id) }.compact
-                                      .select { |doc| doc["has_model_ssim"] = "NewspaperIssue" }
+      issue_query = Blacklight.default_index.search(q: "has_model_ssim:NewspaperIssue AND publication_id_ssi:#{id} AND visibility_ssi:#{solr_document.visibility}",
+                                                    rows: 50_000,
+                                                    fl: "id, publication_date_dtsim")
+      issue_query.documents
     end
 
     private
@@ -66,7 +68,7 @@ module Hyrax
       end
 
       def year_or_nil(date_array)
-        return nil unless date_array.array?
+        return nil unless date_array.is_a?(Array)
         Date.parse(date_array.first).year
       rescue TypeError
         nil
