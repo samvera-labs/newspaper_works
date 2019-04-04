@@ -1,4 +1,4 @@
-newspaper_works — Newspaper Works for Samvera
+probanewspaper_works — Newspaper Works for Samvera
 ===================================================
 Code:
 [![Build Status](https://travis-ci.org/marriott-library/newspaper_works.svg?branch=master)](https://travis-ci.org/marriott-library/newspaper_works)
@@ -13,6 +13,8 @@ Jump in: [![Slack Status](http://slack.samvera.org/badge.svg)](http://slack.samv
 # Table of Contents
 - [Introduction](#introduction)
   - [Documentation](#documentation)
+  - [Wiki](https://github.com/marriott-library/newspaper_works/wiki)
+  - [Features Matrix](https://github.com/marriott-library/newspaper_works/wiki/Features-Matrix)
 - [Overview](#overview)
 	- [Purpose, Use, and Aims](#purpose-use-and-aims)
 	- [Development Status](#development-status)
@@ -35,14 +37,13 @@ Jump in: [![Slack Status](http://slack.samvera.org/badge.svg)](http://slack.samv
 The Newspapers in Samvera is an IMLS grant funded project to develop newspaper specific functionality for the [Samvera](http://samvera.org/) Hyrax framework.
 
 ## Documentation
-
-[Newspapers_Works Wiki](https://github.com/marriott-library/newspaper_works/wiki)
+We are currently working on adding and updating documentation on our [Project Wiki](https://github.com/marriott-library/newspaper_works/wiki)
 
 # Overview
 The Newspaper Works gem provides work type models and administrative
 functionality for Hyrax-based Samvera applications in the space
 of scanned newspaper media.  This gem can be included in a
-Digital Asset Management application based on Hyrax 2.x.
+Digital Asset Management application based on Hyrax 2.5
 
 ## Purpose, Use, and Aims
 This gem, while not a stand-alone application, can be integrated into an
@@ -50,20 +51,21 @@ application based on Hyrax 2.5 easily to support a variety of cases for
 management, ingest, and archiving of primarily scanned (historic) newspaper archives.
 
 ## Development Status
+This gem is currently under development. The development team is actively working on this project and is updating the codebase nightly. We are targeting an initial 1.0 release for June 2019.
 
-This gem is currently under development. The development team is actively working on this project and expects to have an alpha release of the application later this Summer.
+A public testing site is available for those interested in testing out the newspaper_works gem. [Newspaper Works Demo Site](https://newspaperworks.digitalnewspapers.org/)  **NOTE:** The demo site may not be running the latest release of Newspapers_Works.
 
 ## Requirements
 
-  * [Ruby](https://rubyonrails.org/) 2.4+
-  * [Rails](https://rubyonrails.org/) 5.1.6+
+  * [Ruby](https://rubyonrails.org/) >=2.4
+  * [Rails](https://rubyonrails.org/) 5.1.6
   * [Bundler](http://bundler.io/)
   * [Hyrax](https://github.com/samvera/hyrax) 2.5
     - ..._and various [Samvera dependencies](https://github.com/samvera/hyrax#getting-started) that entails_.
   * A Hyrax-based Rails application.
     * newspaper_works is a gem/engine that can extend your application.
 
-## Newspaper_Works Dependencies
+## Newspaper_works Dependencies
 
   * [FITS](https://projects.iq.harvard.edu/fits/home)
   * [Tesseract-ocr](https://github.com/tesseract-ocr/)
@@ -83,16 +85,15 @@ This model was greatly informed by earlier efforts from National Library of Wale
 [Detailed metadata model documents](https://wiki.duraspace.org/display/samvera/PCDM+metadata+model+for+Newspapers)
 
 # Installation/Testing
-Integrating Newspaper_Works in your application.
+Integrating newspaper_works in your application
 
-Your Hyrax 2.5 based application can extend and utilize `newspaper_works`
+Your Hyrax 2.5.0 based application can extend and utilize `newspaper_works`
 
 ## Extending, Using
 
 * Add `gem 'newspaper_works', :git => 'https://github.com/marriott-library/newspaper_works.git'`
 	to your Gemfile.
 * Run `bundle install`
-* Run `rails generate newspaper_works:generate`
 
 ### Ingest, Application Interface
 
@@ -106,101 +107,33 @@ _See [wiki](https://github.com/marriott-library/newspaper_works/wiki)_.
 _More here soon!_
 
 ## Application/Site Specific Configuration
-* In order to use some fields in forms, you will want to make sure you
-have a [username for Geonames](http://www.geonames.org/login),
-and configure that username in the
-`config.geonames_username` value in `config/intitializers/hyrax.rb` of your app.
-
-- This will help fields such as "Place of Publication" provide autocomplete using the Geonames service/vocabulary.
-
-  * NewspaperWorks requires that your application's `config/initializers/hyrax.rb`
-    be edited to make uploads optional for (all) work types, by setting
-    `config.work_requires_files = false`.
-
-  * NewspaperWorks expects that your application's `config/initializers/hyrax.rb`
-    be edited to enable a IIIF viewer, by setting
-    `config.iiif_image_server = true`.    
-
-  * NewspaperWorks expects that your application's `config/initializers/hyrax.rb`
-    be edited to set the FITS path, by setting
-    `config.fits_path = /location/of/fits.sh`
-
-  * NewspaperWorks expects that your application's `config/environments/production.rb`
-    be edited to set file server to public, by setting
-    `config.public_file_server.enabled = true`
-
-  * NewspaperWorks overrides Hyrax's default `:after_create_fileset` event
-    handler, in order to attach pre-existing derivatives in some ingest
-    use cases.  The file attachment adapters for NewspaperWorks use this
-    callback to allow programmatic assignment of pre-existing derivative
-    files before the primary file's file set has been created for a new
-    work.  The callback ensures that derivative files are attached,
-    stored using Hyrax file/path naming conventions, once the file set
-    has been created.  Because the Hyrax callback registry only allows single
-    subscribers to any event, application developers who overwrite
-    this handler, or integrate other gems that do likewise, must take care
-    to create a custom composition that ensures all work and queued jobs
-    desired run after this object lifecycle event.
+  * In order to use the autocomplete function in the "Place of Publication" fields, you will want to make sure you
+    have a [username for Geonames](http://www.geonames.org/login),
+    and configure that username in the `config.geonames_username`
+    value in `config/intitializers/hyrax.rb` of your app.
 
 ## Development and Testing with Vagrant
-### Host System Requirements (install these before proceeding)
+* clone samvera-vagrant
+  - `git clone https://github.com/marriott-library/samvera-vagrant.git`
 
-* [Vagrant](https://www.vagrantup.com/) version 1.8.3+
-* [VirtualBox](https://www.virtualbox.org/) version 5.1.38+
+* Start vagrant box provisioning
+  - `cd samvera-vagrant && vagrant up`
 
-### Test Environment Setup (provisioning of virtual machine)
-
-1. `git clone https://github.com/marriott-library/samvera-vagrant.git`
-2. `cd samvera-vagrant`
-3. `vagrant up`
-
-You can shell into the machine with `vagrant ssh` or `ssh -p 2222 vagrant@localhost`
-
-### Using/testing the Newspaper_works Application with Vagrant
-
-* Ensure you're in the samvera-vagrant directory
-
-* Shell into vagrant box **three times** `vagrant ssh`
+* Shell into vagrant box **three times**
+  - `vagrant ssh`
 
 * First shell (start fcrepo_wrapper)
-`cd /home/vagrant/newspaper_works && fcrepo_wrapper --config config/fcrepo_wrapper_test.yml`
+  - `cd /home/ubuntu/newspaper_works fcrepo_wrapper --config config/fcrepo_wrapper_test.yml`
 
 * Second shell (start solr_wrapper)
-`cd /home/vagrant/newspaper_works && solr_wrapper --config config/solr_wrapper_test.yml`
+  - `cd /home/ubuntu/newspaper_works solr_wrapper --config config/solr_wrapper_test.yml`
+
 * Third shell testing and development
-
-* **before running tests ensure the previous two tasks have completed and you see the following text in the shell windows**
-  * first shell `http://127.0.0.1:8986/`
-  * second shell `http://127.0.0.1:8985/solr/`
-
 
 * Run spec tests
-`cd /home/vagrant/newspaper_works && rake spec`
-
-* Run rails server
-`cd /home/vagrant/newspaper_works/.internal_test_app && rails s`
-
+  - `cd /home/ubuntu/newspaper_works rake spec`
 * Run rails console
-`cd /home/vagrant/newspaper_works/.internal_test_app && rails c`
-
-## Evaluation Environment for Newspaper_works with Vagrant
-
-* Ensure you're in the samvera-vagrant directory
-
-* Shell into vagrant box **three times** `vagrant ssh`
-
-* First shell (start fcrepo_wrapper)
-`cd /home/vagrant/newspaper_works/.internal_test_app && fcrepo_wrapper`
-
-* Second shell (start solr_wrapper)
-`cd /home/vagrant/newspaper_works/.internal_test_app && solr_wrapper`
-* Third shell testing and development
-
-* Run rails server
-`cd /home/vagrant/newspaper_works/.internal_test_app && rails s`
-
-* Run rails console
-`cd /home/vagrant/newspaper_works/.internal_test_app && rails c`
+  - `cd /home/ubuntu/newspaper_works rails s`
 
 ## Development and Testing Setup
 * clone `newspaper_works`:
@@ -246,11 +179,11 @@ and our project's advisory board.
  * [Samvera Community](http://samvera.org/) - Samvera™ is the new name for Hydra. Samvera is a grass-roots, open source community creating best in class digital asset management solutions for Libraries, Archives, Museums and others.
  * [Samvera on Github](https://github.com/samvera/) - Officially supported and maintained Samvera gems and applications for Digital Repository management
  * [Newspapers in Samvera IMLS Grant (formerly Hydra)](https://www.imls.gov/grants/awarded/lg-70-17-0043-17) - The official grant award for the project.
+ * [National Digital Newspapers Program NDNP](https://www.loc.gov/ndnp/)
 
 ## Contact
   * Contact any contributors above by email, or ping us on
-    [Samvera Community Slack channel(s).](http://slack.samvera.org/)
-
+    [Samvera Community Slack channel(s)](http://slack.samvera.org/)
 
 ![Institute of Museum and Library Services Logo](https://imls.gov/sites/default/files/logo.png)
 ![University of Utah Logo](http://www.utah.edu/_images/imagine_u.png)
