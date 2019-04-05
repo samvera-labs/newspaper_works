@@ -18,7 +18,7 @@ RSpec.describe Hyrax::NewspaperTitlePresenter do
     issue1.language = ["eng"]
     issue1.held_by = "Marriott Library"
     issue1.publication_date = '2016-02-13'
-    publication.members.push << issue1
+    publication.members.push issue1
     issues.push(issue1)
 
     issue2 = NewspaperIssue.new
@@ -28,7 +28,7 @@ RSpec.describe Hyrax::NewspaperTitlePresenter do
     issue2.language = ["eng"]
     issue2.held_by = "Marriott Library"
     issue2.publication_date = '2019-02-13'
-    publication.members.push << issue2
+    publication.members.push issue2
     issues.push(issue2)
 
     issue3 = NewspaperIssue.new
@@ -38,7 +38,7 @@ RSpec.describe Hyrax::NewspaperTitlePresenter do
     issue3.language = ["eng"]
     issue3.held_by = "Marriott Library"
     issue3.publication_date = '2019-03-05'
-    publication.members.push << issue3
+    publication.members.push issue3
     issues.push(issue3)
 
     issue1.save!
@@ -55,15 +55,14 @@ RSpec.describe Hyrax::NewspaperTitlePresenter do
   let(:ability) { double Ability }
   let(:presenter) { described_class.new(solr_document, ability, request) }
 
+  subject { described_class.new(solr_document, ability, request) }
+
   it { is_expected.to delegate_method(:alternative_title).to(:solr_document) }
   it { is_expected.to delegate_method(:genre).to(:solr_document) }
   it { is_expected.to delegate_method(:issn).to(:solr_document) }
   it { is_expected.to delegate_method(:lccn).to(:solr_document) }
   it { is_expected.to delegate_method(:oclcnum).to(:solr_document) }
   it { is_expected.to delegate_method(:held_by).to(:solr_document) }
-
-  # subject { described_class.new(double, double) }
-  subject { described_class.new(solr_document, ability, request) }
 
   it { is_expected.to delegate_method(:edition).to(:solr_document) }
   it { is_expected.to delegate_method(:frequency).to(:solr_document) }
@@ -72,38 +71,21 @@ RSpec.describe Hyrax::NewspaperTitlePresenter do
 
   describe '#issues' do
     subject { presenter.issues }
-    it 'will return a all member issues for the earliest year if no year param' do
-      # is_expected.to eq [issues[0].to_solr]
-      issue_query = Blacklight.default_index.search(q: "id:#{issues[0].id}",
-                                                    rows: 50_000,
-                                                    fl: "id, publication_date_dtsim")
-      expect(subject.count).to eq 1
-      expect(subject.first["id"]).to eq issue_query.documents.first["id"]
+    it 'will return a all member issues for the earliest year when no year param is provided' do
+      expect(subject.pluck("id")).to contain_exactly(issues[0].id)
     end
 
-    it 'will return all member issues for a year if a year param is provided' do
+    it 'will return all member issues for a given year when a year param is provided' do
       allow(request).to receive(:params).and_return(year: 2019)
-      solr_query = "has_model_ssim:NewspaperIssue AND publication_id_ssi:#{presenter.id} AND visibility_ssi:#{solr_document.visibility} AND "\
-                   "publication_date_dtsim:[#{request.params[:year]}-01-01T00:00:00Z TO #{request.params[:year]}-12-31T23:59:59Z]"
-      issue_query = Blacklight.default_index.search(q: solr_query,
-                                                    rows: 50_000,
-                                                    fl: "id, publication_date_dtsim")
-      expect(subject.count).to eq 2
-      expect(subject.first["id"]).to be_in [issue_query.documents[0]["id"], issue_query.documents[1]["id"]]
-      expect(subject.second["id"]).to be_in [issue_query.documents[0]["id"], issue_query.documents[1]["id"]]
+      expect(subject.pluck("id")).to contain_exactly(issues[1].id, issues[2].id)
     end
   end
 
-  describe '#issue_dates' do
-    subject { presenter.issue_dates }
-    it "will return a all member issue dates for the earliest year if no year param" do
-      issue_date = issues[0].to_solr["publication_date_dtsim"]
-      is_expected.to eq [issue_date]
-    end
-
-    it "will return all member issue dates for a year if a year param is provided" do
-      allow(request).to receive(:params).and_return(year: 2019)
-      is_expected.to contain_exactly(issues[2].to_solr["publication_date_dtsim"], issues[1].to_solr["publication_date_dtsim"])
+  describe '#issue_years' do
+    subject { presenter.issue_years }
+    it "will return a sorted list of years with no nil values" do
+      allow(presenter).to receive(:all_title_issue_dates).and_return([['2017-01-01T00:00:00Z'], nil, ['2016-01-01'], ['2001-12-01'], ['2017-12-10']])
+      is_expected.to eq [2001, 2016, 2017]
     end
   end
 
@@ -140,6 +122,13 @@ RSpec.describe Hyrax::NewspaperTitlePresenter do
     it "will return the param year if provided" do
       allow(request).to receive(:params).and_return(year: 2019)
       is_expected.to eq 2019
+    end
+  end
+
+  describe '#all_title_issues' do
+    subject { presenter.all_title_issues }
+    it 'will return a all member issues' do
+      expect(subject.pluck("id")).to contain_exactly(issues[0].id, issues[1].id, issues[2].id)
     end
   end
 end
