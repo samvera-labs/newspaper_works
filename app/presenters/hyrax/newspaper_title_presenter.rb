@@ -9,10 +9,6 @@ module Hyrax
       all_title_issues.select { |issue| year_or_nil(issue["publication_date_dtsim"]) == year }
     end
 
-    def issue_dates
-      issues.pluck("publication_date_dtsim")
-    end
-
     def issue_years
       all_title_issue_dates.map { |issue| year_or_nil(issue) }.compact.uniq.sort
     end
@@ -53,12 +49,6 @@ module Hyrax
 
       def all_title_issue_dates
         all_title_issues.pluck("publication_date_dtsim")
-      end
-
-      def find_or_nil(string)
-        ::SolrDocument.find(string)
-      rescue Blacklight::Exceptions::RecordNotFound
-        nil
       end
 
       def number_or_nil(string)
