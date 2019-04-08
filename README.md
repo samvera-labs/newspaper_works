@@ -145,11 +145,26 @@ and configure that username in the
     desired run after this object lifecycle event.
 
 ## Development and Testing with Vagrant
-* clone samvera-vagrant
-  - `git clone https://github.com/marriott-library/samvera-vagrant.git`
 
-* Start vagrant box provisioning
-  - `cd samvera-vagrant && vagrant up`
+### Host System Requirements (install these before proceeding)
+
+* [Vagrant](https://www.vagrantup.com/) version 1.8.3+
+* [VirtualBox](https://www.virtualbox.org/) version 5.1.38+
+
+### Test Environment Setup (provisioning of virtual machine)
+
+1. Clone newspaper works samvera-vagrant `git clone https://github.com/marriott-library/samvera-vagrant.git`
+2. Change the directory to the repository `cd samvera-vagrant`
+3. Provision vagrant box by running `vagrant up`
+
+You can shell into the machine with `vagrant ssh` or `ssh -p 2222 vagrant@localhost`
+
+### Using/testing the Newspaper_works Application with Vagrant
+
+* Ensure you're in the samvera-vagrant directory
+
+* Start vagrant box provisioning (incase you have not provisioned the machine)
+  - run `vagrant up`
 
 * Shell into vagrant box **three times**
   - `vagrant ssh`
