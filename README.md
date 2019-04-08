@@ -84,12 +84,12 @@ This model was greatly informed by earlier efforts from National Library of Wale
 
 [Detailed metadata model documents](https://wiki.duraspace.org/display/samvera/PCDM+metadata+model+for+Newspapers)
 
-# Installation/Testing
+# Installing, Developing, and Testing
 Integrating newspaper_works in your application
 
 Your Hyrax 2.5 based application can extend and utilize `newspaper_works`
 
-## Extending, Using
+## Extending and Using
 
 * Add `gem 'newspaper_works', :git => 'https://github.com/marriott-library/newspaper_works.git'`
 	to your Gemfile.
@@ -99,9 +99,6 @@ Your Hyrax 2.5 based application can extend and utilize `newspaper_works`
 ### Ingest, Application Interface
 
 _See [wiki](https://github.com/marriott-library/newspaper_works/wiki)_.
-
-### Application/Site Specific Configuration
-
 
 ## Basic Model Use (console)
 
@@ -146,6 +143,8 @@ and configure that username in the
 
 ## Development and Testing with Vagrant
 
+Additional information regarding development and testing environments setup and configuration can be found [here](https://github.com/marriott-library/newspaper_works/wiki/Development-and-Testing)
+
 ### Host System Requirements (install these before proceeding)
 
 * [Vagrant](https://www.vagrantup.com/) version 1.8.3+
@@ -156,33 +155,26 @@ and configure that username in the
 1. Clone newspaper works samvera-vagrant `git clone https://github.com/marriott-library/samvera-vagrant.git`
 2. Change the directory to the repository `cd samvera-vagrant`
 3. Provision vagrant box by running `vagrant up`
+4. Shell into the machine with `vagrant ssh` or `ssh -p 2222 vagrant@localhost`
 
-You can shell into the machine with `vagrant ssh` or `ssh -p 2222 vagrant@localhost`
-
-### Using/testing the Newspaper_works Application with Vagrant
-
+### Using/testing the Newspaper_works application with Vagrant
 * Ensure you're in the samvera-vagrant directory
-
-* Start vagrant box provisioning (incase you have not provisioned the machine)
-  - run `vagrant up`
-
+* Start vagrant box provisioning (incase you have not provisioned the virtual machine)
+  - `vagrant up`
 * Shell into vagrant box **three times**
   - `vagrant ssh`
-
 * First shell (start fcrepo_wrapper)
   - `cd /home/ubuntu/newspaper_works fcrepo_wrapper --config config/fcrepo_wrapper_test.yml`
-
 * Second shell (start solr_wrapper)
   - `cd /home/ubuntu/newspaper_works solr_wrapper --config config/solr_wrapper_test.yml`
-
 * Third shell testing and development
-
 * Run spec tests
   - `cd /home/ubuntu/newspaper_works rake spec`
 * Run rails console
   - `cd /home/ubuntu/newspaper_works rails s`
 
-## Development and Testing Setup
+## Development and testing setup
+
 * clone `newspaper_works`:
   - `git clone https://github.com/marriott-library/newspaper_works.git`
 * Install Gem and dependencies:
@@ -199,7 +191,6 @@ You can shell into the machine with `vagrant ssh` or `ssh -p 2222 vagrant@localh
 * For development, you may want to include a clone of `newspaper_works`
   in your app's Gemfile, either via `github:` or by `path:` in a local
   Gemfile used only for local development of your app.
-
 
 # Credits
 ## Sponsoring Organizations
