@@ -4,7 +4,6 @@ RSpec.describe 'hyrax/newspaper_titles/_issue_calendar.html.erb', type: :view do
     issue1 = NewspaperIssue.new
     issue1.title = ['February 13, 2019']
     issue1.resource_type = ["newspaper"]
-    issue1.genre = ["text"]
     issue1.language = ["eng"]
     issue1.held_by = "Marriott Library"
     issue1.publication_date = '2019-02-13'
@@ -12,7 +11,6 @@ RSpec.describe 'hyrax/newspaper_titles/_issue_calendar.html.erb', type: :view do
     issue2 = NewspaperIssue.new
     issue2.title = ['March 5, 2019']
     issue2.resource_type = ["newspaper"]
-    issue2.genre = ["text"]
     issue2.language = ["eng"]
     issue2.held_by = "Marriott Library"
     issue2.publication_date = '2019-03-05'
