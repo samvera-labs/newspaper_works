@@ -22,9 +22,6 @@ class NewspaperTitle < ActiveFedora::Base
   # validates :resource_type, presence: {
   #   message: 'A newspaper article requires a resource type.'
   # }
-  # validates :genre, presence: {
-  #   message: 'A newspaper article requires a genre.'
-  # }
   # validates :language, presence: {
   #   message: 'A newspaper article requires a language.'
   # }
@@ -38,12 +35,6 @@ class NewspaperTitle < ActiveFedora::Base
   # validates :type, presence: {
   #   message: 'A newspaper title requires a type.'
   # }
-
-  # validates :genre, presence: {
-  #   message: 'A newspaper title requires a genre.'
-  # }
-
-  self.human_readable_type = 'Newspaper Title'
 
   # == Type-specific properties ==
 
@@ -71,7 +62,7 @@ class NewspaperTitle < ActiveFedora::Base
     predicate: ::RDF::URI.new('http://rdaregistry.info/Elements/u/P60261'),
     multiple: true
   ) do |index|
-    index.as :stored_searchable
+    index.as :stored_searchable, :facetable
   end
 
   # - Succeeded by
@@ -80,7 +71,7 @@ class NewspaperTitle < ActiveFedora::Base
     predicate: ::RDF::URI.new('http://rdaregistry.info/Elements/u/P60278'),
     multiple: true
   ) do |index|
-    index.as :stored_searchable
+    index.as :stored_searchable, :facetable
   end
 
   # - Publication date start
