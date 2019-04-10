@@ -14,7 +14,6 @@ RSpec.describe Hyrax::NewspaperTitlePresenter do
     issue1 = NewspaperIssue.new
     issue1.title = ['February 13, 2016']
     issue1.resource_type = ["newspaper"]
-    issue1.genre = ["text"]
     issue1.language = ["eng"]
     issue1.held_by = "Marriott Library"
     issue1.publication_date = '2016-02-13'
@@ -24,7 +23,6 @@ RSpec.describe Hyrax::NewspaperTitlePresenter do
     issue2 = NewspaperIssue.new
     issue2.title = ['February 13, 2019']
     issue2.resource_type = ["newspaper"]
-    issue2.genre = ["text"]
     issue2.language = ["eng"]
     issue2.held_by = "Marriott Library"
     issue2.publication_date = '2019-02-13'
@@ -34,7 +32,6 @@ RSpec.describe Hyrax::NewspaperTitlePresenter do
     issue3 = NewspaperIssue.new
     issue3.title = ['March 5, 2019']
     issue3.resource_type = ["newspaper"]
-    issue3.genre = ["text"]
     issue3.language = ["eng"]
     issue3.held_by = "Marriott Library"
     issue3.publication_date = '2019-03-05'
@@ -58,7 +55,6 @@ RSpec.describe Hyrax::NewspaperTitlePresenter do
   subject { described_class.new(solr_document, ability, request) }
 
   it { is_expected.to delegate_method(:alternative_title).to(:solr_document) }
-  it { is_expected.to delegate_method(:genre).to(:solr_document) }
   it { is_expected.to delegate_method(:issn).to(:solr_document) }
   it { is_expected.to delegate_method(:lccn).to(:solr_document) }
   it { is_expected.to delegate_method(:oclcnum).to(:solr_document) }
