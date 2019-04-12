@@ -14,7 +14,7 @@ module NewspaperWorks
 
         def ingest
           batch.each do |issue|
-            issue_ingester(batch, issue).ingest
+            issue_ingester(issue).ingest
           end
         end
 
@@ -22,11 +22,11 @@ module NewspaperWorks
 
           # Return BatchIngest object as enumerable of issues:
           def batch_enumerator
-            NewpaperWorks::Ingest::NDNP::BatchXMLIngest.new(path)
+            NewspaperWorks::Ingest::NDNP::BatchXMLIngest.new(path)
           end
 
           def issue_ingester(issue)
-            NewpaperWorks::Ingest::NDNP::IssueIngester.new(issue, batch)
+            NewspaperWorks::Ingest::NDNP::IssueIngester.new(issue, batch)
           end
 
           def normalize_date(v)
@@ -34,7 +34,7 @@ module NewspaperWorks
           end
 
           def xml_path(path)
-            return path unless File.directory?(p)
+            return path unless File.directory?(path)
             batch_path = Find.find(path).select do |f|
               f.downcase.end_with?('batch_1.xml')
             end
