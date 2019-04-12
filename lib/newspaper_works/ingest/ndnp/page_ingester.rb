@@ -61,6 +61,7 @@ module NewspaperWorks
 
           def link_issue
             issue.members << @target # page
+            issue.save!
           end
 
           # Page title as issue title plus page title

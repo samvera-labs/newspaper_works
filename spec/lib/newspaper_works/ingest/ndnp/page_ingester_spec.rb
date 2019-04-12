@@ -28,6 +28,7 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::PageIngester do
       # construct_page is ingest of metadata only, without importing files:
       adapter.construct_page
       page = adapter.target
+      expect(page).to be_a NewspaperPage
       expect(page.id).not_to be_nil
       expect(issue.members).to include page
     end

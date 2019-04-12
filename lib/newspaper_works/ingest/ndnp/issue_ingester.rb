@@ -11,7 +11,8 @@ module NewspaperWorks
           :edition,
           :volume,
           :publication_date,
-          :held_by
+          :held_by,
+          :issue_number
         ].freeze
 
         # @param issue [NewspaperWorks::Ingest::NDNP::IssueIngest]
@@ -29,48 +30,46 @@ module NewspaperWorks
           ingest_pages
         end
 
-        private
+        def construct_issue
+          create_issue
+          find_or_create_linked_publication
+        end
 
-          def construct_issue
-            create_issue
-            find_or_create_linked_publication
+        def ingest_pages
+          issue.each do |page|
+            NewspaperWorks::Ingest::NDNP::PageIngester.new(page, @target).ingest
           end
+        end
+
+        private
 
           def page_ingester(page_data)
             NewspaperWorks::Ingest::NDNP::PageIngester.new(
               page_data,
-              target
+              @target
             ).ingest
           end
 
-          def ingest_pages
-            issue.each do |page|
-              NewspaperWorks::Ingest::NDNP::PageIngester.new(page, target).ingest
-            end
-          end
-
           def issue_title
-            "#{pub_title} (#{issue.metadata.publication_date})"
+            meta = issue.metadata
+            "#{meta.publication_title} (#{meta.publication_date})"
           end
 
           def copy_issue_metadata
             metadata = issue.metadata
             # set (required, plural) title from single value obtained from reel:
-            target.title = [issue_title]
+            @target.title = [issue_title]
             # copy all fields with singular (non-repeatable) values on both
             #   target NewspaperIssue object, and metadata source:
             COPY_FIELDS.each do |fieldname|
-              target.send("#{fieldname}=", metadata.send(fieldname.to_s))
+              @target.send("#{fieldname}=", metadata.send(fieldname.to_s))
             end
-            # For now treat issue number as one-off, as the PCDM profile
-            #   spells this name differently than the NewspaperIssue model
-            target.issue_number = metadata.issue
           end
 
           def create_issue
-            target = NewspaperIssue.create
+            @target = NewspaperIssue.create
             copy_issue_metadata
-            target.save!
+            @target.save!
           end
 
           # @param lccn [String] Library of Congress Control Number
@@ -80,17 +79,13 @@ module NewspaperWorks
             NewspaperTitle.where(lccn: lccn).first
           end
 
-          def pub_title
-            issue.container.metadata.title
-          end
-
           def find_or_create_linked_publication
             lccn = issue.metadata.lccn
             publication = find_publication(lccn)
             publication = NewspaperTitle.create if publication.nil?
-            publication.title = pub_title
-            publication.lccn |= lccn
-            publication.members << target.id
+            publication.title = [issue.metadata.publication_title]
+            publication.lccn ||= lccn
+            publication.members << target
             publication.save!
           end
       end
