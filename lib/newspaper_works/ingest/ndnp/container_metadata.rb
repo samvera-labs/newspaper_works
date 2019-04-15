@@ -25,7 +25,9 @@ module NewspaperWorks
         # @return [String] a serial number string for reel, may correspond
         #   to an issued barcode
         def reel_number
-          xpath("//mods:identifier[@type='reel number']").first.text
+          v = xpath("//mods:identifier[@type='reel number']").first
+          return v.text unless v.nil?
+          xpath('//mets:mets/@LABEL').first.value
         end
 
         # Original Source Repository (NDNP-mandatory)
