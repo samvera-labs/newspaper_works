@@ -10,7 +10,7 @@ module NewspaperWorks
 
         # Create ingester in context of source reel data, NewspaperTitle
         # @param source [NewspaperWorks::Ingest::NDNP::ContainerIngest]
-        # @param publication [NewspaperTitle] Required publication asset to link to
+        # @param publication [NewspaperTitle] Required publication to link to
         def initialize(source, publication)
           @source = source
           @publication = publication

@@ -1,8 +1,10 @@
 require 'spec_helper'
 require 'ndnp_shared'
+require 'misc_shared'
 
 RSpec.describe NewspaperWorks::Ingest::NDNP::PageIngester do
   include_context "ndnp fixture setup"
+  include_context "shared setup"
 
   # use FactoryBot issue factory for a NewspaperIssue object for page:
   let(:issue) { create(:newspaper_issue) }
@@ -46,6 +48,43 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::PageIngester do
       expect(page.width).to eq metadata.width
       expect(page.height).to eq metadata.height
       expect(page.identifier).to contain_exactly metadata.identifier
+    end
+  end
+
+  describe "reel/container linking" do
+    # need publication, title, and reel to use for page data context:
+    let(:publication) { create(:newspaper_title) }
+
+    let(:issue) do
+      issue = create(:newspaper_issue)
+      publication.members << issue
+      publication.save!
+      issue
+    end
+
+    let(:issue_data) do
+      NewspaperWorks::Ingest::NDNP::IssueIngest.new(issue2)
+    end
+
+    let(:page_data) do
+      data = issue_data.to_a[0]
+      # some NDNP samples missing TIFF, put dummy in place of missing, as needed
+      data.files = data.files.map do |path|
+        File.exist?(path) ? path : File.join(fixture_path, 'ocr_gray.tiff')
+      end
+      data
+    end
+
+    let(:adapter) { described_class.new(page_data, issue) }
+
+    it "links page to reel" do
+      # construct_page + link_reel ~= ingest without files import:
+      adapter.construct_page
+      adapter.link_reel
+      page = adapter.target
+      page.reload
+      expect(page.container).not_to be_nil
+      expect(page.container.members.map(&:id)).to include page.id
     end
   end
 

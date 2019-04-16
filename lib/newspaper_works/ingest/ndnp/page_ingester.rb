@@ -30,6 +30,7 @@ module NewspaperWorks
         def ingest
           construct_page
           ingest_page_files
+          link_reel
         end
 
         def construct_page
@@ -55,6 +56,19 @@ module NewspaperWorks
             end
           end
           work_files.commit!
+        end
+
+        def link_reel
+          reel_data = @page.container
+          return if reel_data.nil?
+          ingester = NewspaperWorks::Ingest::NDNP::ContainerIngester.new(
+            reel_data,
+            issue.publication
+          )
+          # find-or-create container, linked to publication:
+          ingester.ingest
+          # link target page to container asset for reel:
+          ingester.link(@target)
         end
 
         private
