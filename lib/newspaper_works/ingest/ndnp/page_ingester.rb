@@ -68,7 +68,7 @@ module NewspaperWorks
           #   e.g. "ACME Tribune (1910-01-02): Page 2"
           # @return [String] composed page title
           def page_title
-            ["#{issue.title.first}: Page #{page.metadata.page_number}"]
+            ["#{issue.title.first}: Page #{@page.metadata.page_number}"]
           end
 
           def copy_page_metadata
