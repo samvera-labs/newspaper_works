@@ -33,7 +33,14 @@ module NewspaperWorks
         # Original Source Repository (NDNP-mandatory)
         # @return [String]
         def held_by
-          xpath("//mods:physicalLocation").first['displayLabel']
+          v = xpath("//mods:physicalLocation").first
+          return v['displayLabel'] unless v.nil?
+          # fallback to look at mods:note/@displayLabel, when the
+          #   @type="agencyResponsibleForReproduction"
+          xpath(
+            '//mods:note[@type="agencyResponsibleForReproduction"]' \
+            '/@displayLabel'
+          ).first.value
         end
 
         # Media genre/form (Page Physical Description, e.g. "microform")
