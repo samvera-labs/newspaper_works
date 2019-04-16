@@ -31,6 +31,14 @@ RSpec.shared_context "ndnp fixture setup", shared_context: :metadata do
     )
   end
 
+  # reel with no explicit reel number, but containing it in mets/@LABEL
+  let(:reel2) do
+    File.join(
+      ndnp_fixture_path,
+      'batch_test_ver01/data/sn85025202/00279557281/00279557281_1.xml'
+    )
+  end
+
   let(:batch1) do
     File.join(
       ndnp_fixture_path,
