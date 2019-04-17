@@ -41,6 +41,31 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::IssueIngester do
       # check parent publication
       publication = issue.publication
       expect(publication.lccn).to eq issue_data.metadata.lccn
+      expect(publication.title).to contain_exactly 'The Park Record'
+    end
+
+    it "creates new NewspaperTitle without place of publication" do
+      # clear any existing publications from previous testing
+      lccn = issue_data.metadata.lccn
+      NewspaperTitle.where(lccn: lccn).delete_all
+      # construct with title, this time no username set for geonames:
+      Qa::Authorities::Geonames.username = ''
+      adapter.construct_issue
+      expect(adapter.target.publication.place_of_publication).to be_empty
+      Qa::Authorities::Geonames.username = 'newspaper_works'
+    end
+
+    it "creates new NewspaperTitle with place of publication" do
+      # clear any existing publications from previous testing
+      lccn = issue_data.metadata.lccn
+      NewspaperTitle.where(lccn: lccn).delete_all
+      # construct with title, this time with username set for geonames:
+      Qa::Authorities::Geonames.username = 'newspaper_works'
+      adapter.construct_issue
+      pop = adapter.target.publication.place_of_publication
+      expect(pop).not_to be_empty
+      expect(pop[0]).to start_with 'http://sws.geonames.org/'
+      Hyrax.config.geonames_username = ''
     end
   end
 

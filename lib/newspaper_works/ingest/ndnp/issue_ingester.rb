@@ -79,11 +79,19 @@ module NewspaperWorks
             NewspaperTitle.where(lccn: lccn).first
           end
 
+          def copy_publication_title(publication)
+            complete_pubtitle = issue.metadata.publication_title.strip
+            publication.title = [complete_pubtitle.split(/ \(/)[0]]
+            place_name = complete_pubtitle.split(/ [\(]/)[1].split(')')[0]
+            uri = NewspaperWorks::Ingest.geonames_place_uri(place_name)
+            publication.place_of_publication = [uri] unless uri.nil?
+          end
+
           def find_or_create_linked_publication
             lccn = issue.metadata.lccn
             publication = find_publication(lccn)
             publication = NewspaperTitle.create if publication.nil?
-            publication.title = [issue.metadata.publication_title]
+            copy_publication_title(publication)
             publication.lccn ||= lccn
             publication.members << target
             publication.save!
