@@ -18,6 +18,7 @@ Qa::Authorities::Geonames.username = 'newspaper_works'
 
 require 'rspec/rails'
 require 'support/controller_level_helpers'
+require 'rspec/active_model/mocks'
 
 ActiveJob::Base.queue_adapter = :test
 

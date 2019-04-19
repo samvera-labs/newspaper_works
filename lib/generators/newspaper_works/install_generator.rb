@@ -90,5 +90,9 @@ module NewspaperWorks
     def add_helper
       copy_file "newspaper_works_helper.rb", "app/helpers/newspaper_works_helper.rb"
     end
+
+    def inject_assets
+      generate 'newspaper_works:assets'
+    end
   end
 end
