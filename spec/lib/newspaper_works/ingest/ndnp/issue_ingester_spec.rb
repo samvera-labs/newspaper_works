@@ -65,7 +65,6 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::IssueIngester do
       pop = adapter.target.publication.place_of_publication
       expect(pop).not_to be_empty
       expect(pop[0]).to start_with 'http://sws.geonames.org/'
-      Hyrax.config.geonames_username = ''
     end
   end
 
