@@ -93,7 +93,7 @@ module NewspaperWorks
             publication = NewspaperTitle.create if publication.nil?
             copy_publication_title(publication)
             publication.lccn ||= lccn
-            publication.members << target
+            publication.members << @target
             publication.save!
           end
       end
