@@ -2,9 +2,10 @@
   <%= form_tag main_app.search_catalog_path,
                :method => :get,
                :class => 'search-query-form form-inline collection-search' do %>
-      <%#= render_hash_as_hidden_fields(search_state.params_for_search.except('q', 'search_field', 'qt', 'page')) %>
-      <%= hidden_field_tag "f[human_readable_type_sim][]", "Newspaper Page" %>
-      <%= hidden_field_tag "f[publication_id_ssi][]", publication_id %>
+
+      <%= render_hash_as_hidden_fields(search_state.params_for_search
+                                                   .except('q', 'search_field', 'qt', 'page')
+                                                   .merge(@presenter.title_search_params)) %>
 
       <div class="input-group pull-left">
         <label for="q_coll" class="sr-only"><%= t('blacklight.search.form.collection') %></label>

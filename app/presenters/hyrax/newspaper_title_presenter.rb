@@ -5,6 +5,10 @@ module Hyrax
     include NewspaperWorks::NewspaperCorePresenter
     delegate :edition, :frequency, :preceded_by, :succeeded_by, to: :solr_document
 
+    def title_search_params
+      { f: { "human_readable_type_sim" => ["Newspaper Page"], "publication_id_ssi" => [id] } }
+    end
+
     def issues
       all_title_issues.select { |issue| year_or_nil(issue["publication_date_dtsim"]) == year }
     end
