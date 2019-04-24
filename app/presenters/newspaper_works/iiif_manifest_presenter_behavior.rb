@@ -18,8 +18,8 @@ module NewspaperWorks
         value = send(field)
         next if value.blank?
         metadata << {
-            'label' => label,
-            'value' => Array.wrap(value.map { |f| Loofah.fragment(f.to_s).scrub!(:whitewash).to_s })
+          'label' => label,
+          'value' => Array.wrap(value.map { |f| Loofah.fragment(f.to_s).scrub!(:whitewash).to_s })
         }
       end
       metadata
