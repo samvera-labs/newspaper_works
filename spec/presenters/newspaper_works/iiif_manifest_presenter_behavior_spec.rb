@@ -22,11 +22,11 @@ RSpec.describe NewspaperWorks::IiifManifestPresenterBehavior do
   describe '#manifest_metadata' do
     subject { presenter.manifest_metadata }
 
-    it is_expected.not_to be_falsey
+    it { is_expected.not_to be_falsey }
 
     it 'returns the correct metadata array for the manifest' do
-      expect(subject.map { |v| v[:label] }).to include('Page number')
-      expect(subject.map { |v| v[:value] }).to include(['B'])
+      expect(subject.map { |v| v["label"] }).to include('Page number')
+      expect(subject.map { |v| v["value"] }).to include(['B'])
     end
   end
 end
