@@ -7,7 +7,6 @@ namespace :newspaper_works do
   desc 'Ingest an NDNP batch: "rake newspaper_works:ingest_ndnp -- --path="'
   task :ingest_ndnp do
     use_application
-    puts ARGV
     ingester = NewspaperWorks::Ingest::NDNP::BatchIngester.from_command(
       ARGV,
       'rake newspaper_works:ingest_ndnp --'
