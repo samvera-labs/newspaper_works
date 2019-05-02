@@ -21,7 +21,8 @@ en:
       filters:
         title:    "Filtering by:"
       form:
-        pages:    "Find Pages"
+        collection: "Search within this newspaper"
+        pages:    "Search within this newspaper"
       start_over: Clear filters
   errors:
     messages:
