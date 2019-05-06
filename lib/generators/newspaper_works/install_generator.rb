@@ -52,6 +52,18 @@ module NewspaperWorks
       generate 'newspaper_works:blacklight_iiif_search'
     end
 
+    def verify_blacklight_adv_search_installed
+      return if IO.read('app/controllers/catalog_controller.rb').include?('include BlacklightAdvancedSearch::Controller')
+      say_status('info',
+                 'INSTALLING BLACKLIGHT ADVANCED SEARCH',
+                 :blue)
+      generate 'blacklight_advanced_search:install', '--force'
+    end
+
+    def advanced_search_configuration
+      generate 'newspaper_works:blacklight_advanced_search'
+    end
+
     def inject_authorities
       inject_into_file 'config/authorities/resource_types.yml',
                        after: "term: Masters Thesis\n" do
