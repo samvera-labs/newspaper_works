@@ -14,6 +14,7 @@ module NewspaperWorks
           path = batch_path(options, cmd_name)
           missing_path(cmd_name) if path.nil?
           missing_path(cmd_name, "Not found: #{path}") unless File.exist?(path)
+          Hyrax.config.whitelisted_ingest_dirs.push(File.dirname(path))
           new(path)
         end
 
