@@ -91,17 +91,35 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::PageIngester do
   describe "file import integration" do
     do_now_jobs = [IngestLocalFileJob, IngestJob, InheritPermissionsJob]
 
-    it "attaches primary, derivative files", perform_enqueued: do_now_jobs do
-      adapter.ingest
-      page = adapter.target
+    let(:issue_data) do
+      NewspaperWorks::Ingest::NDNP::IssueIngest.new(issue2)
+    end
+
+    let(:page_data_minus_tiff) { issue_data.to_a[0] }
+
+    def check_fileset(page)
       fileset = page.members.select { |m| m.class == FileSet }[0]
       # Reload fileset because jobs have modified:
       fileset.reload
       expect(fileset).not_to be_nil
       expect(fileset.original_file).not_to be_nil
       expect(fileset.original_file.mime_type).to eq 'image/tiff'
-      derivatives = NewspaperWorks::Data::WorkDerivatives.new(page, fileset)
+      expect(fileset.original_file.size).to be > 0
+    end
+
+    it "attaches primary, derivative files", perform_enqueued: do_now_jobs do
+      adapter.ingest
+      page = adapter.target
+      check_fileset(page)
+      derivatives = NewspaperWorks::Data::WorkDerivatives.new(page)
       expect(derivatives.keys).to match_array ["jp2", "xml", "pdf"]
+    end
+
+    # support this use-case for evaluation purposes
+    it "generates TIFF when missing from page", perform_enqueued: do_now_jobs do
+      adapter = described_class.new(page_data_minus_tiff, issue)
+      expect { adapter.ingest }.not_to raise_error
+      check_fileset(adapter.target)
     end
   end
 end

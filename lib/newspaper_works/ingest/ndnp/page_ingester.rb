@@ -50,6 +50,11 @@ module NewspaperWorks
           page.files.each do |path|
             ext = path.downcase.split('.')[-1]
             if ['tif', 'tiff'].include?(ext)
+              unless File.exist?(path)
+                pdf_path = page.files.select { |p| p.end_with?('pdf') }[0]
+                # make and get TIFF path (to generated tmp file):
+                path = make_tiff(pdf_path)
+              end
               work_files.assign(path)
             else
               work_files.derivatives.assign(path)
@@ -76,6 +81,19 @@ module NewspaperWorks
           def link_issue
             issue.members << @target # page
             issue.save!
+          end
+
+          # dir whitelist
+          def whitelist
+            Hyrax.config.whitelisted_ingest_dirs
+          end
+
+          # Generate TIFF in temporary file, return its path, given path to PDF
+          # @param pdf_path [String] path to single-page PDF
+          # @return [String] path to generated TIFF
+          def make_tiff(pdf_path)
+            whitelist.push(Dir.tmpdir) unless whitelist.include?(Dir.tmpdir)
+            NewspaperWorks::Ingest::PdfPages.new(pdf_path).to_a[0]
           end
 
           # Page title as issue title plus page title
