@@ -87,12 +87,17 @@ module NewspaperWorks
             publication.place_of_publication = [uri] unless uri.nil?
           end
 
+          def create_publication(lccn)
+            publication = NewspaperTitle.create
+            copy_publication_title(publication)
+            publication.lccn ||= lccn
+            publication
+          end
+
           def find_or_create_linked_publication
             lccn = issue.metadata.lccn
             publication = find_publication(lccn)
-            publication = NewspaperTitle.create if publication.nil?
-            copy_publication_title(publication)
-            publication.lccn ||= lccn
+            publication = create_publication(lccn) if publication.nil?
             publication.members << @target
             publication.save!
           end
