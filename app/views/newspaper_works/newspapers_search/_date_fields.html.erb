@@ -1,9 +1,13 @@
-<div id="date_range_limit" class="newspapers_search_field">
-  <div class="form-group">
-    <label class="control-label col-sm-2 ">Year</label>
+<div id="date_range_limit_wrapper" class="newspapers_search_field">
+  <div class="form-group" id="date_range_limit">
+    <label class="control-label col-sm-2 ">
+      <%= t("newspaper_works.newspapers_search.fields.date_range") %>
+    </label>
     <div class="col-sm-8">
       <div class="input-group col-sm-4">
-        <label id="date_range_start_label" class="input-group-addon" for="date_start">Start</label>
+        <label id="date_range_start_label" class="input-group-addon" for="date_start">
+          <%= t("newspaper_works.newspapers_search.fields.date_start") %>
+        </label>
         <%= text_field_tag 'date_start',
                            nil,
                            :id => 'date_range_start',
@@ -11,7 +15,9 @@
                            :maxlength => 4 %>
       </div>
       <div class="input-group col-sm-4">
-        <label id="date_range_end_label" class="input-group-addon" for="date_end">End</label>
+        <label id="date_range_end_label" class="input-group-addon" for="date_end">
+          <%= t("newspaper_works.newspapers_search.fields.date_end") %>
+        </label>
         <%= text_field_tag 'date_end',
                            nil,
                            :id => 'date_range_end',

@@ -1,5 +1,13 @@
-<h3>Search Newspapers</h3>
+<% provide :page_title, t('newspaper_works.newspapers_search.title') %>
 
-<%= render 'newspapers_search_form' %>
+<h1><%= t('newspaper_works.newspapers_search.title') %></h1>
 
-<%# @response %>
+<div><%= t('newspaper_works.newspapers_search.text') %></div>
+
+<div id="newspapers_search_form_wrapper" class="col-sm-8">
+  <%= render 'newspapers_search_form' %>
+</div>
+
+<div id="newspapers_search_help_wrapper" class="col-sm-4">
+  <%= render 'newspapers_search_help' %>
+</div>
