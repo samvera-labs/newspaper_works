@@ -1,11 +1,5 @@
 ---
 en:
-  blacklight:
-    search:
-      form:
-        collection: 'Search within this newspaper'
-        pages:      'Search within this newspaper'
-
   newspaper_works:
     newspapers_search:
       title: 'Search Newspapers'
@@ -26,6 +20,10 @@ en:
         date_start: 'Start year'
         front_pages: 'Limit search to front pages:'
         keyword: 'Keywords'
+
+    title_search_form:
+      label: 'Search within this newspaper'
+      placeholder: 'Search within this newspaper...'
 
   simple_form:
     labels:

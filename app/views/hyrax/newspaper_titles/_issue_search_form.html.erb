@@ -9,11 +9,11 @@
       <%= hidden_field_tag :search_field, 'all_fields' %>
 
       <div class="input-group pull-left">
-        <label for="q_coll" class="sr-only"><%= t('blacklight.search.form.collection') %></label>
+        <label for="q_coll" class="sr-only"><%= t('newspaper_works.title_search_form.label') %></label>
         <%= text_field_tag :q,
                            params[:q],
                            :required => true,
-                           :placeholder => t('blacklight.search.form.pages'),
+                           :placeholder => t('newspaper_works.title_search_form.placeholder'),
                            :class => 'search_q q form-control',
                            :id => 'q_coll',
                            :autofocus => false %>
