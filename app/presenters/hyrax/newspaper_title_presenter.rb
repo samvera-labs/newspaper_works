@@ -6,7 +6,7 @@ module Hyrax
     delegate :edition, :frequency, :preceded_by, :succeeded_by, to: :solr_document
 
     def title_search_params
-      { f: { "publication_title_ssi" => [title] } }
+      { f: { "publication_title_ssi" => title } }
     end
 
     def issues
