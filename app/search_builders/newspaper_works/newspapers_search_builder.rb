@@ -1,19 +1,26 @@
 # based heavily on BlacklightAdvancedSearch::AdvancedSearchBuilder
+# this class is used to set params on the search that is performed to
+# display facet values on the Newspapers Search form,
+# NOT the search results when a user submits the form
 module NewspaperWorks
   class NewspapersSearchBuilder < Hyrax::SearchBuilder
-    def facets_for_newspapers_search_form(solr_p)
-      # ensure empty query is all records, to fetch available facets on entire corpus
-      # solr_p["q"]            = '{!lucene}*:*'
-      # explicitly use lucene defType since we are passing a lucene query above (and appears to be required for solr 7)
-      # solr_p["defType"]      = 'lucene'
-      # TODO: limit results to NewspaperPage and NewspaperArticle only
-      # We only care about facets, we don't need any rows.
-      solr_p["rows"] = "0"
+    self.default_processor_chain += [:facets_for_newspapers_search_form, :newspaper_pages_only]
 
-      # Anything set in config as a literal
+    def facets_for_newspapers_search_form(solr_params)
+      # we only care about facets, we don't need any rows.
+      solr_params["rows"] = "0"
+
+      # add anything set in config as a literal
       newspaper_facet_config = blacklight_config.advanced_search[:newspapers_search]
       return if newspaper_facet_config.blank?
-      solr_p.merge!(newspaper_facet_config[:form_solr_parameters])
+      solr_params.merge!(newspaper_facet_config[:form_solr_parameters])
+    end
+
+    def newspaper_pages_only(solr_params)
+      type_field = Solrizer.solr_name('human_readable_type', :facetable)
+      type_value = NewspaperPage.human_readable_type
+      solr_params[:fq] ||= []
+      solr_params[:fq] << "#{type_field}:\"#{type_value}\""
     end
   end
 end

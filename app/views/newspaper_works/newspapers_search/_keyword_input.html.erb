@@ -1,8 +1,8 @@
-<div class="form-group" id="keyword_input">
-  <label class="control-label col-sm-2" for="q_newspapers">
+<div id="keyword_input" class="form-group newspapers_search_field">
+  <label class="control-label col-sm-3" for="q_newspapers">
     <%= t("newspaper_works.newspapers_search.fields.keyword") %>
   </label>
-  <div class="col-sm-8">
+  <div class="col-sm-7">
     <div class="input-group">
       <%= text_field_tag :q, current_search_parameters , class: "q form-control",
                          name: "all_fields", id: "all_fields",
@@ -13,5 +13,10 @@
         </button>
       </div><!-- /.input-group-btn -->
     </div><!-- /.input-group -->
+    <div id="front_pages_input">
+      <%= t("newspaper_works.newspapers_search.fields.front_pages") %>
+      <%= check_box_tag('f[first_page_bsi][]', true,
+                        false, class: 'front_pages_checkbox' ) %>
+    </div>
   </div>
 </div><!-- /.form-group -->

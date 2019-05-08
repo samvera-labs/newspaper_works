@@ -94,7 +94,8 @@ module NewspaperWorks
         "    config.add_facet_field solr_name('photographer', :facetable), label: 'Photographer', if: false\n"\
         "    config.add_facet_field solr_name('geographic_coverage', :facetable), label: 'Geographic coverage', if: false\n"\
         "    config.add_facet_field solr_name('preceded_by', :facetable), label: 'Preceded by', if: false\n"\
-        "    config.add_facet_field solr_name('succeeded_by', :facetable), label: 'Succeeded by', if: false\n"
+        "    config.add_facet_field solr_name('succeeded_by', :facetable), label: 'Succeeded by', if: false\n"\
+        "    config.add_facet_field 'first_page_bsi', label: 'First page', if: false\n"
       end
     end
     # rubocop:enable Metrics/MethodLength

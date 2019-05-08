@@ -24,6 +24,7 @@ en:
         date_end: 'End year'
         date_range: 'Date range'
         date_start: 'Start year'
+        front_pages: 'Limit search to front pages:'
         keyword: 'Keywords'
 
   simple_form:
