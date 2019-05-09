@@ -13,20 +13,17 @@ module NewspaperWorks
    4. Adds an initializer to patch some BlacklightAdvancedSearch classes to allow for date range searches
          "
 
-    # add the new SearchBuilder
     def inject_search_builder
       copy_file 'custom_search_builder.rb',
                 'app/models/custom_search_builder.rb'
     end
 
-    # Update the default SearchBuilder class
     def update_search_builder
       gsub_file('app/controllers/catalog_controller.rb',
                 "config.search_builder_class = Hyrax::CatalogSearchBuilder",
                 "config.search_builder_class = CustomSearchBuilder")
     end
 
-    # add newspapers field info to advanced_search config
     def add_newspapers_advanced_config
       marker = 'config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new'
       inject_into_file 'app/controllers/catalog_controller.rb', after: marker do
@@ -38,6 +35,10 @@ module NewspaperWorks
         "      }\n"\
         "    }\n"
       end
+    end
+
+    def inject_initializer
+      copy_file 'config/initializers/patch_blacklight_advanced_search.rb'
     end
   end
 end
