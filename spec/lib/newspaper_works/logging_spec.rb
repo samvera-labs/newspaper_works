@@ -18,9 +18,12 @@ describe NewspaperWorks::Logging do
     end
 
     it "requires configuration by consuming class" do
+      name = 'random_testing_logname'
       expect(loggable.instance_variable_get(:@logger)).to be_nil
-      loggable.configure_logger('random_testing_logname')
+      expect(described_class.configured).not_to include name
+      loggable.configure_logger(name)
       expect(loggable.instance_variable_get(:@logger)).not_to be_nil
+      expect(described_class.configured).to include name
     end
 
     it "logs formatted message to rails logger with write_log" do
@@ -34,9 +37,11 @@ describe NewspaperWorks::Logging do
     end
 
     it "writes to named log file" do
+      # need to reset global de-dupe state for additional logger, just for
+      #   purposes of this test
+      described_class.configured = []
       message = "Instant coffee"
       named_log = configured.instance_variable_get(:@named_log)
-      expect(named_log).not_to be_nil
       expect(named_log).to receive(:add).with(
         Logger::INFO,
         configured.message_format(message),
