@@ -18,7 +18,7 @@ module NewspaperWorks
     # @param severity [Integer] log level/severity, e.g. Logger::INFO == 2
     # @param progname [String]
     def write_log(msg, severity = Logger::INFO, progname = nil)
-      log(severity, message_format(msg), progname)
+      logger.add(severity, message_format(msg), progname)
     end
 
     # format message, distinct from per-output formatting, to be used in
@@ -32,13 +32,14 @@ module NewspaperWorks
 
     # Should be called by consuming class, prior to use of .logger method
     def configure_logger(name)
-      @named_log = ActiveSupport::Logger.new("log/#{name}.log")
+      path = Rails.root.join("log/#{name}.log")
+      @named_log = ActiveSupport::Logger.new(path)
       @named_log.formatter = proc do |_severity, datetime, _progname, msg|
         "#{datetime}: #{msg}\n"
       end
       # rails will log to named_log in addition to any other configured
       #   or default logging destinations:
-      Rails.logger.extend(ActiveSupport::Logger.broadcast(@named_log))
+      logger.extend(ActiveSupport::Logger.broadcast(@named_log))
     end
   end
 end
