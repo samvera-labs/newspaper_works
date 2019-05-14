@@ -11,6 +11,6 @@ RSpec.describe 'hyrax/newspaper_titles/_all_front_pages_form.html.erb', type: :v
   let(:page) { Capybara::Node::Simple.new(rendered) }
 
   it "has a link to the front pages view" do
-    expect(page).to have_link("All front pages", href: main_app.search_catalog_path(presenter.front_page_search_params))
+    expect(page).to have_link("View all front pages", href: main_app.search_catalog_path(presenter.front_page_search_params))
   end
 end

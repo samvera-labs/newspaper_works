@@ -23,7 +23,7 @@ en:
       form:
         collection: "Search within this newspaper"
         pages: "Search within this newspaper"
-        front_pages: "All front pages"
+        front_pages: "View all front pages"
       start_over: Clear filters
   errors:
     messages:

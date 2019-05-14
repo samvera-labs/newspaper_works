@@ -63,6 +63,27 @@ RSpec.describe Hyrax::NewspaperTitlePresenter do
   it { is_expected.to delegate_method(:preceded_by).to(:solr_document) }
   it { is_expected.to delegate_method(:succeeded_by).to(:solr_document) }
 
+  # def title_search_params
+  #   { f: { "publication_title_ssi" => title } }
+  # end
+  describe 'title_search_params' do
+    subject { presenter.title_search_params }
+    it 'will return a solr search hash with `publication_title_ssi` as key and the `title` as value' do
+      expect(subject).to contain_exactly([:f, "publication_title_ssi" => ["Wall Street Journal"]])
+    end
+  end
+
+  # def front_page_search_params
+  #   { f: { "publication_title_ssi" => title, "first_page_bsi" => [true] } }
+  # end
+  describe 'front_page_search_params' do
+    subject { presenter.front_page_search_params }
+    it 'will return a solr search hash with `publication_title_ssi` as key and the `title` as value ' do
+      expect(subject).to contain_exactly([:f, "publication_title_ssi" => ["Wall Street Journal"],
+                                              "first_page_bsi" => [true]])
+    end
+  end
+
   describe '#issues' do
     subject { presenter.issues }
     it 'will return a all member issues for the earliest year when no year param is provided' do
