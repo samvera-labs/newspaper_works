@@ -32,26 +32,21 @@ class BlacklightAdvancedSearch::QueryParser
                 else
                   params[:date_end] + '-12-31T23:59:59.999Z'
                 end
-    date_query = '(issue_pubdate_dtsi:[' + range_start + ' TO ' + range_end + '])'
-    date_query
+    '(issue_pubdate_dtsi:[' + range_start + ' TO ' + range_end + '])'
   end
 end
 
 module BlacklightAdvancedSearch::RenderConstraintsOverride
   # override to add date range to constraints rendering
-  # Over-ride of Blacklight method, provide advanced constraints if needed,
-  # otherwise call super.
   def render_constraints_filters(my_params = params)
     # these lines are copied from source
     content = super(my_params)
     if advanced_query
-      puts "!!!!! RENDERING ADVANCED CONSTRAINTS STUFF"
       advanced_query.filters.each_pair do |field, value_list|
         label = facet_field_label(field)
         content << render_constraint_element(label,
                                              safe_join(Array(value_list), " <strong class='text-muted constraint-connector'>OR</strong> ".html_safe),
-                                             :remove => search_action_path(remove_advanced_filter_group(field, my_params).except(:controller, :action))
-        )
+                                             remove: search_action_path(remove_advanced_filter_group(field, my_params).except(:controller, :action)))
       end
       # this is our new line
       content << render_advanced_date_query(my_params)
@@ -64,10 +59,10 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
     return ''.html_safe if localized_params[:date_start].blank? && localized_params[:date_end].blank?
     render_constraint_element(t('blacklight.advanced_search.constraints.date'),
                               date_range_constraints_to_s(localized_params),
-                              :classes => ['date_range'],
-                              :remove => remove_constraint_url(localized_params.merge(date_start: nil,
-                                                                                      date_end: nil,
-                                                                                      action: 'index')))
+                              classes: ['date_range'],
+                              remove: remove_constraint_url(localized_params.merge(date_start: nil,
+                                                                                   date_end: nil,
+                                                                                   action: 'index')))
   end
 
   # render date range constraint text from Advanced Search form
