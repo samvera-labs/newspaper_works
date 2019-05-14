@@ -70,15 +70,16 @@ RSpec.shared_examples 'a work and PCDM object' do
   end
 end
 
+# rubocop:disable Metrics/MethodLength
 def model_fixtures(target_type)
   # set up graph of related objects, setting membership on aggregating
   # parents via members setter method, per PCDM Profile for Newspapers.
   publication = NewspaperTitle.new
   publication.title = ["Yesterday's News"]
+  publication.lccn = 'sn1234567'
   issue1 = NewspaperIssue.new
   issue1.title = ['December 7, 1941']
   issue1.resource_type = ["newspaper"]
-  issue1.genre = ["text"]
   issue1.language = ["eng"]
   issue1.held_by = "Marriott Library"
   # issue1.save
@@ -131,3 +132,4 @@ def model_fixtures(target_type)
   # return multiple objects as needed for testing
   return [page1, page2] if target_type == :newspaper_pages
 end
+# rubocop:enable Metrics/MethodLength

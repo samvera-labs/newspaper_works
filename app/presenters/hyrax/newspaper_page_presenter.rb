@@ -5,7 +5,20 @@ module Hyrax
     include NewspaperWorks::ScannedMediaPresenter
     include NewspaperWorks::TitleInfoPresenter
     include NewspaperWorks::IssueInfoPresenter
+    include NewspaperWorks::IiifSearchPresenterBehavior
+    include NewspaperWorks::PersistentUrlPresenterBehavior
+    include NewspaperWorks::PageFinder
+
     delegate :height, :width, to: :solr_document
+
+    def persistent_url
+      return nil unless publication_unique_id && issue_date_for_url
+      NewspaperWorks::Engine.routes.url_helpers.newspaper_page_url(unique_id: publication_unique_id,
+                                                                   date: issue_date_for_url,
+                                                                   edition: edition_for_url,
+                                                                   page: page_index_for_url,
+                                                                   host: request.host)
+    end
 
     def previous_page_id
       solr_document['is_following_page_of_ssi']
@@ -30,5 +43,24 @@ module Hyrax
     def article_titles
       solr_document['article_titles_ssim']
     end
+
+    private
+
+      def publication_unique_id
+        solr_document['publication_unique_id_ssi'] || nil
+      end
+
+      def issue_date_for_url
+        return nil unless solr_document['issue_pubdate_dtsi']
+        solr_document['issue_pubdate_dtsi'].match(/\A[\d]{4}-[\d]{2}-[\d]{2}/).to_s
+      end
+
+      def edition_for_url
+        "ed-#{solr_document['issue_edition_ssi'] || '1'}"
+      end
+
+      def page_index_for_url
+        "seq-#{(get_page_index(id, solr_document['issue_id_ssi']) + 1)}"
+      end
   end
 end
