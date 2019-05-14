@@ -1,8 +1,13 @@
 require 'spec_helper'
 
 RSpec.describe 'newspapers_search' do
+  # use this so titles are different every time spec is run
+  # this prevents tests from accidentally failing because view only shows 10 results
+  # and our newly created fixtures may not show up on first results page
   title_base = 'Mxyzptlk'.chars.shuffle.join
 
+  # have to create NewspaperIssues because NewspaperPage inherits
+  # relevant metadata from parent during indexing
   before(:all) do
     issue1 = NewspaperIssue.new
     issue1.title = ["#{title_base}: July 4, 1965"]

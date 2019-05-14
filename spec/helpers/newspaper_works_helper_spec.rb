@@ -7,7 +7,7 @@ RSpec.describe NewspaperWorksHelper do
 
   describe '#iiif_search_anchor' do
     it 'returns the correct string' do
-      expect(helper.iiif_search_anchor(nil)).to eq nil
+      expect(helper.iiif_search_anchor({})).to eq nil
       expect(helper.iiif_search_anchor(query_params_hash)).to eq("?h=#{query_term}")
     end
   end
