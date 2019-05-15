@@ -18,12 +18,13 @@ en:
         date_end: 'End year'
         date_range: 'Date range'
         date_start: 'Start year'
-        front_pages: 'Limit search to front pages:'
+        front_pages: 'Limit search to front pages'
         keyword: 'Keywords'
 
     title_search_form:
       label: 'Search within this newspaper'
       placeholder: 'Search within this newspaper...'
+      front_pages_link: 'View all front pages'
 
   simple_form:
     labels:
