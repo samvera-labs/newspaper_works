@@ -107,7 +107,33 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::PageIngester do
       expect(fileset.original_file.size).to be > 0
     end
 
+    def expect_file_assignment_logging(adapter)
+      expect(adapter).to receive(:write_log).with(
+        satisfy { |v| v.include?('Assigned primary file to work') }
+      ).once
+      expect(adapter).to receive(:write_log).with(
+        satisfy { |v| v.include?('Assigned derivative file to work') }
+      ).exactly(3).times
+      expect(adapter).to receive(:write_log).with(
+        satisfy { |v| v.include?('Beginning file attachment') }
+      ).once
+    end
+
+    def expect_asset_import_logging(adapter)
+      expect(adapter).to receive(:write_log).with(
+        satisfy { |v| v.include?('Created NewspaperPage work') }
+      ).once
+      expect(adapter).to receive(:write_log).with(
+        satisfy { |v| v.include?('Saved metadata to NewspaperPage work') }
+      ).once
+      expect(adapter).to receive(:write_log).with(
+        satisfy { |v| v.include?('Linked NewspaperIssue') }
+      ).once
+    end
+
     it "attaches primary, derivative files", perform_enqueued: do_now_jobs do
+      expect_asset_import_logging(adapter)
+      expect_file_assignment_logging(adapter)
       adapter.ingest
       page = adapter.target
       check_fileset(page)
@@ -118,7 +144,14 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::PageIngester do
     # support this use-case for evaluation purposes
     it "generates TIFF when missing from page", perform_enqueued: do_now_jobs do
       adapter = described_class.new(page_data_minus_tiff, issue)
-      expect { adapter.ingest }.not_to raise_error
+      expect_asset_import_logging(adapter)
+      expect(adapter).to receive(:write_log).with(
+        satisfy { |arg| arg.include?('Creating TIFF') },
+        Logger::WARN
+      ).exactly(1).times
+      expect_file_assignment_logging(adapter)
+      adapter.ingest
+      # expect { adapter.ingest }.not_to raise_error
       check_fileset(adapter.target)
     end
   end
