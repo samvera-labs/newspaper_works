@@ -28,6 +28,6 @@ RSpec.describe 'hyrax/newspaper_titles/_issue_search_form.html.erb', type: :view
   end
 
   it "has a checkbox to limit to front pages" do
-    expect(page).to have_field("front_pages")
+    expect(page).to have_field("f_first_page_bsi_")
   end
 end
