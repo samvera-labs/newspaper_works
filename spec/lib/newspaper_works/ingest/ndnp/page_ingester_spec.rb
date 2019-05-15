@@ -119,7 +119,7 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::PageIngester do
       ).once
     end
 
-    def expect_asset_import_logging(adapter)
+    def expect_page_import_logging(adapter)
       expect(adapter).to receive(:write_log).with(
         satisfy { |v| v.include?('Created NewspaperPage work') }
       ).once
@@ -132,7 +132,7 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::PageIngester do
     end
 
     it "attaches primary, derivative files", perform_enqueued: do_now_jobs do
-      expect_asset_import_logging(adapter)
+      expect_page_import_logging(adapter)
       expect_file_assignment_logging(adapter)
       adapter.ingest
       page = adapter.target
@@ -144,7 +144,7 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::PageIngester do
     # support this use-case for evaluation purposes
     it "generates TIFF when missing from page", perform_enqueued: do_now_jobs do
       adapter = described_class.new(page_data_minus_tiff, issue)
-      expect_asset_import_logging(adapter)
+      expect_page_import_logging(adapter)
       expect(adapter).to receive(:write_log).with(
         satisfy { |arg| arg.include?('Creating TIFF') },
         Logger::WARN
