@@ -52,12 +52,15 @@ module NewspaperWorks
       generate 'newspaper_works:blacklight_iiif_search'
     end
 
+    # NOTE: BlacklightAdvancedSearch generator installs a view partial by default,
+    # remove it after install, unless app has already customized that view partial
     def verify_blacklight_adv_search_installed
       return if IO.read('app/controllers/catalog_controller.rb').include?('include BlacklightAdvancedSearch::Controller')
-      say_status('info',
-                 'INSTALLING BLACKLIGHT ADVANCED SEARCH',
-                 :blue)
+      say_status('info', 'INSTALLING BLACKLIGHT ADVANCED SEARCH', :blue)
+      search_form_path = 'app/views/catalog/_search_form.html.erb'
+      existing_search_form = File.exists?(search_form_path) ? true : false
       generate 'blacklight_advanced_search:install', '--force'
+      remove_file search_form_path unless existing_search_form
     end
 
     def advanced_search_configuration
