@@ -13,6 +13,7 @@ module NewspaperWorks
         def self.from_command(options, cmd_name)
           path = batch_path(options, cmd_name)
           missing_path(cmd_name) if path.nil?
+          path = xml_path(path)
           missing_path(cmd_name, "Not found: #{path}") unless File.exist?(path)
           Hyrax.config.whitelisted_ingest_dirs.push(File.dirname(path))
           new(path)
@@ -38,8 +39,17 @@ module NewspaperWorks
           path
         end
 
+        def self.xml_path(path)
+          return path unless File.directory?(path)
+          batch_xml_path = Find.find(path).select do |f|
+            f.downcase.end_with?('batch_1.xml')
+          end
+          batch_xml_path[0]
+        end
+
         def initialize(path)
-          @path = xml_path(path)
+          @path = self.class.xml_path(path)
+          raise IOError, 'No batch file found: #{path}' if @path.empty?
           @batch = batch_enumerator
         end
 
@@ -62,15 +72,6 @@ module NewspaperWorks
 
           def normalize_date(v)
             (v.is_a?(String) ? Date.parse(v) : v).to_s
-          end
-
-          def xml_path(path)
-            return path unless File.directory?(path)
-            batch_path = Find.find(path).select do |f|
-              f.downcase.end_with?('batch_1.xml')
-            end
-            raise IOError, 'Batch file not found: #{path}' if batch_path.empty?
-            batch_path[0]
           end
       end
     end

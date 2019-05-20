@@ -47,6 +47,16 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::BatchIngester do
       expect(adapter.path).to eq batch1
     end
 
+    it "creates ingester from command with dir path" do
+      # command can accept a parent directory for batch:
+      base_path = File.dirname(batch1)
+      fake_argv = ['newspaper_works:ingest_ndnp', '--', "--path=#{base_path}"]
+      adapter = construct(fake_argv)
+      expect(adapter).to be_a described_class
+      # adapter.path is path to actual XML
+      expect(adapter.path).to eq batch1
+    end
+
     it "exits on file not found for batch" do
       fake_argv = ['newspaper_works:ingest_ndnp', '--', "--path=123/45/5678"]
       begin
