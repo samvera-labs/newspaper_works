@@ -9,7 +9,7 @@ module NewspaperWorks
         attr_accessor :path, :batch
 
         # alternate constructor from ARGV
-        # @param options [Array<String>
+        # @param options [Array<String>]
         def self.from_command(options, cmd_name)
           path = batch_path(options, cmd_name)
           missing_path(cmd_name) if path.nil?
@@ -49,7 +49,7 @@ module NewspaperWorks
 
         def initialize(path)
           @path = self.class.xml_path(path)
-          raise IOError, 'No batch file found: #{path}' if @path.empty?
+          raise IOError, "No batch file found: #{path}" if @path.empty?
           @batch = batch_enumerator
         end
 

@@ -150,8 +150,7 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::PageIngester do
         Logger::WARN
       ).exactly(1).times
       expect_file_assignment_logging(adapter)
-      adapter.ingest
-      # expect { adapter.ingest }.not_to raise_error
+      expect { adapter.ingest }.not_to raise_error
       check_fileset(adapter.target)
     end
   end
