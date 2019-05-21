@@ -1,0 +1,8 @@
+<div id="newspaper_hierarchy" class="breadcrumb">
+  <ol>
+  <li><%= link_to 'Home', root_path %></li>
+  <% newspaper_breadcrumbs(presenter).each do |link| %>
+    <li><%= link %></li>
+  <% end %>
+  </ol>
+</div>
