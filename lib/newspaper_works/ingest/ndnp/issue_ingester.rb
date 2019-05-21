@@ -25,6 +25,7 @@ module NewspaperWorks
           @issue = issue
           @batch = batch
           @target = nil
+          configure_logger('ingest')
         end
 
         def ingest
