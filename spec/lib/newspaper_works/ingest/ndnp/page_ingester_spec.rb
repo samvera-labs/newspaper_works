@@ -33,6 +33,7 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::PageIngester do
       expect(page).to be_a NewspaperPage
       expect(page.id).not_to be_nil
       expect(issue.members).to include page
+      expect(issue.ordered_members.to_a).to include page
     end
   end
 
@@ -84,7 +85,7 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::PageIngester do
       page = adapter.target
       page.reload
       expect(page.container).not_to be_nil
-      expect(page.container.members.map(&:id)).to include page.id
+      expect(page.container.ordered_members.to_a.map(&:id)).to include page.id
     end
   end
 

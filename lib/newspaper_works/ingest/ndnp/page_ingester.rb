@@ -101,7 +101,7 @@ module NewspaperWorks
           end
 
           def link_issue
-            issue.members << @target # page
+            issue.ordered_members << @target # page
             issue.save!
             write_log(
               "Linked NewspaperIssue work #{issue.id} "\
