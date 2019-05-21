@@ -6,6 +6,8 @@ module NewspaperWorks
   module Ingest
     module NDNP
       class BatchIngester
+        include NewspaperWorks::Logging
+
         attr_accessor :path, :batch
 
         # alternate constructor from ARGV
@@ -51,12 +53,17 @@ module NewspaperWorks
           @path = self.class.xml_path(path)
           raise IOError, "No batch file found: #{path}" if @path.empty?
           @batch = batch_enumerator
+          configure_logger('ingest')
         end
 
         def ingest
+          write_log("Beginning NDNP batch ingest for #{@path}")
           batch.each do |issue|
             issue_ingester(issue).ingest
           end
+          write_log(
+            "NDNP batch ingest complete.  See log/ingest.log for details."
+          )
         end
 
         private
