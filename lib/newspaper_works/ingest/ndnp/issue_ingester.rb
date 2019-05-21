@@ -39,13 +39,13 @@ module NewspaperWorks
 
         def ingest_pages
           issue.each do |page|
-            NewspaperWorks::Ingest::NDNP::PageIngester.new(page, @target).ingest
+            page_ingest(page)
           end
         end
 
         private
 
-          def page_ingester(page_data)
+          def page_ingest(page_data)
             NewspaperWorks::Ingest::NDNP::PageIngester.new(
               page_data,
               @target
