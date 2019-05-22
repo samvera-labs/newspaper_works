@@ -8,7 +8,6 @@ describe 'newspaper_works rake tasks' do
   include_context 'ndnp fixture setup'
 
   before(:all) do
-    # task_path = File.join(NewspaperWorks::GEM_PATH, 'lib/tasks/newspaper_works_tasks')
     Rake.application.rake_require '../lib/tasks/newspaper_works_tasks'
     Rake::Task.define_task(:environment)
   end

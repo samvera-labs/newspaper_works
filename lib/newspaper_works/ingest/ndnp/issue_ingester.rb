@@ -25,6 +25,7 @@ module NewspaperWorks
           @issue = issue
           @batch = batch
           @target = nil
+          configure_logger('ingest')
         end
 
         def ingest
@@ -39,13 +40,13 @@ module NewspaperWorks
 
         def ingest_pages
           issue.each do |page|
-            NewspaperWorks::Ingest::NDNP::PageIngester.new(page, @target).ingest
+            page_ingest(page)
           end
         end
 
         private
 
-          def page_ingester(page_data)
+          def page_ingest(page_data)
             NewspaperWorks::Ingest::NDNP::PageIngester.new(
               page_data,
               @target
@@ -110,7 +111,7 @@ module NewspaperWorks
               )
             end
             publication = create_publication(lccn) if publication.nil?
-            publication.members << @target
+            publication.ordered_members << @target
             publication.save!
             write_log(
               "Linked NewspaperIssue #{@target.id} to "\

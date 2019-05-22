@@ -20,6 +20,15 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::BatchIngester do
   end
 
   describe "ingests issues" do
+    def expect_start_finish_logging(adapter)
+      expect(adapter).to receive(:write_log).with(
+        satisfy { |v| v.include?('Beginning NDNP batch ingest') }
+      ).once
+      expect(adapter).to receive(:write_log).with(
+        satisfy { |v| v.include?('NDNP batch ingest complete') }
+      ).once
+    end
+
     it "calls ingest for all issues in batch" do
       adapter = described_class.new(batch1)
       issue_ingest_call_count = 0
@@ -27,6 +36,7 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::BatchIngester do
       allow_any_instance_of(NewspaperWorks::Ingest::NDNP::IssueIngester).to \
         receive(:ingest) { issue_ingest_call_count += 1 }
       # rubocop:enable RSpec/AnyInstance
+      expect_start_finish_logging(adapter)
       adapter.ingest
       expect(issue_ingest_call_count).to eq 4
     end
@@ -44,6 +54,16 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::BatchIngester do
       fake_argv = ['newspaper_works:ingest_ndnp', '--', "--path=#{batch1}"]
       adapter = construct(fake_argv)
       expect(adapter).to be_a described_class
+      expect(adapter.path).to eq batch1
+    end
+
+    it "creates ingester from command with dir path" do
+      # command can accept a parent directory for batch:
+      base_path = File.dirname(batch1)
+      fake_argv = ['newspaper_works:ingest_ndnp', '--', "--path=#{base_path}"]
+      adapter = construct(fake_argv)
+      expect(adapter).to be_a described_class
+      # adapter.path is path to actual XML
       expect(adapter.path).to eq batch1
     end
 
