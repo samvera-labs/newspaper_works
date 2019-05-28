@@ -4,4 +4,6 @@
     <li><%= link %></li>
   <% end %>
   </ol>
+  <%= previous_page_link(presenter) if presenter.respond_to?(:previous_page_id) && presenter&.previous_page_id  %>
+  <%= next_page_link(presenter) if presenter.respond_to?(:next_page_id) && presenter&.next_page_id %>
 </div>
