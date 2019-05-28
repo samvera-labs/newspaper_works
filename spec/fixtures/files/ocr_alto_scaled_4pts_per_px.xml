@@ -4,10 +4,10 @@
     <MeasurementUnit>pixel</MeasurementUnit>
   </Description>
   <Layout>
-    <Page ID="ID1" PHYSICAL_IMG_NR="1" HEIGHT="418" WIDTH="418">
-      <PrintSpace HEIGHT="1046" WIDTH="418" HPOS="0" VPOS="0">
-        <TextBlock ID="ID1a" HEIGHT="1046" WIDTH="418" HPOS="0" VPOS="0">
-          <TextLine HEIGHT="1046" WIDTH="418" HPOS="0" VPOS="0">
+    <Page ID="ID1" PHYSICAL_IMG_NR="1" HEIGHT="4184" WIDTH="1672">
+      <PrintSpace HEIGHT="4184" WIDTH="1672" HPOS="0" VPOS="0">
+        <TextBlock ID="ID1a" HEIGHT="4184" WIDTH="1672" HPOS="0" VPOS="0">
+          <TextLine HEIGHT="4184" WIDTH="1672" HPOS="0" VPOS="0">
             <String CONTENT="PEHNSYWAHIA" HEIGHT="208" WIDTH="1124" HPOS="96" VPOS="68"></String>
             <String CONTENT="_" HEIGHT="12" WIDTH="132" HPOS="704" VPOS="608"></String>
             <String CONTENT="RESERVES." HEIGHT="208" WIDTH="804" HPOS="868" VPOS="332"></String>
