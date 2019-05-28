@@ -4,7 +4,7 @@
     <MeasurementUnit>pixel</MeasurementUnit>
   </Description>
   <Layout>
-    <Page ID="ID1" PHYSICAL_IMG_NR="1" HEIGHT="418" WIDTH="418">
+    <Page ID="ID1" PHYSICAL_IMG_NR="1" HEIGHT="1046" WIDTH="418">
       <PrintSpace HEIGHT="1046" WIDTH="418" HPOS="0" VPOS="0">
         <TextBlock ID="ID1a" HEIGHT="1046" WIDTH="418" HPOS="0" VPOS="0">
           <TextLine HEIGHT="1046" WIDTH="418" HPOS="0" VPOS="0">
