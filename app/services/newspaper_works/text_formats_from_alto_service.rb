@@ -55,8 +55,13 @@ module NewspaperWorks
       # as this plugin makes derivatives of derivative, _filename is ignored
       source_file = alto
       return if source_file.nil?
+      # Image width from characterized primary file helps ensure proper scaling:
+      width = @file_set.original_file.width[0].to_i
       # ALTOReader is responsible for transcoding, this class just saves result
-      reader = NewspaperWorks::TextExtraction::AltoReader.new(source_file)
+      reader = NewspaperWorks::TextExtraction::AltoReader.new(
+        source_file,
+        width
+      )
       save_derivative('json', reader.json)
       save_derivative('txt', reader.text)
     end
