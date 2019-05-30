@@ -52,8 +52,8 @@ module NewspaperWorks
           xml.Layout do
             xml.Page(ID: 'ID1',
                      PHYSICAL_IMG_NR: '1',
-                     HEIGHT: pxwidth.to_i,
-                     WIDTH: pxheight.to_i) do
+                     HEIGHT: pxheight.to_i,
+                     WIDTH: pxwidth.to_i) do
               xml.PrintSpace(HEIGHT: pxheight.to_i,
                              WIDTH: pxwidth.to_i,
                              HPOS: '0',
