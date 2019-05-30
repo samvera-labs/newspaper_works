@@ -4,6 +4,11 @@
     <li><%= link %></li>
   <% end %>
   </ol>
-  <%= previous_page_link(presenter) if presenter.respond_to?(:previous_page_id) && presenter&.previous_page_id  %>
-  <%= next_page_link(presenter) if presenter.respond_to?(:next_page_id) && presenter&.next_page_id %>
+  <% if presenter.respond_to?(:previous_page_id) && presenter.respond_to?(:next_page_id) %>
+    <div id="pagination_wrapper" class="text-muted text-center">
+      <%= presenter&.previous_page_id ? previous_page_link(presenter) : t('hyrax.newspaper_page.previous_page') %>
+      &vert;
+      <%= presenter&.next_page_id ? next_page_link(presenter) : t('hyrax.newspaper_page.next_page') %>
+    </div>
+  <% end %>
 </div>
