@@ -46,7 +46,7 @@ module NewspaperWorks
           batch_xml_path = Find.find(path).select do |f|
             f.downcase.end_with?('batch_1.xml', 'batch.xml')
           end
-          batch_xml_path[0]
+          batch_xml_path.find { |f| f.end_with?('_1.xml') } || batch_xml_path[0]
         end
 
         def initialize(path)
