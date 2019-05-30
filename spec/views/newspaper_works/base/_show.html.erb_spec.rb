@@ -1,18 +1,5 @@
 require 'spec_helper'
 RSpec.describe 'newspaper_works/base/_show.html.erb', type: :view do
-  # let(:work_solr_document) do
-  #   SolrDocument.new(id: '999',
-  #                    title_tesim: ['My Title'],
-  #                    creator_tesim: ['Doe, John', 'Doe, Jane'],
-  #                    date_modified_dtsi: '2011-04-01',
-  #                    has_model_ssim: ['NewspaperIssue'],
-  #                    depositor_tesim: depositor.user_key,
-  #                    description_tesim: ['Lorem ipsum lorem ipsum.'],
-  #                    keyword_tesim: ['bacon', 'sausage', 'eggs'],
-  #                    rights_statement_tesim: ['http://example.org/rs/1'],
-  #                    date_created_tesim: ['1984-01-02'])
-  # end
-
   let(:work_solr_document) do
     SolrDocument.new(id: '999',
                      title_tesim: ['My Title'],
