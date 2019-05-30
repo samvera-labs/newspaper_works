@@ -11,6 +11,8 @@ namespace :newspaper_works do
       ARGV,
       'rake newspaper_works:ingest_ndnp --'
     )
+    puts "Beginning NDNP batch ingest..."
     ingester.ingest
+    puts "NDNP batch ingest complete! See log/ingest.log for details."
   end
 end

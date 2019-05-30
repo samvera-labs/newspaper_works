@@ -44,7 +44,7 @@ module NewspaperWorks
         def self.xml_path(path)
           return path unless File.directory?(path)
           batch_xml_path = Find.find(path).select do |f|
-            f.downcase.end_with?('batch_1.xml')
+            f.downcase.end_with?('batch_1.xml', 'batch.xml')
           end
           batch_xml_path[0]
         end
@@ -62,7 +62,7 @@ module NewspaperWorks
             issue_ingester(issue).ingest
           end
           write_log(
-            "NDNP batch ingest complete.  See log/ingest.log for details."
+            "NDNP batch ingest complete!"
           )
         end
 
