@@ -8,9 +8,9 @@ module NewspaperWorks
         # Pre-conditions for use:
         #   consuming class implements @target pointing to work asset
         #   consuming class implements @opts pointing to Hash
-        def assign_administrative_metadata
+        def assign_administrative_metadata(work = nil)
           NewspaperWorks::Ingest.assign_administrative_metadata(
-            @target,
+            work || @target,
             @opts
           )
         end
