@@ -99,6 +99,30 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::IssueIngester do
       expect(issue.publication_date).to eq metadata.publication_date
       expect(issue.issue_number).to eq metadata.issue_number
     end
+
+    it "sets default administrative metadata with default construction" do
+      adapter.construct_issue
+      issue_asset = adapter.target
+      expect(issue_asset.depositor).to eq User.batch_user.user_key
+      expect(issue_asset.admin_set).to eq AdminSet.find('admin_set/default')
+      expect(issue_asset.visibility).to eq 'open'
+    end
+
+    it "sets custom administrative metadata for issue" do
+      # test one exemplary/representative option:
+      adapter = described_class.new(issue_data, visibility: 'open')
+      adapter.construct_issue
+      expect(adapter.target.visibility).to eq 'open'
+    end
+
+    it "sets custom administrative metadata for constructed publication" do
+      # test one exemplary/representative option:
+      adapter = described_class.new(issue_data, visibility: 'open')
+      adapter.construct_issue
+      publication_asset = adapter.target.publication
+      expect(publication_asset).not_to be_nil
+      expect(publication_asset.visibility).to eq 'open'
+    end
   end
 
   describe "child page creation" do

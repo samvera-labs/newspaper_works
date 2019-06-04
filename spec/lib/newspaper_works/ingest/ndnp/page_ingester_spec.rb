@@ -52,6 +52,21 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::PageIngester do
       "#{issue.title.first}: Page #{metadata.page_number}"
     end
 
+    it "sets default administrative metadata with default construction" do
+      adapter.construct_page
+      asset = adapter.target
+      expect(asset.depositor).to eq User.batch_user.user_key
+      expect(asset.admin_set).to eq AdminSet.find('admin_set/default')
+      expect(asset.visibility).to eq 'open'
+    end
+
+    it "sets custom administrative metadata" do
+      # test one exemplary/representative option:
+      adapter = described_class.new(page_data, issue, visibility: 'open')
+      adapter.construct_page
+      expect(adapter.target.visibility).to eq 'open'
+    end
+
     it "copies metadata to NewspaperPage" do
       adapter.construct_page
       page = adapter.target

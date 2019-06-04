@@ -3,6 +3,7 @@ module NewspaperWorks
     module NDNP
       class IssueIngester
         include NewspaperWorks::Logging
+        include NewspaperWorks::Ingest::NDNP::NDNPAssetHelper
 
         attr_accessor :issue, :target, :opts
 
@@ -73,6 +74,7 @@ module NewspaperWorks
           def create_issue
             @target = NewspaperIssue.create
             copy_issue_metadata
+            assign_administrative_metadata
             @target.save!
             write_log("Saved metadata to new NewspaperIssue #{@target.id}")
           end
@@ -96,6 +98,7 @@ module NewspaperWorks
             publication = NewspaperTitle.create
             copy_publication_title(publication)
             publication.lccn ||= lccn
+            assign_administrative_metadata(publication)
             publication.save!
             write_log(
               "Created NewspaperTitle work #{publication.id} for LCCN #{lccn}"

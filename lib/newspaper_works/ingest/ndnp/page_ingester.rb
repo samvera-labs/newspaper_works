@@ -6,6 +6,8 @@ module NewspaperWorks
       # rubocop:disable Metrics/ClassLength
       class PageIngester
         include NewspaperWorks::Logging
+        include NewspaperWorks::Ingest::NDNP::NDNPAssetHelper
+
         attr_accessor :page, :issue, :target, :opts
 
         delegate :path, :dmdid, to: :page
@@ -49,6 +51,7 @@ module NewspaperWorks
             "with title '#{@target.title[0]}'"
           )
           copy_page_metadata
+          assign_administrative_metadata
           link_issue
           @target.save!
           write_log("Saved metadata to NewspaperPage work #{@target.id}")
