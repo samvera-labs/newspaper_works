@@ -17,6 +17,15 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::BatchIngester do
       expect(adapter.path).to eq batch1
       expect(adapter.batch.path).to eq adapter.path
     end
+
+    it "constructs adapter with hash options" do
+      user = User.batch_user.user_key
+      adapter = described_class.new(
+        batch1,
+        depositor: user
+      )
+      expect(adapter.opts[:depositor]).to eq user
+    end
   end
 
   describe "ingests issues" do

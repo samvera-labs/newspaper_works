@@ -24,16 +24,17 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::IssueIngester do
     it "constructs adapter with issue source" do
       expect(adapter.issue).to be issue_data
       expect(adapter.path).to eq issue_data.path
-      # default nil batch value when optional value omitted from construction:
-      expect(adapter.batch).to be_nil
       # initially nil target:
       expect(adapter.target).to be_nil
     end
 
-    it "constructs with optional batch reference" do
-      batch = NewspaperWorks::Ingest::NDNP::BatchXMLIngest.new(batch1)
-      adapter = described_class.new(issue_data, batch)
-      expect(adapter.batch).to be batch
+    it "constructs adapter with hash options" do
+      user = User.batch_user.user_key
+      adapter = described_class.new(
+        issue_data,
+        depositor: user
+      )
+      expect(adapter.opts[:depositor]).to eq user
     end
 
     # rubocop:disable RSpec/ExampleLength

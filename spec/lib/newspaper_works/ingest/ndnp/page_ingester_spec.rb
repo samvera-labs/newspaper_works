@@ -35,6 +35,16 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::PageIngester do
       expect(issue.members).to include page
       expect(issue.ordered_members.to_a).to include page
     end
+
+    it "constructs adapter with hash options" do
+      user = User.batch_user.user_key
+      adapter = described_class.new(
+        page_data,
+        issue,
+        depositor: user
+      )
+      expect(adapter.opts[:depositor]).to eq user
+    end
   end
 
   describe "metadata access/setting" do

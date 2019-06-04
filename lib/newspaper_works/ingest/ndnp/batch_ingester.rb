@@ -8,7 +8,7 @@ module NewspaperWorks
       class BatchIngester
         include NewspaperWorks::Logging
 
-        attr_accessor :path, :batch
+        attr_accessor :path, :batch, :opts
 
         # alternate constructor from ARGV
         # @param options [Array<String>]
@@ -49,9 +49,14 @@ module NewspaperWorks
           batch_xml_path.find { |f| f.end_with?('_1.xml') } || batch_xml_path[0]
         end
 
-        def initialize(path)
+        # @param path [String] path to batch xml or directory
+        # @param opts [Hash]
+        #   global ingest options, to be passed to ingester components,
+        #   may include administrative metadata.
+        def initialize(path, opts = {})
           @path = self.class.xml_path(path)
           raise IOError, "No batch file found: #{path}" if @path.empty?
+          @opts = opts
           @batch = batch_enumerator
           configure_logger('ingest')
         end
@@ -74,7 +79,7 @@ module NewspaperWorks
           end
 
           def issue_ingester(issue)
-            NewspaperWorks::Ingest::NDNP::IssueIngester.new(issue, batch)
+            NewspaperWorks::Ingest::NDNP::IssueIngester.new(issue, @opts)
           end
 
           def normalize_date(v)

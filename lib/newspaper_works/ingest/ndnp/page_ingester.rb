@@ -6,7 +6,7 @@ module NewspaperWorks
       # rubocop:disable Metrics/ClassLength
       class PageIngester
         include NewspaperWorks::Logging
-        attr_accessor :page, :issue, :target
+        attr_accessor :page, :issue, :target, :opts
 
         delegate :path, :dmdid, to: :page
 
@@ -24,9 +24,12 @@ module NewspaperWorks
         #   source page data
         # @param issue [NewspaperIssue]
         #   source issue data
-        def initialize(page, issue)
+        # @param opts [Hash]
+        #   ingest options, e.g. administrative metadata
+        def initialize(page, issue, opts = {})
           @page = page
           @issue = issue
+          @opts = opts
           # target is to-be-created NewspaperPage:
           @target = nil
           @work_files = nil
@@ -75,7 +78,8 @@ module NewspaperWorks
           return if reel_data.nil?
           ingester = NewspaperWorks::Ingest::NDNP::ContainerIngester.new(
             reel_data,
-            issue.publication
+            issue.publication,
+            @opts
           )
           # find-or-create container, linked to publication:
           ingester.ingest

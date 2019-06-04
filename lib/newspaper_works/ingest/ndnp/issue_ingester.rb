@@ -4,7 +4,7 @@ module NewspaperWorks
       class IssueIngester
         include NewspaperWorks::Logging
 
-        attr_accessor :batch, :issue, :target
+        attr_accessor :issue, :target, :opts
 
         delegate :path, to: :issue
 
@@ -19,11 +19,11 @@ module NewspaperWorks
 
         # @param issue [NewspaperWorks::Ingest::NDNP::IssueIngest]
         #   source issue data
-        # @param batch [NewspaperWorks::Ingest::NDNP::BatchIngest, NilClass]
-        #   source batch data (optional)
-        def initialize(issue, batch = nil)
+        # @param opts [Hash]
+        #   ingest options, e.g. administrative metadata
+        def initialize(issue, opts = {})
           @issue = issue
-          @batch = batch
+          @opts = opts
           @target = nil
           configure_logger('ingest')
         end
@@ -40,17 +40,18 @@ module NewspaperWorks
 
         def ingest_pages
           issue.each do |page|
-            page_ingest(page)
+            page_ingester(page).ingest
           end
         end
 
         private
 
-          def page_ingest(page_data)
+          def page_ingester(page_data)
             NewspaperWorks::Ingest::NDNP::PageIngester.new(
               page_data,
-              @target
-            ).ingest
+              @target,
+              @opts
+            )
           end
 
           def issue_title
