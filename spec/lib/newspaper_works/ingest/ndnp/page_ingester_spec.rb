@@ -56,7 +56,7 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::PageIngester do
       adapter.construct_page
       asset = adapter.target
       expect(asset.depositor).to eq User.batch_user.user_key
-      expect(asset.admin_set).to eq AdminSet.find('admin_set/default')
+      expect(asset.admin_set).to eq AdminSet.find(AdminSet::DEFAULT_ID)
       expect(asset.visibility).to eq 'open'
     end
 

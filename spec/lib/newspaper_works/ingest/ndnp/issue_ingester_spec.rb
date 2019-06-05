@@ -104,7 +104,7 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::IssueIngester do
       adapter.construct_issue
       issue_asset = adapter.target
       expect(issue_asset.depositor).to eq User.batch_user.user_key
-      expect(issue_asset.admin_set).to eq AdminSet.find('admin_set/default')
+      expect(issue_asset.admin_set).to eq AdminSet.find(AdminSet::DEFAULT_ID)
       expect(issue_asset.visibility).to eq 'open'
     end
 
