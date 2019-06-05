@@ -13,12 +13,12 @@ module NewspaperWorks
         # alternate constructor from ARGV
         # @param options [Array<String>]
         def self.from_command(options, cmd_name)
-          path = batch_path(options, cmd_name)
+          path, opts = batch_path(options, cmd_name)
           missing_path(cmd_name) if path.nil?
           path = xml_path(path)
           missing_path(cmd_name, "Not found: #{path}") unless File.exist?(path)
           Hyrax.config.whitelisted_ingest_dirs.push(File.dirname(path))
-          new(path)
+          new(path, opts)
         end
 
         def self.missing_path(cmd_name, msg = "Missing path argument")
@@ -31,14 +31,18 @@ module NewspaperWorks
 
         def self.batch_path(options, cmd_name)
           path = nil
+          params = {}
           parser = OptionParser.new
           args = parser.order!(options) {}
           parser.banner = "Usage: #{cmd_name} -- --path=PATH"
           parser.on('-i PATH', '--path PATH') do |p|
             path = p
           end
-          parser.parse!(args)
-          path
+          parser.on('--admin_set=ADMIN_SET')
+          parser.on('--depositor=DEPOSITOR')
+          parser.on('--visibility=VISIBILITY')
+          parser.parse!(args, into: params)
+          [path, params]
         end
 
         def self.xml_path(path)
