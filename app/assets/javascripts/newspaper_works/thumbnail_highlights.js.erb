@@ -1,0 +1,140 @@
+/* highlight the query term on the search result thumbnail */
+/* heavily based on https://github.com/mlibrary/fishrappr -> results_page_highlighting.js */
+
+/*
+  TODO:
+   - remove console logging
+   - remove commented out leftovers
+   - change this to .js if no .erb is being used
+   - how to deal with multi-word or phrase queries?
+   - ask Sean -- how difficult to get height and width into coords.json?
+                 if we can do this:
+                  - remove index_dimensions stuff from IndexesRelationships
+                  - change how script accesses dimensions data
+*/
+
+$().ready(function() {
+    console.log('SO IT BEGINS');
+    // we use dummy value so we can use rails url_helper for URL (have to pass id)
+    var coordsUrl = '<%= Hyrax::Engine.routes.url_helpers.download_path("xyz", file: "json") %>';
+    console.log('coordsUrl = ' + coordsUrl);
+    var $thumbs = $(".thumbnail img, .list-thumbnail img");
+
+    if ( $thumbs.length == 0 ) {
+        console.log('DANG, NO THUMBS!');
+        return;
+    } else {
+        console.log('WE GOT THIS MANY THUMBS: ' + $thumbs.length);
+    }
+
+    $thumbs.each(function() {
+        var $thumb = $(this);
+        $thumb.on('load', function() {
+            console.log('RUNNING $thumb load func');
+            // var identifier = $(this).data('identifier');
+            addHighlights($(this));
+            $thumb.addClass("loaded")
+        });
+        // $img.attr('src', $img.data('src'));
+    })
+
+    var addHighlights = function($thumb) {
+        console.log('STARTED add_highlights');
+
+        var $div = $thumb.closest(".thumbnail, .list-thumbnail");
+        var filesetId = $div.data('fileset');
+        var query = $div.data('query');
+        if ( query === undefined || query.length == 0 || filesetId === undefined || filesetId.length == 0 ) {
+            return ;
+        }
+
+        $.ajax({
+            url: coordsUrl.replace("xyz", filesetId),
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                console.log('A QUERY RESPONSE WAS RECEIVED');
+                console.log('THE FIRST WORD: ' + data['words'][0]['word']);
+
+                var words = data['words'].filter(function(w) {
+                    return RegExp(query.toLowerCase()).test(w['word'].toLowerCase())
+                });
+                console.log('THE FIRST MATCH: ' + words[0]['word']);
+                if (words.length == 0) { return ; }
+
+                //var padding_left = ( $link.width() - img_width ) / 2;
+                //var padding_top = 0;
+
+                var thumbWidth = $thumb.width();
+                var thumbHeight = $thumb.height();
+                var trueWidth = parseFloat($div.data('width'));
+                var trueHeight = parseFloat($div.data('height'));
+
+                console.log('thumbWidth = ' + thumbWidth + '; thumbWidth is a ' + thumbWidth.constructor.name);
+                console.log('thumbHeight = ' + thumbHeight + '; thumbHeight is a ' + thumbHeight.constructor.name);
+                console.log('trueWidth = ' + trueWidth + '; trueWidth is a ' + trueWidth.constructor.name);
+                console.log('trueHeight = ' + trueHeight + '; trueHeight is a ' + trueHeight.constructor.name);
+
+                /*
+                var scale;
+                if ( thumbWidth > thumbHeight ) {
+                    scale = thumbHeight / trueHeight;
+                } else {
+                    scale = thumbWidth / trueWidth;
+                }
+                */
+                var hScale = thumbWidth / trueWidth;
+                var vScale = thumbHeight / trueHeight;
+                // console.log('SCALE = ' + scale);
+
+                $.each(words, function(_idx, word) {
+                    var coords = word['coordinates']
+                    if ( coords == null ) { return; }
+
+                    var left = Math.round(coords[0] * hScale);
+                    var top = Math.round(coords[1] * vScale);
+                    var width = Math.round(coords[2] * hScale);
+                    var height = Math.round(coords[3] * vScale);
+
+                    console.log('left = ' + left + '; left is a ' + left.constructor.name);
+                    console.log('top = ' + top + '; top is a ' + top.constructor.name);
+                    console.log('width = ' + width + '; width is a ' + width.constructor.name);
+                    console.log('height = ' + height + '; height is a ' + height.constructor.name);
+
+                    var unit = 'px';
+
+                    if ( height < 5 ) { height = 5; }
+                    if ( width < 10 ) { width = 10; }
+/*
+                    var min = 5;
+                    var check_width = img_width + ( padding_left * 2 ) - ( min * 2 );
+                    if ( height < min ) { var r = min / height; height = min;  width *= r; }
+                    if ( debugging ) { message = [ "AHOY", left, "+", width, check_width, "/", left + width > check_width, "/", img_width - left ] };
+                    if ( left + width > check_width ) {
+                        width = img_width - left - ( min * 2 );
+                        if ( left > ( img_width + padding_left ) ) {
+                            left = img_width - padding_left;
+                        }
+                        if ( width <= min ) {
+                            width = min;
+                        }
+                    }
+
+                    left = ( left / ( img_width + ( padding_left * 2 ) ) ) * 100;
+                    top = ( top / ( img_height ) ) * 100;
+                    width = ( width / ( img_width + ( padding_left * 2 ) ) ) * 100;
+                    height = ( height / img_height ) * 100;
+                    unit = '%';
+*/
+                    //var $span = $('<div class="thumbail_highlight"></div>').css({ top: top + unit, left: left + unit, width: width + unit, height: height + unit });
+                    //$span.data('identifier', identifier);
+                    var $span = $('<div class="thumbail_highlight"></div>').css({ top: top + unit, left: left + unit, width: width + unit, height: height + unit });
+                    $span.appendTo($div);
+
+                })
+            },
+            error: function() { console.log('AJAX UNSUCCESSFUL'); }
+        });
+
+    };
+})

@@ -6,9 +6,18 @@ module NewspaperWorks
     # @param query_params_hash [Hash] current_search_session.query_params
     # @return [String] or [nil] anchor
     def iiif_search_anchor(query_params_hash)
-      query = query_params_hash[:q] || query_params_hash[:all_fields]
+      query = search_query(query_params_hash)
       return nil if query.blank?
       "?h=#{query}"
+    end
+
+    ##
+    # get the query, which may be in a different object,
+    #   depending if regular search or newspapers_search was run
+    # @param query_params_hash [Hash] current_search_session.query_params
+    # @return [String] or [nil] query
+    def search_query(query_params_hash)
+      query_params_hash[:q] || query_params_hash[:all_fields]
     end
 
     ##
