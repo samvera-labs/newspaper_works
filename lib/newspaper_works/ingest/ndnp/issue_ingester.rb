@@ -55,9 +55,13 @@ module NewspaperWorks
             )
           end
 
+          def publication_date
+            parsed = DateTime.iso8601(issue.metadata.publication_date)
+            parsed.strftime('%B %-d, %Y')
+          end
+
           def issue_title
-            meta = issue.metadata
-            "#{meta.publication_title} (#{meta.publication_date})"
+            "#{publication_title(issue)}: #{publication_date}"
           end
 
           def copy_issue_metadata
@@ -86,9 +90,15 @@ module NewspaperWorks
             NewspaperTitle.where(lccn: lccn).first
           end
 
+          # Singular string title for publication, without place description
+          # @return [String]
+          def publication_title(issue)
+            issue.metadata.publication_title.strip.split(/ \(/)[0]
+          end
+
           def copy_publication_title(publication)
             complete_pubtitle = issue.metadata.publication_title.strip
-            publication.title = [complete_pubtitle.split(/ \(/)[0]]
+            publication.title = [publication_title(issue)]
             place_name = complete_pubtitle.split(/ [\(]/)[1].split(')')[0]
             uri = NewspaperWorks::Ingest.geonames_place_uri(place_name)
             publication.place_of_publication = [uri] unless uri.nil?

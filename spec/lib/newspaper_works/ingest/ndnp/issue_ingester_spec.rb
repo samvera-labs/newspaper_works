@@ -88,12 +88,21 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::IssueIngester do
   end
 
   describe "metadata access/setting" do
+    def normalized_pubtitle(issue_data)
+      issue_data.metadata.publication_title.strip.split(/ \(/)[0]
+    end
+
+    def expected_title(issue_data)
+      metadata = issue_data.metadata
+      d = DateTime.iso8601(metadata.publication_date).strftime('%B %-d, %Y')
+      "#{normalized_pubtitle(issue_data)}: #{d}"
+    end
+
     it "copies metadata to NewspaperIssue" do
       adapter.construct_issue
       issue = adapter.target
       metadata = issue_data.metadata
-      title = "#{metadata.publication_title} (#{metadata.publication_date})"
-      expect(issue.title).to contain_exactly title
+      expect(issue.title).to contain_exactly expected_title(issue_data)
       expect(issue.lccn).to eq metadata.lccn
       expect(issue.volume).to eq metadata.volume
       expect(issue.publication_date).to eq metadata.publication_date
