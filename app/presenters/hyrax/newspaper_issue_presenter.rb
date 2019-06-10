@@ -5,7 +5,8 @@ module Hyrax
     include NewspaperWorks::NewspaperCorePresenter
     include NewspaperWorks::TitleInfoPresenter
     include NewspaperWorks::IiifSearchPresenterBehavior
-    delegate :volume, :edition, :issue_number, :extent, to: :solr_document
+    delegate :volume, :edition_number, :edition_name,
+             :issue_number, :extent, to: :solr_document
 
     # @return [Boolean] render the UniversalViewer
     def iiif_viewer?
@@ -46,7 +47,7 @@ module Hyrax
       end
 
       def edition_for_url
-        "ed-#{edition ? edition.first : '1'}"
+        "ed-#{edition_number ? edition_number.first : '1'}"
       end
   end
 end
