@@ -87,14 +87,20 @@ $().ready(function() {
                 var vScale = thumbHeight / trueHeight;
                 // console.log('SCALE = ' + scale);
 
+                // TODO: this will have to change for gallery
+                var paddingLeft = parseInt($div.closest(".search-result-wrapper .col-md-2").css("padding-left"));
+                console.log('paddingLeft = ' + paddingLeft);
+
                 $.each(words, function(_idx, word) {
                     var coords = word['coordinates']
                     if ( coords == null ) { return; }
 
-                    var left = Math.round(coords[0] * hScale);
-                    var top = Math.round(coords[1] * vScale);
-                    var width = Math.round(coords[2] * hScale);
-                    var height = Math.round(coords[3] * vScale);
+                    // decrease left, top; increase height, width
+                    // so that highlight surrounds image with a bit of padding
+                    var left = Math.round(coords[0] * hScale) + paddingLeft -2;
+                    var top = Math.round(coords[1] * vScale) - 2;
+                    var width = Math.round(coords[2] * hScale) + 3;
+                    var height = Math.round(coords[3] * vScale) + 3;
 
                     console.log('left = ' + left + '; left is a ' + left.constructor.name);
                     console.log('top = ' + top + '; top is a ' + top.constructor.name);
@@ -103,6 +109,7 @@ $().ready(function() {
 
                     var unit = 'px';
 
+                    // make sure highlight div isn't too small to be easily visible
                     if ( height < 5 ) { height = 5; }
                     if ( width < 10 ) { width = 10; }
 /*
