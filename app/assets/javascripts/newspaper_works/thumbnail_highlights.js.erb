@@ -5,42 +5,34 @@
   TODO:
    - remove console logging
    - remove commented out leftovers
-   - change this to .js if no .erb is being used
    - how to deal with multi-word or phrase queries?
-   - ask Sean -- how difficult to get height and width into coords.json?
+   - ask Sean -- get height and width into coords.json
                  if we can do this:
                   - remove index_dimensions stuff from IndexesRelationships
                   - change how script accesses dimensions data
 */
 
 $().ready(function() {
-    console.log('SO IT BEGINS');
     // we use dummy value so we can use rails url_helper for URL (have to pass id)
     var coordsUrl = '<%= Hyrax::Engine.routes.url_helpers.download_path("xyz", file: "json") %>';
-    console.log('coordsUrl = ' + coordsUrl);
-    var $thumbs = $(".thumbnail img, .list-thumbnail img");
+    var $thumbs = $("#documents .thumbnail img, #search-results .list-thumbnail img");
 
-    if ( $thumbs.length == 0 ) {
-        console.log('DANG, NO THUMBS!');
-        return;
-    } else {
-        console.log('WE GOT THIS MANY THUMBS: ' + $thumbs.length);
+    if ( $thumbs.length == 0 ) { return ; }
+
+    var viewType = 'list';
+    if ($('#documents.gallery').length) {
+        viewType = 'gallery';
     }
 
     $thumbs.each(function() {
         var $thumb = $(this);
         $thumb.on('load', function() {
-            console.log('RUNNING $thumb load func');
-            // var identifier = $(this).data('identifier');
             addHighlights($(this));
             $thumb.addClass("loaded")
         });
-        // $img.attr('src', $img.data('src'));
     })
 
     var addHighlights = function($thumb) {
-        console.log('STARTED add_highlights');
-
         var $div = $thumb.closest(".thumbnail, .list-thumbnail");
         var filesetId = $div.data('fileset');
         var query = $div.data('query');
@@ -53,43 +45,32 @@ $().ready(function() {
             method: 'GET',
             dataType: 'json',
             success: function (data) {
-                console.log('A QUERY RESPONSE WAS RECEIVED');
-                console.log('THE FIRST WORD: ' + data['words'][0]['word']);
 
                 var words = data['words'].filter(function(w) {
                     return RegExp(query.toLowerCase()).test(w['word'].toLowerCase())
                 });
-                console.log('THE FIRST MATCH: ' + words[0]['word']);
                 if (words.length == 0) { return ; }
-
-                //var padding_left = ( $link.width() - img_width ) / 2;
-                //var padding_top = 0;
 
                 var thumbWidth = $thumb.width();
                 var thumbHeight = $thumb.height();
                 var trueWidth = parseFloat($div.data('width'));
                 var trueHeight = parseFloat($div.data('height'));
-
-                console.log('thumbWidth = ' + thumbWidth + '; thumbWidth is a ' + thumbWidth.constructor.name);
-                console.log('thumbHeight = ' + thumbHeight + '; thumbHeight is a ' + thumbHeight.constructor.name);
-                console.log('trueWidth = ' + trueWidth + '; trueWidth is a ' + trueWidth.constructor.name);
-                console.log('trueHeight = ' + trueHeight + '; trueHeight is a ' + trueHeight.constructor.name);
-
-                /*
-                var scale;
-                if ( thumbWidth > thumbHeight ) {
-                    scale = thumbHeight / trueHeight;
-                } else {
-                    scale = thumbWidth / trueWidth;
-                }
-                */
                 var hScale = thumbWidth / trueWidth;
                 var vScale = thumbHeight / trueHeight;
-                // console.log('SCALE = ' + scale);
+                var paddingLeft, paddingTop;
 
-                // TODO: this will have to change for gallery
-                var paddingLeft = parseInt($div.closest(".search-result-wrapper .col-md-2").css("padding-left"));
-                console.log('paddingLeft = ' + paddingLeft);
+                // check if this is gallery or list view
+                if (viewType === 'gallery') {
+                    var offset = $thumb.position();
+                    paddingTop = offset.top;
+                    var thumbOuterWidth = $thumb.outerWidth(true);
+                    var thumbPaddingLeft = parseInt($div.css("padding-left"));
+                    var documentPaddingLeft = parseInt($div.closest(".document").css("padding-left"));
+                    paddingLeft = Math.round(((thumbOuterWidth - thumbWidth) / 2) + thumbPaddingLeft + documentPaddingLeft);
+                } else {
+                    paddingLeft = parseInt($div.closest(".search-result-wrapper .col-md-2").css("padding-left"));
+                    paddingTop = 0;
+                }
 
                 $.each(words, function(_idx, word) {
                     var coords = word['coordinates']
@@ -97,51 +78,20 @@ $().ready(function() {
 
                     // decrease left, top; increase height, width
                     // so that highlight surrounds image with a bit of padding
-                    var left = Math.round(coords[0] * hScale) + paddingLeft -2;
-                    var top = Math.round(coords[1] * vScale) - 2;
+                    var left = Math.round(coords[0] * hScale) + paddingLeft - 2;
+                    var top = Math.round(coords[1] * vScale) + paddingTop - 2;
                     var width = Math.round(coords[2] * hScale) + 3;
                     var height = Math.round(coords[3] * vScale) + 3;
-
-                    console.log('left = ' + left + '; left is a ' + left.constructor.name);
-                    console.log('top = ' + top + '; top is a ' + top.constructor.name);
-                    console.log('width = ' + width + '; width is a ' + width.constructor.name);
-                    console.log('height = ' + height + '; height is a ' + height.constructor.name);
-
                     var unit = 'px';
 
-                    // make sure highlight div isn't too small to be easily visible
+                    // make sure highlight div isn't too small, else won't be visible
                     if ( height < 5 ) { height = 5; }
                     if ( width < 10 ) { width = 10; }
-/*
-                    var min = 5;
-                    var check_width = img_width + ( padding_left * 2 ) - ( min * 2 );
-                    if ( height < min ) { var r = min / height; height = min;  width *= r; }
-                    if ( debugging ) { message = [ "AHOY", left, "+", width, check_width, "/", left + width > check_width, "/", img_width - left ] };
-                    if ( left + width > check_width ) {
-                        width = img_width - left - ( min * 2 );
-                        if ( left > ( img_width + padding_left ) ) {
-                            left = img_width - padding_left;
-                        }
-                        if ( width <= min ) {
-                            width = min;
-                        }
-                    }
 
-                    left = ( left / ( img_width + ( padding_left * 2 ) ) ) * 100;
-                    top = ( top / ( img_height ) ) * 100;
-                    width = ( width / ( img_width + ( padding_left * 2 ) ) ) * 100;
-                    height = ( height / img_height ) * 100;
-                    unit = '%';
-*/
-                    //var $span = $('<div class="thumbail_highlight"></div>').css({ top: top + unit, left: left + unit, width: width + unit, height: height + unit });
-                    //$span.data('identifier', identifier);
                     var $span = $('<div class="thumbail_highlight"></div>').css({ top: top + unit, left: left + unit, width: width + unit, height: height + unit });
                     $span.appendTo($div);
-
                 })
-            },
-            error: function() { console.log('AJAX UNSUCCESSFUL'); }
+            }
         });
-
     };
 })
