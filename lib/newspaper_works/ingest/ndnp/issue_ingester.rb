@@ -1,6 +1,7 @@
 module NewspaperWorks
   module Ingest
     module NDNP
+      # rubocop:disable Metrics/ClassLength
       class IssueIngester
         include NewspaperWorks::Logging
         include NewspaperWorks::Ingest::NDNP::NDNPAssetHelper
@@ -11,7 +12,8 @@ module NewspaperWorks
 
         COPY_FIELDS = [
           :lccn,
-          :edition,
+          :edition_number,
+          :edition_name,
           :volume,
           :publication_date,
           :held_by,
@@ -133,6 +135,7 @@ module NewspaperWorks
             )
           end
       end
+      # rubocop:enable Metrics/ClassLength
     end
   end
 end
