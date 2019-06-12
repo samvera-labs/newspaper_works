@@ -4,7 +4,6 @@ module Hyrax
   class NewspaperIssuePresenter < Hyrax::WorkShowPresenter
     include NewspaperWorks::NewspaperCorePresenter
     include NewspaperWorks::TitleInfoPresenter
-    include NewspaperWorks::IiifSearchPresenterBehavior
     include NewspaperWorks::IiifManifestPresenterBehavior
 
     delegate :volume, :edition_number, :edition_name,
