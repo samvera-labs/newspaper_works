@@ -56,8 +56,8 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::IssueMetadata do
     end
 
     it "gets edition fields" do
-      expect(issue.edition_name).to eq "1"
-      expect(issue.edition_number).to eq issue.edition_name
+      expect(issue.edition_name).to be_nil
+      expect(issue.edition_number).to eq "1"
     end
 
     it "gets publication date" do

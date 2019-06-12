@@ -43,17 +43,13 @@ module NewspaperWorks
           result.text
         end
 
-        # Edition name, with fallback to edition number
+        # Edition name
         #   Edition name is optional ("caption" / "label") is optional
-        #     in NDNP, but as it may be used as a label for readability,
-        #     it makes sense to fall back to a textural representation
-        #     of mandatory edition number.
-        # @return [String]
+        #     in NDNP, but as it may be used as a label for readability.
+        # @return [String,NilClass]
         def edition_name
           ed_name = xpath("//mods:detail[@type='edition']/mods:caption")
           return ed_name.text unless ed_name.size.zero?
-          # fallback to edition number if name unavailable:
-          edition_number
         end
 
         # Edition name, with fallback to edition number (mandatory)
