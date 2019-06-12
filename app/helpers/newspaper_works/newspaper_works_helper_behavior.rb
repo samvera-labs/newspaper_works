@@ -56,5 +56,28 @@ module NewspaperWorks
         image_tag url if url.present?
       end
     end
+
+    ##
+    # return the matching highlighted terms from Solr highlight field
+    #
+    # @param document [SolrDocument]
+    # @param hl_fl [String] the name of the Solr field with highlights
+    # @param hl_tag [String] the HTML element name used for marking highlights
+    #   configured in Solr as hl.tag.pre value
+    # @return [String]
+    def highlight_matches(document, hl_fl, hl_tag)
+      hl_matches = []
+      # regex: find all chars between hl_tag, but NOT other <element>
+      regex = /<#{hl_tag}>[^<>]+<\/#{hl_tag}>/
+      hls = document.highlight_field(hl_fl)
+      return nil unless hls.present?
+      hls.each do |hl|
+        matches = hl.scan(regex)
+        matches.each do |match|
+          hl_matches << match.gsub(/<[\/]*#{hl_tag}>/, '').downcase
+        end
+      end
+      hl_matches.uniq.sort.join(' ')
+    end
   end
 end

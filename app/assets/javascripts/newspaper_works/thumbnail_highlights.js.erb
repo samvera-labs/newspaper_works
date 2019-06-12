@@ -28,7 +28,6 @@ $().ready(function() {
         var $thumb = $(this);
         $thumb.on('load', function() {
             addHighlights($(this));
-            $thumb.addClass("loaded")
         });
     })
 
@@ -45,11 +44,6 @@ $().ready(function() {
             method: 'GET',
             dataType: 'json',
             success: function (data) {
-
-                var words = data['words'].filter(function(w) {
-                    return RegExp(query.toLowerCase()).test(w['word'].toLowerCase())
-                });
-                if (words.length == 0) { return ; }
 
                 var thumbWidth = $thumb.width();
                 var thumbHeight = $thumb.height();
@@ -71,6 +65,11 @@ $().ready(function() {
                     paddingLeft = parseInt($div.closest(".search-result-wrapper .col-md-2").css("padding-left"));
                     paddingTop = 0;
                 }
+
+                var words = data['words'].filter(function(w) {
+                    return RegExp(query.toLowerCase()).test(w['word'].toLowerCase())
+                });
+                if (words.length == 0) { return ; }
 
                 $.each(words, function(_idx, word) {
                     var coords = word['coordinates']
