@@ -2,7 +2,7 @@ module NewspaperWorks
   # Module for text extraction (OCR or otherwise)
   module TextExtraction
     class WordCoordsBuilder
-      def initialize(words, width, height)
+      def initialize(words, width = nil, height = nil)
         @words = words
         @width = width
         @height = height
