@@ -13,19 +13,9 @@ module NewspaperWorks
         index_container(object, solr_doc)
         index_articles(object, solr_doc)
         index_siblings(object, solr_doc)
-        index_dimensions(object, solr_doc) # TODO: remove this
       when NewspaperArticle
         index_issue(object, solr_doc)
         index_pages(object, solr_doc)
-      end
-    end
-
-    # TODO: remove this
-    def index_dimensions(object, solr_doc)
-      fileset = object.file_sets.first
-      if fileset
-        solr_doc['height_is'] = fileset.height[0]
-        solr_doc['width_is'] = fileset.width[0]
       end
     end
 

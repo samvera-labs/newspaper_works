@@ -30,8 +30,9 @@ module NewspaperWorks
           return default_coords if query.blank?
           coords_json = fetch_and_parse_coords
           return default_coords unless coords_json && coords_json['coords']
+          query_terms = query.split(' ').map(&:downcase)
           matches = coords_json['coords'].select do |k, _v|
-            k.downcase =~ /#{query.downcase}/
+            k.downcase =~ /(#{query_terms.join('|')})/
           end
           return default_coords if matches.blank?
           coords_array = matches.values.flatten(1)[hl_index]
