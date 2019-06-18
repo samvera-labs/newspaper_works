@@ -14,6 +14,7 @@ module NewspaperWorks
       return if newspaper_works_js_installed?
       insert_into_file 'app/assets/javascripts/application.js', after: '//= require hyrax' do
         <<-JS.strip_heredoc
+
         //= require newspaper_works
         JS
       end

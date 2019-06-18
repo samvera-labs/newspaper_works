@@ -6,9 +6,11 @@ class CustomSearchBuilder < Hyrax::CatalogSearchBuilder
 
   # add logic to BlacklightAdvancedSearch::AdvancedSearchBuilder
   # so that date range params are recognized as advanced search
+  # rubocop:disable Naming/PredicateName
   def is_advanced_search?
     blacklight_params[:date_start].present? || blacklight_params[:date_end].present? || super
   end
+  # rubocop:enable Naming/PredicateName
 
   # add highlights on full text field, if there is a keyword query
   def fulltext_search_params(solr_parameters = {})
