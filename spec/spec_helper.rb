@@ -54,7 +54,7 @@ RSpec.configure do |config|
   config.include EngineRoutes, type: :controller
 
   # ensure Hyrax has active sipity workflow for default admin set:
-  config.before do
+  config.before(:suite) do
     admin_set = AdminSet.find(AdminSet.find_or_create_default_admin_set_id)
     permission_template = admin_set.permission_template
     workflow = permission_template.available_workflows.where(
