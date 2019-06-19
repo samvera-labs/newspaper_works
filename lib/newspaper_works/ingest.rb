@@ -1,6 +1,7 @@
 require 'faraday'
 require 'nokogiri'
 require 'uri'
+require 'newspaper_works/ingest/pub_finder'
 require 'newspaper_works/ingest/pdf_images'
 require 'newspaper_works/ingest/pdf_pages'
 require 'newspaper_works/ingest/base_ingest'
