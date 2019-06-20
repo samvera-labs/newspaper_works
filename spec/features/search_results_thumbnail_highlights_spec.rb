@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe 'newspapers_search' do
+RSpec.describe 'thumbnail_highlights', js: true do
   fixture_path = File.join(NewspaperWorks::GEM_PATH, 'spec', 'fixtures', 'files')
   let(:query_term) { 'rotunda' }
 
@@ -11,7 +11,10 @@ RSpec.describe 'newspapers_search' do
     whitelist = Hyrax.config.whitelisted_ingest_dirs
     whitelist.push(fixture_path) unless whitelist.include?(fixture_path)
 
-    @work = NewspaperPage.create!(title: ['Test Page for Thumbnail Highlights'])
+    @work = NewspaperPage.create!(
+      title: ['Test Page for Thumbnail Highlights'],
+      visibility: "open"
+    )
     attachment = NewspaperWorks::Data::WorkFiles.of(@work)
     attachment.assign(File.join(fixture_path, 'page1.tiff'))
     attachment.derivatives.assign(File.join(fixture_path, 'ndnp-sample1-txt.txt'))
@@ -20,14 +23,11 @@ RSpec.describe 'newspapers_search' do
     @work.save!
   end
 
-  before do
-    visit search_catalog_path(q: query_term)
-  end
-
   describe 'thumbnail highlighting' do
-    it 'adds a highlight div to thumbnail' do
+    it 'adds highlight divs to thumbnail' do
+      visit search_catalog_path(q: 'rotunda scarcely')
       within "#document_#{@work.id}" do
-        expect(page).to have_selector '.thumbail_highlight'
+        expect(page).to have_selector('.thumbnail_highlight', count: 2)
       end
     end
   end

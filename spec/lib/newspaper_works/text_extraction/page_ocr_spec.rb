@@ -75,9 +75,10 @@ RSpec.describe NewspaperWorks::TextExtraction::PageOCR do
       parsed = JSON.parse(ocr_from_gray_tiff.word_json)
       expect(parsed['coords'].length).to be > 1
       word = ocr_from_gray_tiff.words[0]
-      word1 = parsed['coords'][word]
-      expect(word1[2]).to eq word[:x_end] - word[:x_start]
-      expect(word1[3]).to eq word[:y_end] - word[:y_start]
+      word1 = parsed['coords'][word[:word]]
+      word1_coords = word1[0]
+      expect(word1_coords[2]).to eq word[:x_end] - word[:x_start]
+      expect(word1_coords[3]).to eq word[:y_end] - word[:y_start]
     end
   end
 end
