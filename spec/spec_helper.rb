@@ -55,15 +55,19 @@ RSpec.configure do |config|
 
   # ensure Hyrax has active sipity workflow for default admin set:
   config.before(:suite) do
-    admin_set = AdminSet.find(AdminSet.find_or_create_default_admin_set_id)
-    permission_template = admin_set.permission_template
-    workflow = permission_template.available_workflows.where(
-      name: 'default'
-    ).first
-    Sipity::Workflow.activate!(
-      permission_template: permission_template,
-      workflow_id: workflow.id
-    )
+    begin
+      admin_set = AdminSet.find(AdminSet.find_or_create_default_admin_set_id)
+      permission_template = admin_set.permission_template
+      workflow = permission_template.available_workflows.where(
+        name: 'default'
+      ).first
+      Sipity::Workflow.activate!(
+        permission_template: permission_template,
+        workflow_id: workflow.id
+      )
+    rescue Faraday::ConnectionFailed
+      STDERR.puts "Attempting to run test suite without Fedora and/or Solr..."
+    end
   end
 
   # :perform_enqueued config setting below copied from Hyrax spec_helper.rb
