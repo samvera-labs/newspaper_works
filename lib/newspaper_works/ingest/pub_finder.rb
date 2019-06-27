@@ -17,6 +17,7 @@ module NewspaperWorks
       def copy_publication_title(publication, title)
         parts = title.split(/ [\(]/)
         publication.title = [parts[0]]
+        return unless parts.size > 1
         place_name = parts[1].split(')')[0]
         uri = NewspaperWorks::Ingest.geonames_place_uri(place_name)
         publication.place_of_publication = [uri] unless uri.nil?
