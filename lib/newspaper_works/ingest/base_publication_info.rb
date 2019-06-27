@@ -5,8 +5,6 @@ module NewspaperWorks
 
       def initialize(lccn)
         @lccn = lccn
-        # some authorities may not have issn, so have a default nil value:
-        @issn = nil
         load
       end
 
