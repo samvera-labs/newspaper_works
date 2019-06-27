@@ -1,6 +1,10 @@
 require 'faraday'
 require 'nokogiri'
 require 'uri'
+require 'newspaper_works/ingest/base_publication_info'
+require 'newspaper_works/ingest/chronam_publication_info'
+require 'newspaper_works/ingest/lc_publication_info'
+require 'newspaper_works/ingest/publication_info'
 require 'newspaper_works/ingest/pub_finder'
 require 'newspaper_works/ingest/pdf_images'
 require 'newspaper_works/ingest/pdf_pages'
@@ -29,6 +33,15 @@ module NewspaperWorks
       geonames_id = doc.xpath('//geonames/geoname[1]/geonameId').first
       return if geonames_id.nil?
       "http://sws.geonames.org/#{geonames_id.text}/"
+    end
+
+    # Get publication metadata from LC catalog MODS data, if available,
+    #   and from ChronAm, as a fallback.
+    # @param lccn [String] Library of Congress Control number for publication
+    # @return [NewspaperWorks::Ingest::PublicationInfo] proxy to metadata
+    #   source, an object for accessors for publication fields.
+    def self.publication_metadata(lccn)
+      PublicationInfo.new(lccn)
     end
 
     def self.find_admin_set(admin_set = nil)
