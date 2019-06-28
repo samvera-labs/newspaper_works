@@ -25,6 +25,7 @@ module NewspaperWorks
     def self.geonames_place_uri(place_name)
       username = Qa::Authorities::Geonames.username
       return if username.nil? || username.empty?
+      place_name = place_name.delete('.').split(/[\[\(]/)[0].strip
       query = URI.encode(place_name)
       geo_qs = "q=#{query}&username=#{username}"
       url = "http://api.geonames.org/search?#{geo_qs}"

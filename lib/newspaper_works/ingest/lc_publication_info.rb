@@ -39,12 +39,19 @@ module NewspaperWorks
         resp = Faraday.get url
         @doc = Nokogiri.XML(resp.body)
         return if empty?
+        # try title[@type="uniform"] first:
         title = find('//mods:titleInfo[@type="uniform"]/mods:title').first
+        # if no type="uniform" title, try non-alternate bare titleInfo:
+        #   -- in either case, should omit any non-sorted article (e.g. "The")
+        title = find('//mods:titleInfo[count(@type)=0]/mods:title').first if title.nil?
         @full_title = title.text unless title.nil?
       end
 
       def load_place
-        @place_name = place_name_from_title(@full_title)
+        place_term = find('//mods:originInfo//mods:placeTerm[@type="text"]').first
+        @place_name = place_term.nil? ? nil : place_term.text
+        @place_name = place_name_from_title(@full_title) if @place_name.nil?
+        return if @place_name.nil?
         uri = NewspaperWorks::Ingest.geonames_place_uri(@place_name)
         @place_of_publication = uri
       end
@@ -79,7 +86,7 @@ module NewspaperWorks
       def oclcnum
         return if empty?
         v = find('//mods:mods/mods:identifier[@type="oclc"]').first
-        v.nil? ? nil : v.text
+        v.nil? ? nil : oclc_prefixed(v.text)
       end
 
       def preceded_by

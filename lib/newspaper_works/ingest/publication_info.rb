@@ -5,6 +5,8 @@ require 'uri'
 module NewspaperWorks
   module Ingest
     class PublicationInfo
+      attr_accessor :implementation
+
       def initialize(lccn)
         @lccn = lccn
         @implementation = nil

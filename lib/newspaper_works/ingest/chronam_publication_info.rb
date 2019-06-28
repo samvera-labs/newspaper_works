@@ -62,7 +62,7 @@ module NewspaperWorks
         key = 'info:oclcnum'
         selected = sameas_resources.select { |v| v.text.start_with?(key) }
         return if selected.empty?
-        selected[0].text.split('/')[1]
+        oclc_prefixed(selected[0].text.split('/')[1])
       end
 
       def preceded_by
