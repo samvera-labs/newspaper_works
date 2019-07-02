@@ -1,8 +1,8 @@
 zh:
   hyrax:
     icons:
-      newspaper_issue:     'fa fa-newspaper-o'
+      newspaper_issue: 'fa fa-newspaper-o'
     select_type:
       newspaper_issue:
-        name:               "报纸问题"
-        description:        "报纸问题有效"
+        name:          "报纸问题"
+        description:   "报纸问题有效"

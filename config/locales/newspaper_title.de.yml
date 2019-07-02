@@ -1,8 +1,8 @@
 de:
   hyrax:
     icons:
-      newspaper_title:     'fa fa-newspaper-o'
+      newspaper_title: 'fa fa-newspaper-o'
     select_type:
       newspaper_title:
-        name:               "Zeitungstitel"
-        description:        "Zeitungstitel Arbeit"
+        name:          "Zeitungstitel"
+        description:   "Zeitungstitel Arbeit"

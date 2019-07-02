@@ -1,11 +1,11 @@
 es:
   hyrax:
     icons:
-      newspaper_article:     'fa fa-newspaper-o'
+      newspaper_article:   'fa fa-newspaper-o'
     select_type:
       newspaper_article:
-        name:               "Artículo de periódico"
-        description:        "Trabajos de artículos periodísticos"
+        name:              "Artículo de periódico"
+        description:       "Trabajos de artículos periodísticos"
   simple_form:
     labels:
       newspaper_article:

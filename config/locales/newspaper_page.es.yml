@@ -1,15 +1,15 @@
 es:
   hyrax:
     icons:
-      newspaper_page:     'fa fa-newspaper-o'
+      newspaper_page: 'fa fa-newspaper-o'
     select_type:
       newspaper_page:
-        name:               "Página del periódico"
-        description:        "Página de periódico funciona"
+        name:         "Página del periódico"
+        description:  "Página de periódico funciona"
     newspaper_page:
-      previous_page: 'Anterior'
-      next_page: 'Siguiente'
+      previous_page:  'Anterior'
+      next_page:      'Siguiente'
   simple_form:
     labels:
       newspaper_page:
-        title: "Siguiente"
+        title:        "Siguiente"

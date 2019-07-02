@@ -1,8 +1,8 @@
 de:
   hyrax:
     icons:
-      newspaper_issue:     'fa fa-newspaper-o'
+      newspaper_issue: 'fa fa-newspaper-o'
     select_type:
       newspaper_issue:
-        name:               "Zeitungsausgabe"
-        description:        "Zeitungsausgabe Arbeit"
+        name:          "Zeitungsausgabe"
+        description:   "Zeitungsausgabe Arbeit"
