@@ -4,5 +4,5 @@ pt-BR:
       newspaper_issue:     'fa fa-newspaper-o'
     select_type:
       newspaper_issue:
-        name:               "Newspaper Issue"
-        description:        "Newspaper issue trabalhos"
+        name:               "Questão Jornalística"
+        description:        "Trabalhos de emissão de jornais"
