@@ -2,10 +2,14 @@ de:
   hyrax:
     icons:
       newspaper_page:     'fa fa-newspaper-o'
+    select_type:
+      newspaper_page:
+        name:               "Zeitungsseite"
+        description:        "Zeitungsseite funktioniert"
     newspaper_page:
       previous_page: 'Bisherige'
       next_page: 'Nächster'
-    select_type:
+  simple_form:
+    labels:
       newspaper_page:
-        name:               "Newspaper Page"
-        description:        "Newspaper page Werke"
+        title: "Etikette"

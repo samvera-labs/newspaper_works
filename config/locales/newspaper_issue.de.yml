@@ -4,5 +4,5 @@ de:
       newspaper_issue:     'fa fa-newspaper-o'
     select_type:
       newspaper_issue:
-        name:               "Newspaper Issue"
-        description:        "Newspaper issue Werke"
+        name:               "Zeitungsausgabe"
+        description:        "Zeitungsausgabe Arbeit"
