@@ -9,13 +9,13 @@ fr:
         tips:
           open_date_range:      'Pour une plage de dates ouverte (par exemple, avant 1850, après 1900, etc.), laissez le champ "Début" ou "Fin" vide dans la section "Période".'
           undated_items:        'Si une plage de dates est entrée dans le formulaire dans la section "Plage de dates", les éléments non datés ne seront pas inclus dans les résultats de la recherche.'
-          limiters:             'Si aucune case n'est cochée dans la section Limite de champs, toutes les valeurs seront incluses.'
+          limiters:             "Si aucune case n'est cochée dans la section Limite de champs, toutes les valeurs seront incluses."
           quotation_marks:      'Utilisez des guillemets pour rechercher une phrase.'
           boolean:              'Utilisez "OU", "AND" et "NOT" dans le champ du mot clé pour créer une logique booléenne complexe. Vous pouvez également utiliser des parenthèses.'
-          plus:                 'Utilisez "+" avant un terme pour le rendre obligatoire.'
-          minus:                'Utilisez "-" avant un mot ou une phrase pour l'exclure.'
+          plus:                 "Utilisez \"+\" avant un terme pour le rendre obligatoire."
+          minus:                "Utilisez \"-\" avant un mot ou une phrase pour l'exclure."
       fields:
-        date_end:               'Fin d'année'
+        date_end:               "Fin d'année"
         date_range:             'Plage de dates'
         date_start:             'Année de début'
         front_pages:            'Limiter la recherche aux premières pages'
