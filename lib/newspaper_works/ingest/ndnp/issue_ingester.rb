@@ -90,9 +90,9 @@ module NewspaperWorks
           end
 
           def find_or_create_linked_publication
-            raw_title = issue.metadata.publication_title.strip
+            title = publication_title(issue)
             lccn = issue.metadata.lccn
-            find_or_create_publication_for_issue(@target, lccn, raw_title, @opts)
+            find_or_create_publication_for_issue(@target, lccn, title, @opts)
           end
       end
     end

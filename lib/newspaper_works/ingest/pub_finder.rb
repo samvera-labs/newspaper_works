@@ -7,6 +7,25 @@ module NewspaperWorks
     module PubFinder
       include NewspaperWorks::Logging
 
+      COPY_FIELDS = [
+        :title,
+        :lccn,
+        :oclcnum,
+        :issn,
+        :place_of_publication,
+        :language,
+        :preceded_by,
+        :succeeded_by
+      ].freeze
+
+      MULTI_VALUED = [
+        :title,
+        :language,
+        :preceded_by,
+        :succeeded_by,
+        :place_of_publication
+      ].freeze
+
       # @param lccn [String] Library of Congress Control Number
       #   of Publication
       # @return [NewspaperTitle, NilClass] publication or nil if not found
@@ -14,18 +33,24 @@ module NewspaperWorks
         NewspaperTitle.where(lccn: lccn).first
       end
 
-      def copy_publication_title(publication, title)
-        parts = title.split(/ [\(]/)
-        publication.title = [parts[0]]
-        return unless parts.size > 1
-        place_name = parts[1].split(')')[0]
-        uri = NewspaperWorks::Ingest.geonames_place_uri(place_name)
-        publication.place_of_publication = [uri] unless uri.nil?
+      # Copy publication metadata from authority lookup for LCCN
+      # @param publication [NewspaperTitle]
+      # @param metadata [NewspaperWorks::Ingest::PublicationInfo]
+      def copy_publication_metadata(publication, metadata, title = nil)
+        COPY_FIELDS.each do |name|
+          value = metadata.send(name)
+          next if value.nil?
+          value = [value] if MULTI_VALUED.include?(name)
+          publication.send("#{name}=", value)
+        end
+        # prefer locally-specified title to looked-up title:
+        publication.title = [title] unless title.nil?
       end
 
       def create_publication(lccn, title = nil, opts = {})
         publication = NewspaperTitle.create
-        copy_publication_title(publication, title || lccn)
+        info = NewspaperWorks::Ingest::PublicationInfo.new(lccn)
+        copy_publication_metadata(publication, info, title)
         publication.lccn ||= lccn
         NewspaperWorks::Ingest.assign_administrative_metadata(publication, opts)
         publication.save!
