@@ -36,7 +36,7 @@ module NewspaperWorks
 
       def title
         v = "#{@publication.title}: #{publication_date}"
-        v = "#{v} (#{edition_number}" if edition_number.to_i > 1
+        v = "#{v} (#{edition_number})" if edition_number.to_i > 1
         [v]
       end
     end
