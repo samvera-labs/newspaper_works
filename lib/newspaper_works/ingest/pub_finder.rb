@@ -36,7 +36,7 @@ module NewspaperWorks
       # Copy publication metadata from authority lookup for LCCN
       # @param publication [NewspaperTitle]
       # @param metadata [NewspaperWorks::Ingest::PublicationInfo]
-      def copy_publication_metadata(publication, metadata, title = nil)
+      def copy_publication_metadata(publication, metadata, lccn, title = nil)
         COPY_FIELDS.each do |name|
           value = metadata.send(name)
           next if value.nil?
@@ -45,12 +45,14 @@ module NewspaperWorks
         end
         # prefer locally-specified title to looked-up title:
         publication.title = [title] unless title.nil?
+        # final fallback, nothing specified, title mandatory: use LCCN
+        publication.title = [lccn] if publication.title.empty?
       end
 
       def create_publication(lccn, title = nil, opts = {})
         publication = NewspaperTitle.create
         info = NewspaperWorks::Ingest::PublicationInfo.new(lccn)
-        copy_publication_metadata(publication, info, title)
+        copy_publication_metadata(publication, info, lccn, title)
         publication.lccn ||= lccn
         NewspaperWorks::Ingest.assign_administrative_metadata(publication, opts)
         publication.save!
