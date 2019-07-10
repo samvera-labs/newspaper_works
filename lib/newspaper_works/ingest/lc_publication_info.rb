@@ -119,6 +119,7 @@ module NewspaperWorks
 
         def find(expr, context = nil)
           context ||= @doc
+          return if context.nil? && empty?
           context.xpath(
             expr,
             **XML_NS

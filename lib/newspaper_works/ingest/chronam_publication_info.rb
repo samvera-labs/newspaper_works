@@ -38,7 +38,9 @@ module NewspaperWorks
       end
 
       def load_place
-        @place_name = find('//rda:placeOfPublication').first.text
+        place_match = find('//rda:placeOfPublication')
+        return if place_match.nil?
+        @place_name = place_match.first.text
         @place_of_publication = NewspaperWorks::Ingest.geonames_place_uri(
           @place_name
         )
@@ -67,13 +69,13 @@ module NewspaperWorks
 
       def preceded_by
         found = find('//frbr:successorOf/@rdf:resource')
-        return if found.empty?
+        return if found.nil?
         normalize_related(found.first.text)
       end
 
       def succeeded_by
         found = find('//frbr:successor/@rdf:resource')
-        return if found.empty?
+        return if found.nil?
         normalize_related(found.first.text)
       end
 
@@ -99,11 +101,12 @@ module NewspaperWorks
         end
 
         def sameas_resources
-          find('//owl:sameAs/@rdf:resource')
+          find('//owl:sameAs/@rdf:resource') || []
         end
 
         def find(expr, context = nil)
           context ||= @doc
+          return if context.nil?
           context.xpath(expr, **XML_NS)
         end
 
