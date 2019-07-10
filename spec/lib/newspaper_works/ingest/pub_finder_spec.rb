@@ -9,7 +9,7 @@ describe NewspaperWorks::Ingest::PubFinder do
     end
 
     before do
-      ['sn2036999999', 'sn2036999999'].each do |lccn|
+      ['sn2099999999', 'sn2036999999', 'sn82014496'].each do |lccn|
         NewspaperTitle.where(lccn: lccn).delete_all
       end
     end
@@ -40,6 +40,18 @@ describe NewspaperWorks::Ingest::PubFinder do
       publication = ingester.find_publication(lccn)
       expect(publication).to be_a NewspaperTitle
       expect(publication.ordered_members.to_a).to include issue
+    end
+
+    it "copies metadata for created publication" do
+      lccn = 'sn82014496'
+      expect(ingester.find_publication(lccn)).to be_nil
+      publication = ingester.create_publication(lccn, nil, {})
+      expect(publication.title).to contain_exactly "Rocky Mountain news"
+      expect(publication.place_of_publication).to contain_exactly(
+        "http://sws.geonames.org/5419384/"
+      )
+      expect(publication.language).to contain_exactly 'eng'
+      expect(publication.oclcnum).to eq 'ocm03946163'
     end
   end
 end
