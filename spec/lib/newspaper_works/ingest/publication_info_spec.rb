@@ -14,7 +14,7 @@ RSpec.describe NewspaperWorks::Ingest::PublicationInfo do
       expect(meta.title).to eq 'Salt Lake daily tribune'
       expect(meta.issn).to be_nil
       expect(meta.oclcnum).to eq 'ocm10170377'
-      expect(meta.place_name).to eq 'Salt Lake City, U.T. [i.e. Utah]'
+      expect(meta.place_name).to eq 'Salt Lake City, Utah'
       expect(meta.place_of_publication).to eq 'http://sws.geonames.org/5780993/'
     end
 

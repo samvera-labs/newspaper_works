@@ -4,6 +4,7 @@ require 'uri'
 
 module NewspaperWorks
   module Ingest
+    # rubocop:disable Metrics/ClassLength
     class LCPublicationInfo < BasePublicationInfo
       attr_accessor :place_of_publication, :full_title, :lccn, :place_name, :doc
 
@@ -47,10 +48,24 @@ module NewspaperWorks
         @full_title = title.text unless title.nil?
       end
 
+      def mods_place_name
+        # prefer geographic subject hierarchy for place name construction:
+        city = find('//mods:hierarchicalGeographic/mods:city').first
+        # State (e.g. "Utah"), Province (e.g. "Ontario"), other (e.g. "England")
+        state = find('//mods:hierarchicalGeographic/mods:state').first
+        # if state is nil, fallback to country in its place
+        state = find('//mods:hierarchicalGeographic/mods:country').first if state.nil?
+        return "#{city.text}, #{state.text}" if city && state
+        # fallback to placeTerm text, which may be abbreviated in such a
+        #   way that geonames struggles to find on search; for a list of
+        #   abbreviations, see:
+        #   https://www.loc.gov/aba/publications/FreeSHM/H0810.pdf
+        name = find('//mods:originInfo//mods:placeTerm[@type="text"]').first
+        name.nil? ? nil : name.text
+      end
+
       def load_place
-        place_term = find('//mods:originInfo//mods:placeTerm[@type="text"]').first
-        @place_name = place_term.nil? ? nil : place_term.text
-        @place_name = place_name_from_title(@full_title) if @place_name.nil?
+        @place_name = mods_place_name || place_name_from_title(@full_title)
         return if @place_name.nil?
         uri = NewspaperWorks::Ingest.geonames_place_uri(@place_name)
         @place_of_publication = uri
@@ -126,5 +141,6 @@ module NewspaperWorks
           )
         end
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end
