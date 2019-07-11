@@ -27,20 +27,23 @@ module NewspaperWorks
       end
 
       def info(path)
-        NewspaperWorks::Ingest::PDFIssue.new(path)
+        NewspaperWorks::Ingest::PDFIssue.new(path, @publication)
       end
 
       def each
+        return enum_for(:each) unless block_given?
         @pdf_paths.each do |path|
           yield [path, info(path)]
         end
       end
 
       def each_key
-        @pdf_paths.each
+        enum_for(:each_key) unless block_given?
+        @pdf_paths.each { |path| yield path }
       end
 
       def each_value
+        return enum_for(:each_value) unless block_given?
         @pdf_paths.each do |path|
           yield info(path)
         end

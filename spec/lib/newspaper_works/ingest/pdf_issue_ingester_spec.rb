@@ -32,9 +32,11 @@ RSpec.describe NewspaperWorks::Ingest::PDFIssueIngester do
     it "constructs ingester enumerating PDF files" do
       ingester = described_class.new(pdf_fixtures)
       pdfs = Dir.entries(pdf_fixtures).select { |name| name.end_with?('.pdf') }
+      paths = pdfs.map { |name| File.join(pdf_fixtures, name) }
       issues = ingester.issues
       expect(issues).to be_a NewspaperWorks::Ingest::PDFIssues
       expect(issues.size).to eq pdfs.size
+      expect(issues.keys).to match_array paths
     end
   end
 

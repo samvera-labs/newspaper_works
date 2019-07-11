@@ -1,3 +1,5 @@
+require 'date'
+
 module NewspaperWorks
   module Ingest
     class PDFIssue
@@ -18,7 +20,7 @@ module NewspaperWorks
         year = filename.slice(0, 4).to_i
         month = filename.slice(4, 2).to_i
         day = filename.slice(6, 2).to_i
-        DateTime(year, month, day).iso8601[0..9]
+        DateTime.new(year, month, day).iso8601[0..9]
       end
 
       def edition_number
@@ -35,7 +37,8 @@ module NewspaperWorks
       end
 
       def title
-        v = "#{@publication.title}: #{publication_date}"
+        title_date = DateTime.iso8601(publication_date).strftime('%B %-d, %Y')
+        v = "#{@publication.title}: #{title_date}"
         v = "#{v} (#{edition_number})" if edition_number.to_i > 1
         [v]
       end

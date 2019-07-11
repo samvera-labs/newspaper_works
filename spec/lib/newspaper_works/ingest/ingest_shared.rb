@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'newspaper_works_fixtures'
 
 RSpec.shared_context "ingest test fixtures", shared_context: :metadata do
   # Path to fixtures gem for sample fixtures, whitelisted:
