@@ -3,13 +3,13 @@ module NewspaperWorks
     class PDFIssueIngester
       include NewspaperWorks::Ingest::PubFinder
 
-      attr_accessor :path, :lccn, :publication, :opts
+      attr_accessor :path, :lccn, :publication, :opts, :issues
 
       def initialize(path, lccn = nil, opts = {})
         @path = path
         @lccn = normalize_lccn(lccn.nil? ? lccn_from_path(path) : lccn)
         # get publication info for LCCN from authority web service:
-        @publication = NewspaperWorks::Ingest::PublicationInfo.new(lccn)
+        @publication = NewspaperWorks::Ingest::PublicationInfo.new(@lccn)
         # issues for publication, as enumerable of PDFIssue
         @issues = NewspaperWorks::Ingest::PDFIssues.new(path, publication)
         @opts = opts
@@ -21,18 +21,13 @@ module NewspaperWorks
 
       def normalize_lccn(v)
         p = /^[A-Za-z]{0,3}[0-9]{8}([0-9]{2})?$/
-        v = v.gsub(/\s+/, '').downcase.slice(0,13)
+        v = v.gsub(/\s+/, '').downcase.slice(0, 13)
         raise ArgumentError, "LCCN appears invalid: #{v}" unless p.match(v)
         v
       end
 
-      def newspaper_title(issue)
-        pub_title = find_or_create_publication_from_issue(issue)
-
-      end
-
       def issue_title(issue_data)
-        ["#{@publication.title}: #{issue.publication_date}"]
+        ["#{@publication.title}: #{issue_data.publication_date}"]
       end
 
       def create_issue(issue_data)
