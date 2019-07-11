@@ -68,15 +68,15 @@ module NewspaperWorks
       end
 
       def preceded_by
-        found = find('//frbr:successorOf/@rdf:resource')
+        found = find('//frbr:successorOf/@rdf:resource').first
         return if found.nil?
-        normalize_related(found.first.text)
+        normalize_related(found.text)
       end
 
       def succeeded_by
-        found = find('//frbr:successor/@rdf:resource')
+        found = find('//frbr:successor/@rdf:resource').first
         return if found.nil?
-        normalize_related(found.first.text)
+        normalize_related(found.text)
       end
 
       private
