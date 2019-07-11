@@ -68,12 +68,14 @@ module NewspaperWorks
       end
 
       def preceded_by
+        return if empty?
         found = find('//frbr:successorOf/@rdf:resource').first
         return if found.nil?
         normalize_related(found.text)
       end
 
       def succeeded_by
+        return if empty?
         found = find('//frbr:successor/@rdf:resource').first
         return if found.nil?
         normalize_related(found.text)
