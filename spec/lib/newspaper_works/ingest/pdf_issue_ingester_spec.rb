@@ -41,8 +41,36 @@ RSpec.describe NewspaperWorks::Ingest::PDFIssueIngester do
   end
 
   describe "ingester behavior" do
+    # Ensure LCCN has no initial publication NewspaperTitle asset:
+    let(:lccn) do
+      v = 'sn93059126'
+      NewspaperTitle.where(lccn: v).delete_all
+      v
+    end
+
+    let(:pdf_path) { File.join(pdf_fixtures, '1853060401.pdf') }
+
+    let(:single_issue_dir) do
+      Hyrax.config.whitelisted_ingest_dirs.push('/tmp')
+      parent_dir = Dir.mktmpdir
+      dir = File.join(parent_dir, lccn)
+      FileUtils.mkdir(dir)
+      FileUtils.cp(pdf_path, dir)
+      dir
+    end
+
     it "ingests PDFs" do
-      # TODO: implement
+      ingester = described_class.new(single_issue_dir)
+      ingester.ingest
+      # Outcomes tested:
+      # 1. NewspaperTitle fpr Publication created
+      publication = NewspaperTitle.where(lccn: lccn).first
+      expect(publication).not_to be_nil
+      # 2. NewspaperIssue created and findable withing publication members
+      expect(publication.ordered_members.to_a[0].publication_date).to eq \
+        "1853-06-04"
+      # Remove single-issue temporary directory
+      FileUtils.rmtree(File.dirname(single_issue_dir))
     end
   end
 end

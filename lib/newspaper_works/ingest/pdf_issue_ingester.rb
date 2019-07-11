@@ -60,7 +60,7 @@ module NewspaperWorks
       end
 
       def ingest
-        ingester.issues.each do |path, issue_data|
+        @issues.each do |path, issue_data|
           issue = create_issue(issue_data)
           ingest_pdf(issue, path)
         end
