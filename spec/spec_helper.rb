@@ -57,6 +57,7 @@ RSpec.configure do |config|
   config.before(:suite) do
     begin
       admin_set = AdminSet.find(AdminSet.find_or_create_default_admin_set_id)
+      admin_set.save!
       permission_template = admin_set.permission_template
       workflow = permission_template.available_workflows.where(
         name: 'default'
