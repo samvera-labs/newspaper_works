@@ -33,6 +33,10 @@ module NewspaperWorks
       def create_issue(issue_data)
         issue = NewspaperIssue.create
         copy_issue_metadata(issue_data, issue)
+        NewspaperWorks::Ingest.assign_administrative_metadata(
+          issue,
+          @opts
+        )
         issue.save!
         find_or_create_publication_for_issue(
           issue,

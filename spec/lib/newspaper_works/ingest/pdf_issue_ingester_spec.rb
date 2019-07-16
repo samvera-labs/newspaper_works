@@ -67,8 +67,13 @@ RSpec.describe NewspaperWorks::Ingest::PDFIssueIngester do
       publication = NewspaperTitle.where(lccn: lccn).first
       expect(publication).not_to be_nil
       # 2. NewspaperIssue created and findable withing publication members
-      expect(publication.ordered_members.to_a[0].publication_date).to eq \
-        "1853-06-04"
+      issue = publication.ordered_members.to_a[0]
+      expect(issue.publication_date).to eq "1853-06-04"
+      puts(publication.ordered_members.to_a.size)
+      # Verify administrative metadata defaults:
+      expect(issue.depositor).to eq User.batch_user.user_key
+      expect(issue.admin_set).to eq AdminSet.find(AdminSet::DEFAULT_ID)
+      expect(issue.visibility).to eq 'open'
       # Remove single-issue temporary directory
       FileUtils.rmtree(File.dirname(single_issue_dir))
     end
