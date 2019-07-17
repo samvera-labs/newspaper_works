@@ -23,7 +23,7 @@ RSpec.describe NewspaperWorks::Ingest::PDFIssueIngester do
     it "constructs ingester with explicit LCCN" do
       # path is for The weekly journal (Chicopee Mass), pass LCCN for other pub
       sltrib = 'sn83045396'
-      ingester = described_class.new(pdf_fixtures, sltrib)
+      ingester = described_class.new(pdf_fixtures, lccn: sltrib)
       expect(ingester.lccn).to eq sltrib
       expect(ingester.publication.lccn).to eq ingester.lccn
       expect(ingester.publication.title).to eq 'Salt Lake tribune'

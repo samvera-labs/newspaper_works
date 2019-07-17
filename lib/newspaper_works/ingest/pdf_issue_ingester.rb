@@ -5,8 +5,9 @@ module NewspaperWorks
 
       attr_accessor :path, :lccn, :publication, :opts, :issues
 
-      def initialize(path, lccn = nil, opts = {})
+      def initialize(path, opts = {})
         @path = path
+        lccn = opts[:lccn]
         @lccn = normalize_lccn(lccn.nil? ? lccn_from_path(path) : lccn)
         # get publication info for LCCN from authority web service:
         @publication = NewspaperWorks::Ingest::PublicationInfo.new(@lccn)
