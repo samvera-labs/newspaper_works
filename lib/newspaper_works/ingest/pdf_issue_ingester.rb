@@ -5,6 +5,7 @@ module NewspaperWorks
       extend NewspaperWorks::Ingest::FromCommand
 
       include NewspaperWorks::Ingest::PubFinder
+      include NewspaperWorks::Logging
 
       attr_accessor :path, :lccn, :publication, :opts, :issues
 
@@ -17,6 +18,7 @@ module NewspaperWorks
         # issues for publication, as enumerable of PDFIssue
         @issues = NewspaperWorks::Ingest::PDFIssues.new(path, publication)
         @opts = opts
+        configure_logger('ingest')
       end
 
       def lccn_from_path(path)
@@ -34,6 +36,7 @@ module NewspaperWorks
         ["#{@publication.title}: #{issue_data.publication_date}"]
       end
 
+      # rubocop:disable Metrics/MethodLength
       def create_issue(issue_data)
         issue = NewspaperIssue.create
         copy_issue_metadata(issue_data, issue)
@@ -42,6 +45,13 @@ module NewspaperWorks
           @opts
         )
         issue.save!
+        write_log(
+          "Created new NewspaperIssue work with date, lccn, edition metadata:"\
+          "\n"\
+          "\tLCCN: #{@lccn}\n"\
+          "\tPublication Date: #{issue_data.publication_date}\n"\
+          "\tEdition number: #{issue_data.edition_number}"
+        )
         find_or_create_publication_for_issue(
           issue,
           @lccn,
@@ -50,6 +60,7 @@ module NewspaperWorks
         )
         issue
       end
+      # rubocop:enable Metrics/MethodLength
 
       def copy_issue_metadata(source, target)
         target.title = issue_title(source)
@@ -68,10 +79,16 @@ module NewspaperWorks
       end
 
       def ingest
+        write_log("Beginning PDF issue(s) batch ingest for #{@path}")
+        write_log("\tPublication: #{@publication.title} (LCCN: #{@lccn})")
         @issues.each do |path, issue_data|
           issue = create_issue(issue_data)
           ingest_pdf(issue, path)
         end
+        write_log(
+          "PDF issue ingest completed for LCCN #{@lccn}. Asyncrhonous jobs "\
+          "may still be creating derivatives for issue, and child page works."
+        )
       end
     end
   end
