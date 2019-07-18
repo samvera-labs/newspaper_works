@@ -1,6 +1,9 @@
 module NewspaperWorks
   module Ingest
     class PDFIssueIngester
+      # CLI constructor, related class methods:
+      extend NewspaperWorks::Ingest::FromCommand
+
       include NewspaperWorks::Ingest::PubFinder
 
       attr_accessor :path, :lccn, :publication, :opts, :issues
