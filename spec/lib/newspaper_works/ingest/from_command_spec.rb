@@ -21,7 +21,7 @@ RSpec.describe NewspaperWorks::Ingest::FromCommand do
     def construct(args)
       klass.from_command(
         args,
-        'rake newspaper_works:ingest_issue_pdfs --'
+        'rake newspaper_works:ingest_pdf_issues --'
       )
     end
 
@@ -29,7 +29,7 @@ RSpec.describe NewspaperWorks::Ingest::FromCommand do
 
     let(:fake_argv) do
       [
-        'newspaper_works:ingest_issue_pdfs',
+        'newspaper_works:ingest_pdf_issues',
         '--',
         "--path=#{pdf_fixtures}"
       ]

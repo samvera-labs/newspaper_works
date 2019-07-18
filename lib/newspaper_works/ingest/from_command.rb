@@ -36,7 +36,7 @@ module NewspaperWorks
         parser.on('--depositor=DEPOSITOR')
         parser.on('--visibility=VISIBILITY')
         # lccn used by PDF issue ingest, but not NDNP ingest:
-        parser.on('--lccn=lccn')
+        parser.on('--lccn=LCCN')
         parser.parse!(args, into: params)
         [path, params]
       end
