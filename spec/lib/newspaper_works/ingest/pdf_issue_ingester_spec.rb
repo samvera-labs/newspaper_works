@@ -17,7 +17,7 @@ RSpec.describe NewspaperWorks::Ingest::PDFIssueIngester do
       ingester = described_class.new(pdf_fixtures)
       expect(ingester.publication).to be_a NewspaperWorks::Ingest::PublicationInfo
       expect(ingester.publication.lccn).to eq ingester.lccn
-      expect(ingester.publication.title).to eq 'The weekly journal.'
+      expect(ingester.publication.title).to eq 'The weekly journal'
     end
 
     it "constructs ingester with explicit LCCN" do

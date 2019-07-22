@@ -23,7 +23,7 @@ RSpec.describe NewspaperWorks::Ingest::PDFIssue do
       issue = described_class.new(pdf_path, publication)
       expect(issue.publication_date).to eq '1853-06-04'
       expect(issue.edition_number).to eq 1
-      expect(issue.title).to contain_exactly 'The weekly journal.: June 4, 1853'
+      expect(issue.title).to contain_exactly 'The weekly journal: June 4, 1853'
     end
   end
 end

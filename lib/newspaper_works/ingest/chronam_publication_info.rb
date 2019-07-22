@@ -54,7 +54,7 @@ module NewspaperWorks
         resp = Faraday.get url
         return if resp.status == 404
         @doc = Nokogiri.XML(resp.body)
-        @title = find('//dcterms:title').first.text
+        @title = normalize_title(find('//dcterms:title').first.text)
         @language = iso_language_for(find('//dcterms:language').first.text)
         @empty = false
         load_place
@@ -82,6 +82,10 @@ module NewspaperWorks
       end
 
       private
+
+        def normalize_title(value)
+          NewspaperWorks::Ingest.normalize_title(value)
+        end
 
         # Returns URL to LC catalog, provided such exists, on the basis of
         #   non-empty MODS for given LCCN.  Otherwise returns nil.

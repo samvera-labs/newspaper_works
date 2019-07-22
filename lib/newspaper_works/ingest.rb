@@ -40,6 +40,14 @@ module NewspaperWorks
       "http://sws.geonames.org/#{geonames_id.text}/"
     end
 
+    # Normalize publication title from catalog data
+    #   Presently strips trailing period
+    # @param title [String]
+    # @return [String] normalized title
+    def self.normalize_title(title)
+      title.strip.sub(/[.]+$/, '')
+    end
+
     # Get publication metadata from LC catalog MODS data, if available,
     #   and from ChronAm, as a fallback.
     # @param lccn [String] Library of Congress Control number for publication

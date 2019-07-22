@@ -8,7 +8,7 @@ RSpec.describe NewspaperWorks::Ingest::ChronAmPublicationInfo do
   describe "gets metadata" do
     it "gets simple metadata" do
       meta = described_class.new(lccn1)
-      expect(meta.title).to eq 'Marysville daily news.'
+      expect(meta.title).to eq 'Marysville daily news'
       expect(meta.issn).to be_nil
       expect(meta.oclcnum).to eq 'ocm30043558'
       expect(meta.place_name).to eq 'Marysville, Calif.'
