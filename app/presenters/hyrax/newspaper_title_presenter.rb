@@ -4,18 +4,19 @@ module Hyrax
   class NewspaperTitlePresenter < Hyrax::WorkShowPresenter
     include NewspaperWorks::NewspaperCorePresenter
     delegate :edition_number, :edition_name, :frequency, :preceded_by,
-             :succeeded_by, to: :solr_document
+             :succeeded_by, :publication_date_start,
+             :publication_date_end, to: :solr_document
 
     def title_search_params
       { f: { "publication_title_ssi" => title } }
     end
 
     def front_page_search_params
-      { f: { "publication_title_ssi" => title, "first_page_bsi" => [true] }, sort: 'publication_date_dtsim asc' }
+      { f: { "publication_title_ssi" => title, "first_page_bsi" => [true] }, sort: 'publication_date_dtsi asc' }
     end
 
     def issues
-      all_title_issues.select { |issue| year_or_nil(issue["publication_date_dtsim"]) == year }
+      all_title_issues.select { |issue| year_or_nil(issue["publication_date_dtsi"]) == year }
     end
 
     def issue_years
@@ -34,13 +35,16 @@ module Hyrax
       issue_years[issue_years.index(year) + 1]
     end
 
+=begin
+TESTING
     def publication_date_start
-      solr_document["publication_date_start_dtsim"]
+      solr_document["publication_date_start_dtsizm"]
     end
 
     def publication_date_end
-      solr_document["publication_date_end_dtsim"]
+      solr_document["publication_date_end_dtsizm"]
     end
+=end
 
     def year
       return nil if issue_years.empty?
@@ -50,7 +54,7 @@ module Hyrax
     def all_title_issues
       issue_query = Blacklight.default_index.search(q: "has_model_ssim:NewspaperIssue AND publication_id_ssi:#{id} AND visibility_ssi:#{solr_document.visibility}",
                                                     rows: 50_000,
-                                                    fl: "id, publication_date_dtsim")
+                                                    fl: "id, publication_date_dtsi")
       issue_query.documents
     end
 
@@ -67,7 +71,7 @@ module Hyrax
     private
 
       def all_title_issue_dates
-        all_title_issues.pluck("publication_date_dtsim")
+        all_title_issues.pluck("publication_date_dtsi")
       end
 
       def number_or_nil(string)

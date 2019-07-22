@@ -7,17 +7,19 @@ module Hyrax
     include NewspaperWorks::IiifManifestPresenterBehavior
 
     delegate :volume, :edition_number, :edition_name,
-             :issue_number, :extent, to: :solr_document
+             :issue_number, :extent, :publication_date, to: :solr_document
 
     # @return [Boolean] render the UniversalViewer
     def iiif_viewer?
       Hyrax.config.iiif_image_server? && members_include_viewable_page?
     end
 
+=begin
+TESTING
     def publication_date
-      solr_document["publication_date_dtsim"]
+      solr_document["publication_date_dtsizm"]
     end
-
+=end
     def persistent_url
       return nil unless publication_unique_id && issue_date_for_url
       NewspaperWorks::Engine.routes.url_helpers.newspaper_issue_edition_url(unique_id: publication_unique_id,
