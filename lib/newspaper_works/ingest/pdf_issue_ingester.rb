@@ -33,7 +33,7 @@ module NewspaperWorks
       end
 
       def issue_title(issue_data)
-        ["#{@publication.title}: #{issue_data.publication_date}"]
+        issue_data.title
       end
 
       # rubocop:disable Metrics/MethodLength
