@@ -1,7 +1,10 @@
 require 'faraday'
 require 'spec_helper'
+require 'misc_shared'
 
 RSpec.describe NewspaperWorks::Actors::NewspaperWorksUploadActor, :perform_enqueued do
+  include_context 'shared setup'
+
   let(:issue) { build(:newspaper_issue) }
   let(:ability) { build(:ability) }
   let(:uploaded_pdf_file) { create(:uploaded_pdf_file) }
@@ -34,7 +37,6 @@ RSpec.describe NewspaperWorks::Actors::NewspaperWorksUploadActor, :perform_enque
     #   shared state across examples (without use of `before(:all)` which is
     #   mutually exclusive with `let` in practice, and ruffles rubocop's
     #   overzealous sense of moral duty, speaking of which:
-    # rubocop:disable RSpec/ExampleLength
     it "creates child pages for issue", perform_enqueued: do_now_jobs do
       pages = uploaded_issue.members.select { |w| w.class == NewspaperPage }
       expect(pages.size).to eq 2
@@ -50,6 +52,5 @@ RSpec.describe NewspaperWorks::Actors::NewspaperWorksUploadActor, :perform_enque
       stored_size = response.body.length
       expect(stored_size).to be > 0
     end
-    # rubocop:enable RSpec/ExampleLength
   end
 end
