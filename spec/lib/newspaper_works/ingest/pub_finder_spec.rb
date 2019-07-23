@@ -30,7 +30,7 @@ RSpec.describe NewspaperWorks::Ingest::PubFinder do
       lccn = publication.lccn
       ingester.find_or_create_publication_for_issue(issue, lccn, nil, {})
       publication.reload
-      expect(publication.ordered_members.to_a).to include issue
+      expect(publication.members.to_a).to include issue
     end
 
     it "links issue to new publication" do
@@ -39,7 +39,7 @@ RSpec.describe NewspaperWorks::Ingest::PubFinder do
       ingester.find_or_create_publication_for_issue(issue, lccn, nil, {})
       publication = ingester.find_publication(lccn)
       expect(publication).to be_a NewspaperTitle
-      expect(publication.ordered_members.to_a).to include issue
+      expect(publication.members.to_a).to include issue
     end
 
     it "copies metadata for created publication" do

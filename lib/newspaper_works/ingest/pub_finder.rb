@@ -70,7 +70,7 @@ module NewspaperWorks
           )
         end
         publication = create_publication(lccn, title, opts) if publication.nil?
-        publication.ordered_members << issue
+        publication.members << issue
         publication.save!
         write_log(
           "Linked NewspaperIssue #{issue.id} to "\

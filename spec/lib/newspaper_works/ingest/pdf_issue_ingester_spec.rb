@@ -67,10 +67,9 @@ RSpec.describe NewspaperWorks::Ingest::PDFIssueIngester do
       publication = NewspaperTitle.where(lccn: lccn).first
       expect(publication).not_to be_nil
       # 2. NewspaperIssue created and findable withing publication members
-      issue = publication.ordered_members.to_a[0]
+      issue = publication.members.to_a[0]
       expect(issue.publication_date).to eq "1853-06-04"
       expect(issue.title).to eq "The weekly journal: June 4, 1853"
-      puts(publication.ordered_members.to_a.size)
       # Verify administrative metadata defaults:
       expect(issue.depositor).to eq User.batch_user.user_key
       expect(issue.admin_set).to eq AdminSet.find(AdminSet::DEFAULT_ID)
