@@ -51,9 +51,9 @@ module NewspaperWorks
       end
 
       def load
-        resp = Faraday.get url
-        return if resp.status == 404
-        @doc = Nokogiri.XML(resp.body)
+        resp = NewspaperWorks::ResourceFetcher.get url
+        return if resp['status'] == 404
+        @doc = Nokogiri.XML(resp['body'])
         @title = normalize_title(find('//dcterms:title').first.text)
         @language = iso_language_for(find('//dcterms:language').first.text)
         @empty = false
@@ -92,8 +92,8 @@ module NewspaperWorks
         def lc_catalog_url(lccn)
           content_url = "https://lccn.loc.gov/#{lccn}"
           url = "#{content_url}/mods"
-          resp = Faraday.get url
-          doc = Nokogiri.XML(resp.body)
+          resp = NewspaperWorks::ResourceFetcher.get url
+          doc = Nokogiri.XML(resp['body'])
           return content_url unless doc.root.children.empty?
         end
 
@@ -124,8 +124,8 @@ module NewspaperWorks
           code = code.split('/')[-1]
           lookup_url = 'https://www.loc.gov/standards/iso639-2/php/langcodes_name.php'
           lookup_url += "?iso_639_1=#{code}"
-          resp = Faraday.get lookup_url
-          html = Nokogiri::HTML(resp.body)
+          resp = NewspaperWorks::ResourceFetcher.get lookup_url
+          html = Nokogiri::HTML(resp['body'])
           html.xpath('//table[1]/tr[2]/td[2]').first.text.strip
         end
     end

@@ -37,8 +37,8 @@ module NewspaperWorks
       end
 
       def load_lc
-        resp = Faraday.get url
-        @doc = Nokogiri.XML(resp.body)
+        resp = NewspaperWorks::ResourceFetcher.get url
+        @doc = Nokogiri.XML(resp['body'])
         return if empty?
         # try title[@type="uniform"] first:
         title = find('//mods:titleInfo[@type="uniform"]/mods:title').first

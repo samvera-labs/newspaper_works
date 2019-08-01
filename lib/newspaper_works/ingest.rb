@@ -33,8 +33,8 @@ module NewspaperWorks
       query = URI.encode(place_name)
       geo_qs = "q=#{query}&username=#{username}"
       url = "http://api.geonames.org/search?#{geo_qs}"
-      resp = Faraday.get url
-      doc = Nokogiri.XML(resp.body)
+      resp = NewspaperWorks::ResourceFetcher.get url
+      doc = Nokogiri.XML(resp['body'])
       geonames_id = doc.xpath('//geonames/geoname[1]/geonameId').first
       return if geonames_id.nil?
       "http://sws.geonames.org/#{geonames_id.text}/"

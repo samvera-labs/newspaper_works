@@ -41,4 +41,5 @@ SUMMARY
   spec.add_development_dependency 'rspec-activemodel-mocks'
   spec.add_development_dependency 'shoulda-matchers', '~> 3.1'
   spec.add_development_dependency 'solr_wrapper', '>= 1.1', '< 3.0'
+  spec.add_development_dependency 'webmock', '~> 3.6'
 end
