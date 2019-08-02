@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'webmock/rspec'
 
 describe NewspaperWorks::ResourceFetcher do
   describe "cache hit and expiration handling" do

@@ -1,3 +1,5 @@
+require 'json'
+
 # testing environent:
 ENV['RAILS_ENV'] ||= 'test'
 
@@ -12,6 +14,15 @@ end
 require 'bundler/setup'
 require 'engine_cart'
 EngineCart.load_application!
+
+# webmock
+require 'webmock/rspec'
+# include WebMock API makes stub_request available in initial config, not
+#   just inside tests:
+include WebMock::API
+# Allow connections to pass through by default, so that any before(:suite)
+#   hook that runs before WebMock config isn't affected:
+WebMock.allow_net_connect!
 
 # test account for Geonames-related specs
 Qa::Authorities::Geonames.username = 'newspaper_works'
@@ -73,7 +84,23 @@ RSpec.configure do |config|
 
   # enable WebMock, but make sure it is opt-in for stubs, allowing non-stubbed
   # HTTP requests to proceed normally
-  config.before(:suite) { WebMock.enable! }
+  config.before(:suite) do
+    WebMock.enable!
+    WebMock.allow_net_connect!
+    # Load stubs from manifest
+    fixtures = File.join(NewspaperWorks::GEM_PATH, 'spec', 'fixtures', 'files')
+    manifest_path = File.join(fixtures, 'resource_mocks', 'urls.json')
+    manifest = JSON.parse(File.read(manifest_path))
+    manifest['urls'].each do |r|
+      path = File.join(fixtures, 'resource_mocks', r['local'])
+      status = r['status'] || 200
+      stub_request(:any, r['url']).to_return(
+        body: File.open(path),
+        status: status
+      )
+    end
+  end
+  # ensure HTTP connections allowed by webmock between/before tests:
   config.before { WebMock.allow_net_connect! }
 
   # :perform_enqueued config setting below copied from Hyrax spec_helper.rb
