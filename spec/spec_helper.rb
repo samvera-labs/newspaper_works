@@ -71,6 +71,11 @@ RSpec.configure do |config|
     end
   end
 
+  # enable WebMock, but make sure it is opt-in for stubs, allowing non-stubbed
+  # HTTP requests to proceed normally
+  config.before(:suite) { WebMock.enable! }
+  config.before { WebMock.allow_net_connect! }
+
   # :perform_enqueued config setting below copied from Hyrax spec_helper.rb
   config.before(:example, :perform_enqueued) do |example|
     ActiveJob::Base.queue_adapter.filter = example.metadata[:perform_enqueued].try(:to_a)

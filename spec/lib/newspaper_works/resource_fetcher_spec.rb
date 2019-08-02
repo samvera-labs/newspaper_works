@@ -2,18 +2,6 @@ require 'spec_helper'
 require 'webmock/rspec'
 
 describe NewspaperWorks::ResourceFetcher do
-  before(:context) do
-    # Enable WebMock, but...
-    WebMock.enable!
-    # ...allow connection for non-stubbed requests:
-    WebMock.allow_net_connect!
-  end
-
-  after(:context) do
-    WebMock.allow_net_connect!
-    WebMock.disable!
-  end
-
   describe "cache hit and expiration handling" do
     cached_time_url1 = 0
     cached_time_url2 = 0
