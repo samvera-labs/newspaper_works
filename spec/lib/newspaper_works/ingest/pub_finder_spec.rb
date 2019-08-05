@@ -47,9 +47,10 @@ RSpec.describe NewspaperWorks::Ingest::PubFinder do
       expect(ingester.find_publication(lccn)).to be_nil
       publication = ingester.create_publication(lccn, nil, {})
       expect(publication.title).to contain_exactly "Rocky Mountain news"
-      expect(publication.place_of_publication).to contain_exactly(
-        "http://sws.geonames.org/5419384/"
-      )
+      expect(publication.place_of_publication.map { |v| v.to_uri.to_s }).to \
+        contain_exactly(
+          "http://sws.geonames.org/5419384/"
+        )
       expect(publication.language).to contain_exactly 'eng'
       expect(publication.oclcnum).to eq 'ocm03946163'
     end

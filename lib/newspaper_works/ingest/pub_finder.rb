@@ -26,6 +26,10 @@ module NewspaperWorks
         :place_of_publication
       ].freeze
 
+      WRAPPERS = {
+        place_of_publication: Hyrax::ControlledVocabularies::Location
+      }.freeze
+
       # @param lccn [String] Library of Congress Control Number
       #   of Publication
       # @return [NewspaperTitle, NilClass] publication or nil if not found
@@ -40,6 +44,9 @@ module NewspaperWorks
         COPY_FIELDS.each do |name|
           value = metadata.send(name)
           next if value.nil?
+          # wrapped value, if applicable:
+          value = WRAPPERS[name].new(value) if WRAPPERS.include?(name)
+          # value in array, if applicable:
           value = [value] if MULTI_VALUED.include?(name)
           publication.send("#{name}=", value)
         end

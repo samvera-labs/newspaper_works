@@ -88,7 +88,9 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::IssueIngester do
       # construct with title, this time with username set for geonames:
       Qa::Authorities::Geonames.username = 'newspaper_works'
       adapter.construct_issue
-      pop = adapter.target.publication.place_of_publication
+      pop = adapter.target.publication.place_of_publication.map do |v|
+        v.to_uri.to_s
+      end
       expect(pop).not_to be_empty
       expect(pop[0]).to start_with 'http://sws.geonames.org/'
     end
