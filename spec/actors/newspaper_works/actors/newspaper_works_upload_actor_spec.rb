@@ -46,7 +46,7 @@ RSpec.describe NewspaperWorks::Actors::NewspaperWorksUploadActor, :perform_enque
     #   mutually exclusive with `let` in practice, and ruffles rubocop's
     #   overzealous sense of moral duty, speaking of which:
     it "creates child pages for issue", perform_enqueued: do_now_jobs do
-      pages = uploaded_issue.members.select { |w| w.class == NewspaperPage }
+      pages = uploaded_issue.ordered_pages
       expect(pages.size).to eq 2
       page = pages[0]
       # Page needs correct admin set:
@@ -62,7 +62,7 @@ RSpec.describe NewspaperWorks::Actors::NewspaperWorksUploadActor, :perform_enque
       # expect that subsequent edits of same issue (run though update
       #   method of actor stack) do not duplicate pages (verify by count):
       expect(edited_issue.id).to eq uploaded_issue.id
-      pages = edited_issue.members.select { |w| w.class == NewspaperPage }
+      pages = edited_issue.ordered_pages
       expect(pages.size).to eq 2 # still the same page count
     end
   end
