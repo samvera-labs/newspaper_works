@@ -6,16 +6,10 @@
       Issues:
       <% if (years[:all].count >= 1) %>
         <% year_select_options = Hash[years[:all].collect { |y| [y, url_for(main_app.hyrax_newspaper_title_path(params[:id], year: y))] }] %>
-        <%= year_select_options %>
-        <%= select_tag :year, options_for_select(year_select_options) %>
+        <%= select_tag :year, options_for_select(year_select_options, selected=url_for(main_app.hyrax_newspaper_title_path(params[:id], year: years[:current]))) %>
       <% else %>
         <%= years[:current] %>
       <% end %>
-      <hr>
-      <%= years %>
-      <hr>
-      <%= years[:all].count %>
-      <hr>
       <%= link_to(">>", main_app.hyrax_newspaper_title_path(params[:id], year: years[:next])) if years[:next] %>
     </h2>
     </div>
