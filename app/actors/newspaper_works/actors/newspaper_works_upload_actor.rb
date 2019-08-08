@@ -39,7 +39,7 @@ module NewspaperWorks
         hold_upload_paths(env) if env.curation_concern.class == NewspaperIssue
         # pass to next actor, then handle issue uploads after other actors
         #   that are lower on the stack
-        next_actor.create(env) && after_other_actors(env)
+        next_actor.update(env) && after_other_actors(env)
       end
 
       def default_admin_set
