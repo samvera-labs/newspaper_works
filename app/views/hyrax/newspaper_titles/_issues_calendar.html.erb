@@ -4,7 +4,7 @@
     <h2 align="center">
       <%= link_to("<<", main_app.hyrax_newspaper_title_path(params[:id], year: years[:previous])) if years[:previous] %>
       Issues:
-      <% if (years[:all].count >= 1) %>
+      <% if (years[:all] && years[:all].count >= 1) %>
         <% year_select_options = Hash[years[:all].collect { |y| [y, url_for(main_app.hyrax_newspaper_title_path(params[:id], year: y))] }] %>
         <%= select_tag :year, options_for_select(year_select_options, selected=url_for(main_app.hyrax_newspaper_title_path(params[:id], year: years[:current]))) %>
       <% else %>
