@@ -10,14 +10,11 @@ module Hyrax
 
     delegate :author, :photographer, :volume, :edition_number,
              :edition_name, :issue_number, :geographic_coverage, :extent,
-             :genre, :publication_date, to: :solr_document
+             :genre, to: :solr_document
 
-=begin
-TESTING
     def publication_date
-      solr_document["publication_date_dtsizm"]&.first
+      solr_document["publication_date_dtsi"]
     end
-=end
 
     def page_ids
       solr_document['page_ids_ssim']

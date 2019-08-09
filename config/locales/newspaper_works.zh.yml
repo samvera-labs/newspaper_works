@@ -1,6 +1,9 @@
 ---
 zh:
   newspaper_works:
+    attributes:
+      place_of_publication:
+        label: '出版地'
     newspapers_search:
       title:                    '搜索报纸'
       text:                     '使用此表单搜索全文报纸内容。'

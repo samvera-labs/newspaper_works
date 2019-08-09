@@ -1,6 +1,9 @@
 ---
 fr:
   newspaper_works:
+    attributes:
+      place_of_publication:
+        label: 'Place de publication'
     newspapers_search:
       title:                    'Rechercher dans les journaux'
       text:                     'Utilisez ce formulaire pour rechercher un contenu de journal en texte intégral.'

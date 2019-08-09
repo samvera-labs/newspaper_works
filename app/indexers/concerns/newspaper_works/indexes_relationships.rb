@@ -120,7 +120,7 @@ module NewspaperWorks
       fields = %w[language_sim place_of_publication_label_sim
                   place_of_publication_city_sim place_of_publication_county_sim
                   place_of_publication_state_sim place_of_publication_country_sim
-                  place_of_publication_llsim]
+                  place_of_publication_llsim place_of_publication_label_tesim]
       fields.each do |field|
         solr_doc[field] ||= parent_doc[field]
       end

@@ -1,6 +1,9 @@
 ---
 it:
   newspaper_works:
+    attributes:
+      place_of_publication:
+        label: 'Luogo di pubblicazione'
     newspapers_search:
       title:                    'Cerca giornali'
       text:                     'Utilizzare questo modulo per cercare contenuti di giornali a testo completo.'

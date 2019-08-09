@@ -2,8 +2,6 @@
 module NewspaperWorks
   # shared NewspaperIssue info for multiple newspaper models
   module IssueInfoPresenter
-    delegate :publication_date, to: :solr_document
-
     def issue_id
       solr_document['issue_id_ssi']
     end
@@ -12,12 +10,9 @@ module NewspaperWorks
       solr_document['issue_title_ssi']
     end
 
-=begin
-TESTING
     def publication_date
-      solr_document.publication_date
+      solr_document['publication_date_dtsi']
     end
-=end
 
     def issue_volume
       solr_document['issue_volume_ssi']

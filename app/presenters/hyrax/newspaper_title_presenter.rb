@@ -3,9 +3,8 @@
 module Hyrax
   class NewspaperTitlePresenter < Hyrax::WorkShowPresenter
     include NewspaperWorks::NewspaperCorePresenter
-    delegate :edition_number, :edition_name, :frequency, :preceded_by,
-             :succeeded_by, :publication_date_start,
-             :publication_date_end, to: :solr_document
+    delegate :edition_name, :frequency, :preceded_by,
+             :succeeded_by, to: :solr_document
 
     def title_search_params
       { f: { "publication_title_ssi" => title } }
@@ -20,7 +19,7 @@ module Hyrax
     end
 
     def issue_years
-      all_title_issue_dates.map { |issue| year_or_nil(issue) }.compact.uniq.sort
+      all_title_issue_dates.map { |issue_date| year_or_nil(issue_date) }.compact.uniq.sort
     end
 
     def prev_year
@@ -35,16 +34,13 @@ module Hyrax
       issue_years[issue_years.index(year) + 1]
     end
 
-=begin
-TESTING
     def publication_date_start
-      solr_document["publication_date_start_dtsizm"]
+      solr_document["publication_date_start_dtsi"]
     end
 
     def publication_date_end
-      solr_document["publication_date_end_dtsizm"]
+      solr_document["publication_date_end_dtsi"]
     end
-=end
 
     def year
       return nil if issue_years.empty?
@@ -80,9 +76,9 @@ TESTING
         nil
       end
 
-      def year_or_nil(date_array)
-        return nil unless date_array.is_a?(Array)
-        Date.parse(date_array.first).year
+      def year_or_nil(date_value)
+        return nil unless date_value.is_a?(String)
+        Date.parse(date_value).year
       rescue TypeError
         nil
       end
