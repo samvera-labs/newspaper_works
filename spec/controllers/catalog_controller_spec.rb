@@ -6,6 +6,7 @@ RSpec.describe CatalogController do
     subject { described_class.blacklight_config.index_fields }
 
     it 'has NewspaperWorks index fields' do
+      expect(subject['publication_title_ssi']).not_to be_falsey
       expect(subject['place_of_publication_label_tesim']).not_to be_falsey
       expect(subject['publication_date_dtsi'].class).to eq(Blacklight::Configuration::IndexField)
     end
