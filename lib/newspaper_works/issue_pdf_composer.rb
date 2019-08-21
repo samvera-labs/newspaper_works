@@ -48,26 +48,26 @@ module NewspaperWorks
       "issue-#{@issue.id}-generated.pdf"
     end
 
-    private
-
-      # Validate PDF with poppler `pdfinfo` command, which will detect
-      #   error conditions in cases like truncated PDF, and only in those
-      #   error conditions will write to stderr.
-      # @param path [String] path to PDF file
-      # @return [Boolean] true or false
-      def validate_pdf(path)
-        return false if path.nil? || !File.exist?(path)
-        return false if File.size(path).zero?
-        result = ''
-        cmd = "pdfinfo #{path}"
-        # rubocop:disable Lint/UnusedBlockArgument
-        Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
-          result = stderr.read
-        end
-        # rubocop:enable Lint/UnusedBlockArgument
-        # only zero bytes stderr output from `pdfinfo` considered valid PDF:
-        result.size.zero?
+    # Validate PDF with poppler `pdfinfo` command, which will detect
+    #   error conditions in cases like truncated PDF, and only in those
+    #   error conditions will write to stderr.
+    # @param path [String] path to PDF file
+    # @return [Boolean] true or false
+    def validate_pdf(path)
+      return false if path.nil? || !File.exist?(path)
+      return false if File.size(path).zero?
+      result = ''
+      cmd = "pdfinfo #{path}"
+      # rubocop:disable Lint/UnusedBlockArgument
+      Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
+        result = stderr.read
       end
+      # rubocop:enable Lint/UnusedBlockArgument
+      # only zero bytes stderr output from `pdfinfo` considered valid PDF:
+      result.size.zero?
+    end
+
+    private
 
       # @return [Array] list of paths to page PDFs, in page order
       # @raises [NewspaperWorks::PagesNotReady] if any page has invalid
@@ -79,7 +79,7 @@ module NewspaperWorks
           e = "Page PDFs not ready for issue "\
             "(Issue id: #{issue.id}, Page index: #{idx})"
           path = derivatives_of(page).path('pdf')
-          raise NewspaperWorks::PagesNotReady, e unless validate_path(page)
+          raise NewspaperWorks::PagesNotReady, e unless validate_pdf(path)
           result.push(path)
         end
         result
@@ -93,7 +93,13 @@ module NewspaperWorks
         NewspaperWorks::Data::WorkDerivatives.of(work)
       end
 
+      def ensure_whitelist
+        whitelist = Hyrax.config.whitelisted_ingest_dirs
+        whitelist.push(Dir.tmpdir) unless whitelist.include?(Dir.tmpdir)
+      end
+
       def attach_to_issue(path)
+        ensure_whitelist
         derivatives = derivatives_of(@issue)
         derivatives.assign(path)
         derivatives.commit!
