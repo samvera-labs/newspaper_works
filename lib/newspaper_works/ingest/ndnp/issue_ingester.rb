@@ -34,6 +34,7 @@ module NewspaperWorks
         def ingest
           construct_issue
           ingest_pages
+          NewspaperWorks::ComposeIssuePDFJob.perform_later(@issue)
         end
 
         def construct_issue
