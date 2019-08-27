@@ -5,10 +5,6 @@ RSpec.describe NewspaperWorks::IssuePDFComposer do
     build(:newspaper_issue)
   end
 
-  let(:empty_saved_fileset) do
-    FileSet.create!
-  end
-
   let(:fixtures_path) do
     fixtures = File.join(NewspaperWorks::GEM_PATH, 'spec/fixtures/files')
     Hyrax.config.whitelisted_ingest_dirs.push(fixtures)
