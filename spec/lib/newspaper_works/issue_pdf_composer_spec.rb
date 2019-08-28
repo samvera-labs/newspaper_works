@@ -38,8 +38,6 @@ RSpec.describe NewspaperWorks::IssuePDFComposer do
 
   let(:two_page_issue) do
     issue = NewspaperIssue.create(title: ['Issue Test'])
-    issue.members << FileSet.create!
-    issue.save!
     issue.ordered_members << page1_with_pdf
     issue.ordered_members << page2_with_pdf
     issue.save!
@@ -84,8 +82,8 @@ RSpec.describe NewspaperWorks::IssuePDFComposer do
       expect(derivatives.exist?('pdf')).to be false
       # Make the mulit-page-pdf with IssuePDFComposer#compose:
       composer.compose
-      # issue derivatives: reload from directory traversal:
-      derivatives.load_paths
+      # reload issue derivatives, as they have been updated:
+      derivatives = NewspaperWorks::Data::WorkDerivatives.of(two_page_issue)
       # upon reload of cached derivative paths, we see a PDF:
       expect(derivatives.exist?('pdf')).to be true
     end

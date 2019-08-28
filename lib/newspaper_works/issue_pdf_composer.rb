@@ -98,8 +98,16 @@ module NewspaperWorks
         whitelist.push(Dir.tmpdir) unless whitelist.include?(Dir.tmpdir)
       end
 
+      def ensure_issue_has_fileset
+        fileset = @issue.members.select { |m| m.class == FileSet }[0]
+        return unless fileset.nil?
+        @issue.members << FileSet.create!
+        @issue.save!
+      end
+
       def attach_to_issue(path)
         ensure_whitelist
+        ensure_issue_has_fileset
         derivatives = derivatives_of(@issue)
         derivatives.assign(path)
         derivatives.commit!
