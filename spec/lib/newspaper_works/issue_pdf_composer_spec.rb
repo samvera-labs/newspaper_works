@@ -76,16 +76,26 @@ RSpec.describe NewspaperWorks::IssuePDFComposer do
   end
 
   describe "Construction, attachment of combined PDF" do
-    it "creates issue PDF from sources" do
+    do_now_jobs = [IngestLocalFileJob, IngestJob, InheritPermissionsJob]
+
+    def files_of(work)
+      NewspaperWorks::Data::WorkFiles.of(work)
+    end
+
+    it "creates issue PDF from sources", perform_enqueued: do_now_jobs do
       composer = described_class.new(two_page_issue)
-      derivatives = NewspaperWorks::Data::WorkDerivatives.of(two_page_issue)
-      expect(derivatives.exist?('pdf')).to be false
+      # no (primary) files attached to issue yet:
+      expect(files_of(two_page_issue).keys.size).to eq 0
       # Make the mulit-page-pdf with IssuePDFComposer#compose:
       composer.compose
-      # reload issue derivatives, as they have been updated:
-      derivatives = NewspaperWorks::Data::WorkDerivatives.of(two_page_issue)
-      # upon reload of cached derivative paths, we see a PDF:
-      expect(derivatives.exist?('pdf')).to be true
+      # reload issue files, as they have been updated; check for PDF:
+      two_page_issue.reload
+      files = files_of(two_page_issue)
+      expect(files.keys.size).to eq 1
+      # getting path initiates a repository checkout of file:
+      path = files.values[0].path
+      # we found a PDF, simple check only extension (not validating):
+      expect(path.end_with?('pdf')).to be true
     end
   end
 end
