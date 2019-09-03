@@ -45,7 +45,7 @@ module NewspaperWorks
     end
 
     def output_filename
-      "issue-#{@issue.id}-generated.pdf"
+      "#{@issue.id}_full-issue.pdf"
     end
 
     # Validate PDF with poppler `pdfinfo` command, which will detect
