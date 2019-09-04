@@ -2,12 +2,9 @@ require 'hyrax'
 
 module NewspaperWorks
   module Data
-    # Disable below metric, for now, not splitting this class into modules,
-    #   which would just make for more complexity and hinder readabilty.
     #   TODO: consider compositional refactoring (not mixins), but this
     #         may make readability/comprehendability higher, and yield
     #         higher applied/practical complexity.
-    # rubocop:disable Metrics/ClassLength
     class WorkDerivatives
       include NewspaperWorks::Data::FilesetHelper
       include NewspaperWorks::Data::PathHelper
@@ -82,8 +79,7 @@ module NewspaperWorks
 
       # Assign a destination name to unassigned queue for deletion -- OR --
       #   remove a path from queue of assigned items
-      # @param name_or_id [String] Destination name (file extension),
-      #   or source path
+      # @param name [String] Destination name (file extension), or source path
       def unassign(name)
         # if name is queued path, remove from @assigned queue:
         if @assigned.include?(name)
@@ -314,6 +310,5 @@ module NewspaperWorks
           FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
         end
     end
-    # rubocop:enable Metrics/ClassLength
   end
 end
