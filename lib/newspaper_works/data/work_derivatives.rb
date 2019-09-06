@@ -198,10 +198,10 @@ module NewspaperWorks
       #   is provided, the size of derivative file
       # @param name [String] optional destination name, usually file extension
       # @return [Integer] size in bytes
-      def size(*args)
+      def size(name = nil)
         load_paths if @paths.nil?
-        return @paths.size if args[0].nil?
-        File.size(@paths[args[0]])
+        return @paths.size if name.nil?
+        File.size(@paths[name])
       end
 
       # Check if derivative file exists for destination name
