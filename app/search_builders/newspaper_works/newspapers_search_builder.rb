@@ -4,7 +4,9 @@
 # NOT the search results when a user submits the form
 module NewspaperWorks
   class NewspapersSearchBuilder < Hyrax::SearchBuilder
-    self.default_processor_chain += [:facets_for_newspapers_search_form, :newspaper_pages_only]
+    self.default_processor_chain += [:facets_for_newspapers_search_form,
+                                     :newspaper_pages_only,
+                                     :ocr_search_params]
 
     def facets_for_newspapers_search_form(solr_params)
       # we only care about facets, we don't need any rows.
@@ -21,6 +23,16 @@ module NewspaperWorks
       type_value = NewspaperPage.human_readable_type
       solr_params[:fq] ||= []
       solr_params[:fq] << "#{type_field}:\"#{type_value}\""
+    end
+
+    # set params for ocr field searching
+    def ocr_search_params(solr_parameters = {})
+      config_ocr_search_field = 'all_text_tsimv'
+      solr_parameters[:facet] = false
+      solr_parameters[:hl] = true
+      solr_parameters[:'hl.fl'] = config_ocr_search_field
+      solr_parameters[:'hl.fragsize'] = 135
+      solr_parameters[:'hl.snippets'] = 10
     end
   end
 end
