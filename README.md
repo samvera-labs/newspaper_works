@@ -20,7 +20,6 @@ Jump in: [![Slack Status](http://slack.samvera.org/badge.svg)](http://slack.samv
 	- [Development Status](#development-status)
 	- [Requirements](#requirements)
 	  - [Newspaper Works Dependencies](#newspaper-works-dependencies)
-	- [PCDM metadata Model](#Newspapers-PCDM-metadata-model)
 - [Installation/Testing](#installationtesting)
 	- [Extending, Using](#extending-using)
 	- [Basic Model Use (console)](#basic-model-use-console)
@@ -67,14 +66,6 @@ A public testing site is available for those interested in testing out the newsp
   * [poppler-utils](https://poppler.freedesktop.org/)
   * [GraphicsMagick](http://www.graphicsmagick.org/)
   * [libcurl3](https://packages.ubuntu.com/search?keywords=libcurl3)
-
-## Newspapers PCDM metadata model
-
-This model describes digitized newspaper content modeled using the PCDM ontology, and is intended to inform the development of RDF-based models for all types of newspaper content objects (titles, containers, issues, pages, articles, files), such as would be used in Samvera- or Islandora-based digital asset management applications.
-
-This model was greatly informed by earlier efforts from National Library of Wales and University of Maryland, as well as discussions of the Samvera Newspapers Interest Group. This is essentially an attempt to reconcile these efforts and express them as a formal PCDM profile.
-
-[Detailed metadata model documents](https://wiki.duraspace.org/display/samvera/PCDM+metadata+model+for+Newspapers)
 
 # Installing, Developing, and Testing
 Newspaper_works easily integrates with your Hyrax 2.5.1 applications.
