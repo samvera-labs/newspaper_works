@@ -11,15 +11,14 @@ Jump in: [![Slack Status](http://slack.samvera.org/badge.svg)](http://slack.samv
 
 <!-- TOC -->
 
-- [Introduction](#introduction)
-  - [Documentation](#documentation)
 - [Overview](#overview)
+  - [Documentation](#documentation)
   - [Purpose, Use, and Aims](#purpose-use-and-aims)
-  - [Development Status](#development-status)
   - [Requirements](#requirements)
   - [Newspaper_works Dependencies](#newspaper_works-dependencies)
 - [Installing, Developing, and Testing](#installing-developing-and-testing)
-  - [Extending and Using](#extending-and-using)
+  - [Extending into existing Hyrax application](#extending-into-existing-hyrax-application)
+  - [Developing and Testing with Vagrant](#developing-and-testing-with-vagrant)
     - [Ingest, Application Interface](#ingest-application-interface)
   - [Basic Model Use (console)](#basic-model-use-console)
   - [Newspapers PCDM metadata model](#newspapers-pcdm-metadata-model)
@@ -27,11 +26,7 @@ Jump in: [![Slack Status](http://slack.samvera.org/badge.svg)](http://slack.samv
     - [Config changes made by the installer:](#config-changes-made-by-the-installer)
     - [Configuration changes to _config/intitializers/hyrax.rb_ you should make after running the installer:](#configuration-changes-to-_configintitializershyraxrb_-you-should-make-after-running-the-installer)
     - [Configuration changes to _config/environments/production.rb_ you should make after running the installer:](#configuration-changes-to-_configenvironmentsproductionrb_-you-should-make-after-running-the-installer)
-  - [Development and Testing with Vagrant](#development-and-testing-with-vagrant)
-    - [Host System Requirements (install these before proceeding)](#host-system-requirements-install-these-before-proceeding)
-    - [Test Environment Setup (provisioning of virtual machine)](#test-environment-setup-provisioning-of-virtual-machine)
-    - [Using/testing the Newspaper_works application with Vagrant](#usingtesting-the-newspaper_works-application-with-vagrant)
-  - [Development and testing setup](#development-and-testing-setup)
+- [Contributing to Newspaper Works](#contributing-to-newspaper-works)
 - [Acknowledgements](#acknowledgements)
   - [Sponsoring Organizations](#sponsoring-organizations)
   - [Contributors and Project Team](#contributors-and-project-team)
@@ -74,13 +69,19 @@ This gem, while not a stand-alone application, can be integrated into an applica
 # Installing, Developing, and Testing
 Newspaper_works easily integrates with your Hyrax 2.5.x applications.
 
-A public testing site is available for those interested in testing out the newspaper_works gem. [Newspaper Works Demo Site](https://newspaperworks.digitalnewspapers.org/) **NOTE:** The demo site may not be running the latest release of Newspapers_Works.
-
-## Extending and Using
+## Extending into existing Hyrax application
 
 * Add `gem 'newspaper_works', :git => 'https://github.com/marriott-library/newspaper_works.git'` to your Gemfile.
 * Run `bundle install`
 * Run `rails generate newspaper_works:generate`
+
+## Developing and Testing with Vagrant
+
+A VM has been created for users and developers to quickly and easily deploy the latest newspaper_works codebase using vagrant and virtual box. Additional information can be found by heading over to the [samvera-newspapers-vagrant](https://github.com/marriott-library/samvera-newspapers-vagrant) github project.
+
+Additional information regarding development and testing environments setup and configuration can be found [here](https://github.com/marriott-library/newspaper_works/wiki/Installing,-Developing,-and-Testing)
+
+Additionally, a public testing site is available for those interested in testing out the newspaper_works gem. [Newspaper Works Demo Site](https://newspaperworks.digitalnewspapers.org/) **NOTE:** The demo site may not be running the latest release of Newspapers_Works.
 
 ### Ingest, Application Interface
 
@@ -115,13 +116,8 @@ _More here soon!_
 
 * NewspaperWorks overrides Hyrax's default `:after_create_fileset` More infomation can be found [here](https://github.com/marriott-library/newspaper_works/wiki/File-Attachment-Notes)
 
-## Developing and Testing with Vagrant
-
-A VM has been created for users and developers to quickly and easily deploy the latest newspaper_works codebase using vagrant and virtual box. Additional information can be found by heading over to the [samvera-newspapers-vagrant](https://github.com/marriott-library/samvera-newspapers-vagrant) github project.
-
-Additional information regarding development and testing environments setup and configuration can be found [here](https://github.com/marriott-library/newspaper_works/wiki/Installing,-Developing,-and-Testing)
-
 # Contributing to Newspaper Works
+
 We encourage anyone who is interested in newspapers and Samvera to contribute to this project. [How can I contribute?](https://github.com/samvera/hyrax/blob/master/.github/CONTRIBUTING.md)
 
 # Acknowledgements
