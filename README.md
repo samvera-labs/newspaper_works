@@ -19,7 +19,7 @@ Jump in: [![Slack Status](http://slack.samvera.org/badge.svg)](http://slack.samv
 - [Installing, Developing, and Testing](#installing-developing-and-testing)
   - [Extending into existing Hyrax application](#extending-into-existing-hyrax-application)
   - [Developing and Testing with Vagrant](#developing-and-testing-with-vagrant)
-    - [Ingest, Application Interface](#ingest-application-interface)
+  - [Ingest, Application Interface](#ingest-application-interface)
   - [Basic Model Use (console)](#basic-model-use-console)
   - [Newspapers PCDM metadata model](#newspapers-pcdm-metadata-model)
   - [Application/Site Specific Configuration](#applicationsite-specific-configuration)
@@ -83,7 +83,7 @@ Additional information regarding development and testing environments setup and 
 
 Additionally, a public testing site is available for those interested in testing out the newspaper_works gem. [Newspaper Works Demo Site](https://newspaperworks.digitalnewspapers.org/) **NOTE:** The demo site may not be running the latest release of Newspapers_Works.
 
-### Ingest, Application Interface
+## Ingest, Application Interface
 
 _See [wiki](https://github.com/marriott-library/newspaper_works/wiki)_.
 
@@ -116,11 +116,12 @@ _More here soon!_
 
 * NewspaperWorks overrides Hyrax's default `:after_create_fileset` More infomation can be found [here](https://github.com/marriott-library/newspaper_works/wiki/File-Attachment-Notes)
 
-# Contributing to Newspaper Works
+# Contributing
 
 We encourage anyone who is interested in newspapers and Samvera to contribute to this project. [How can I contribute?](https://github.com/samvera/hyrax/blob/master/.github/CONTRIBUTING.md)
 
 # Acknowledgements
+
 ## Sponsoring Organizations
 
 This gem is part of a project developed in a collaboration between [The University of Utah](https://www.utah.edu/), [J. Willard Marriott Library](https://www.lib.utah.edu/) and [Boston Public Library](https://www.bpl.org/), as part of a "Newspapers in Samvera" project grant funded by the [Institute for Museum and Library Services](https:///imls.gov).
