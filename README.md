@@ -9,27 +9,36 @@ Docs:
 
 Jump in: [![Slack Status](http://slack.samvera.org/badge.svg)](http://slack.samvera.org/)
 
-<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
-# Table of Contents
+<!-- TOC -->
+
 - [Introduction](#introduction)
   - [Documentation](#documentation)
-  - [Wiki](https://github.com/marriott-library/newspaper_works/wiki)
-  - [Features Matrix](https://github.com/marriott-library/newspaper_works/wiki/Features-Matrix)
 - [Overview](#overview)
-	- [Purpose, Use, and Aims](#purpose-use-and-aims)
-	- [Development Status](#development-status)
-	- [Requirements](#requirements)
-	  - [Newspaper Works Dependencies](#newspaper-works-dependencies)
-- [Installation/Testing](#installationtesting)
-	- [Extending, Using](#extending-using)
-	- [Basic Model Use (console)](#basic-model-use-console)
-	- [Application/Site Specific Configuration](#applicationsite-specific-configuration)
-	- [Development and Testing Setup](#development-and-testing-setup)
-- [Credits](#credits)
-	- [Sponsoring Organizations](#sponsoring-organizations)
-	- [Contributors and Project Team](#contributors-and-project-team)
-	- [More Information / Contact](#more-information-contact)
+  - [Purpose, Use, and Aims](#purpose-use-and-aims)
+  - [Development Status](#development-status)
+  - [Requirements](#requirements)
+  - [Newspaper_works Dependencies](#newspaper_works-dependencies)
+- [Installing, Developing, and Testing](#installing-developing-and-testing)
+  - [Extending and Using](#extending-and-using)
+    - [Ingest, Application Interface](#ingest-application-interface)
+  - [Basic Model Use (console)](#basic-model-use-console)
+  - [Application/Site Specific Configuration](#applicationsite-specific-configuration)
+    - [Config changes made by the installer:](#config-changes-made-by-the-installer)
+    - [Configuration changes to _config/intitializers/hyrax.rb_ you should make after running the installer:](#configuration-changes-to-configintitializershyraxrb-you-should-make-after-running-the-installer)
+    - [Configuration changes to _config/environments/production.rb_ you should make after running the installer:](#configuration-changes-to-configenvironmentsproductionrb-you-should-make-after-running-the-installer)
+  - [Development and Testing with Vagrant](#development-and-testing-with-vagrant)
+    - [Host System Requirements (install these before proceeding)](#host-system-requirements-install-these-before-proceeding)
+    - [Test Environment Setup (provisioning of virtual machine)](#test-environment-setup-provisioning-of-virtual-machine)
+    - [Using/testing the Newspaper_works application with Vagrant](#usingtesting-the-newspaper_works-application-with-vagrant)
+  - [Development and testing setup](#development-and-testing-setup)
+- [Acknowledgements](#acknowledgements)
+  - [Sponsoring Organizations](#sponsoring-organizations)
+  - [Contributors and Project Team](#contributors-and-project-team)
+  - [More Information](#more-information)
+  - [Contact](#contact)
+
 <!-- /TOC -->
+
 # Introduction
 The Newspapers in Samvera is an IMLS grant funded project to develop newspaper specific functionality for the [Samvera](http://samvera.org/) Hyrax framework.
 
@@ -93,14 +102,14 @@ _More here soon!_
 
 (It may be helpful to run `git diff` after installation to see all the changes made by the installer.)
 
-#### Configuration changes to `config/intitializers/hyrax.rb` you should make after running the installer:
+#### Configuration changes to _config/intitializers/hyrax.rb_ you should make after running the installer:
 
 * set `config.geonames_username` Enables geonames [username for Geonames](http://www.geonames.org/login
 * set `config.work_requires_files = false`
 * set ` config.iiif_image_server = true`
 * set `config.fits_path = /location/of/fits.sh`
 
-#### Configuration changes to `config/environments/production.rb` you should make after running the installer:
+#### Configuration changes to _config/environments/production.rb_ you should make after running the installer:
 
 * set `config.public_file_server.enabled = true`
 
@@ -108,7 +117,7 @@ _More here soon!_
 
 ## Development and Testing with Vagrant
 
-Additional information regarding development and testing environments setup and configuration can be found [here](https://github.com/marriott-library/newspaper_works/wiki/Development-and-Testing)
+Additional information regarding development and testing environments setup and configuration can be found [here](https://github.com/marriott-library/newspaper_works/wiki/Installing,-Developing,-and-Testing)
 
 ### Host System Requirements (install these before proceeding)
 
