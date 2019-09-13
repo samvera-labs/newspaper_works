@@ -102,6 +102,14 @@ RSpec.configure do |config|
   # ensure Hyrax has active sipity workflow for default admin set:
   config.before(:suite) do
     begin
+      # ensure workflows exist:
+      Hyrax::Workflow::WorkflowImporter.load_workflows
+      # ensure permission template actually exists in RDBMS:
+      id = 'admin_set/default'
+      no_template = Hyrax::PermissionTemplate.find_by(source_id: id).nil?
+      Hyrax::PermissionTemplate.create!(source_id: id) if no_template
+      # Default admin set needs to exist in Fedora, with relation to its
+      #   PermissionTemplate object:
       admin_set = AdminSet.find(AdminSet.find_or_create_default_admin_set_id)
       admin_set.save!
       permission_template = admin_set.permission_template
