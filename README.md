@@ -36,7 +36,8 @@ Jump in: [![Slack Status](http://slack.samvera.org/badge.svg)](http://slack.samv
 <!-- /TOC -->
 
 # Overview
-The Newspaper Works gem provides work type models and administrative functionality for Hyrax-based Samvera applications in the space of scanned newspaper media.  This gem can be included in a Digital Asset Management application based on Hyrax 2.5.x
+
+NewspaperWorks is a gem (Rails "engine") that refines the Hyrax solution bundle to support newspaper content in your repository, and is not a stand-alone application.  It is designed to be integrated into your new or existing Hyrax application, providing newspaper work types, ingest, derivative workflow, and user experience for newspaper repository use-cases.
 
 A complete list of the features for available in Newspaper_works can be found [here](https://github.com/marriott-library/newspaper_works/wiki/Features-Matrix)
 
