@@ -42,7 +42,7 @@ NewspaperWorks is a gem (Rails "engine") that refines the Hyrax solution bundle 
 A complete list of the features for available in Newspaper_works can be found [here](https://github.com/marriott-library/newspaper_works/wiki/Features-Matrix)
 
 ## Documentation
-We are currently working on adding and updating documentation on our [Project Wiki](https://github.com/marriott-library/newspaper_works/wiki)
+A set of helpful documents to help you learn more and deploy NewspaperWorks can be found on the [Project Wiki](https://github.com/marriott-library/newspaper_works/wiki)
 
 ## Purpose, Use, and Aims
 This gem, while not a stand-alone application, can be integrated into an application based on Hyrax 2.5.x easily to support a variety of cases for management, ingest, and archiving of primarily scanned (historic) newspaper archives.
@@ -50,9 +50,9 @@ This gem, while not a stand-alone application, can be integrated into an applica
 ## Requirements
 
   * [Ruby](https://rubyonrails.org/) >=2.4
-  * [Rails](https://rubyonrails.org/) 5.1.7
+  * [Rails](https://rubyonrails.org/) ~>5.1
   * [Bundler](http://bundler.io/)
-  * [Hyrax](https://github.com/samvera/hyrax) 2.5.x
+  * [Hyrax](https://github.com/samvera/hyrax) ~>2.5
     - ..._and various [Samvera dependencies](https://github.com/samvera/hyrax#getting-started) that entails_.
   * A Hyrax-based Rails application.
     * Newspaper_works is a gem/engine that can extend your Hyrax application.
