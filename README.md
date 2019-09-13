@@ -37,13 +37,13 @@ The Newspapers in Samvera is an IMLS grant funded project to develop newspaper s
 We are currently working on adding and updating documentation on our [Project Wiki](https://github.com/marriott-library/newspaper_works/wiki)
 
 # Overview
-The Newspaper Works gem provides work type models and administrative functionality for Hyrax-based Samvera applications in the space of scanned newspaper media.  This gem can be included in a Digital Asset Management application based on Hyrax 2.5.1
+The Newspaper Works gem provides work type models and administrative functionality for Hyrax-based Samvera applications in the space of scanned newspaper media.  This gem can be included in a Digital Asset Management application based on Hyrax 2.5.x
 
 ## Purpose, Use, and Aims
-This gem, while not a stand-alone application, can be integrated into an application based on Hyrax 2.5 easily to support a variety of cases for management, ingest, and archiving of primarily scanned (historic) newspaper archives.
+This gem, while not a stand-alone application, can be integrated into an application based on Hyrax 2.5.x easily to support a variety of cases for management, ingest, and archiving of primarily scanned (historic) newspaper archives.
 
 ## Development Status
-This gem is currently under development. The development team is actively working on this project and is updating the codebase nightly. We are targeting an initial 1.0 release for June 2019.
+This gem is currently under development. The development team is actively working on this project and is updating the codebase nightly. We are scheduled to release version 1.0 in September 2019.
 
 A public testing site is available for those interested in testing out the newspaper_works gem. [Newspaper Works Demo Site](https://newspaperworks.digitalnewspapers.org/) **NOTE:** The demo site may not be running the latest release of Newspapers_Works.
 
@@ -52,10 +52,10 @@ A public testing site is available for those interested in testing out the newsp
   * [Ruby](https://rubyonrails.org/) >=2.4
   * [Rails](https://rubyonrails.org/) 5.1.7
   * [Bundler](http://bundler.io/)
-  * [Hyrax](https://github.com/samvera/hyrax) 2.5.1
+  * [Hyrax](https://github.com/samvera/hyrax) 2.5.x
     - ..._and various [Samvera dependencies](https://github.com/samvera/hyrax#getting-started) that entails_.
   * A Hyrax-based Rails application.
-    * newspaper_works is a gem/engine that can extend your application.
+    * Newspaper_works is a gem/engine that can extend your Hyrax application.
 
 ## Newspaper_works Dependencies
 
@@ -68,7 +68,7 @@ A public testing site is available for those interested in testing out the newsp
   * [libcurl3](https://packages.ubuntu.com/search?keywords=libcurl3)
 
 # Installing, Developing, and Testing
-Newspaper_works easily integrates with your Hyrax 2.5.1 applications.
+Newspaper_works easily integrates with your Hyrax 2.5.x applications.
 
 ## Extending and Using
 
@@ -93,17 +93,18 @@ _More here soon!_
 
 (It may be helpful to run `git diff` after installation to see all the changes made by the installer.)
 
-#### Config changes you should make after running the installer:
-* In order to use some fields in forms, you will want to make sure you
-have a [username for Geonames](http://www.geonames.org/login),
-and configure that username in the
-`config.geonames_username` value in `config/intitializers/hyrax.rb` of your app.
-  * This will help fields such as "Place of Publication" provide autocomplete using the Geonames service/vocabulary.
-* NewspaperWorks requires that your application's `config/initializers/hyrax.rb` be edited to make uploads optional for (all) work types, by setting `config.work_requires_files = false`.
-* NewspaperWorks expects that your application's `config/initializers/hyrax.rb` be edited to enable a IIIF viewer, by setting` config.iiif_image_server = true`.    
-* NewspaperWorks expects that your application's `config/initializers/hyrax.rb` be edited to set the FITS path, by setting `config.fits_path = /location/of/fits.sh`
-* NewspaperWorks expects that your application's `config/environments/production.rb` be edited to set file server to public, by setting `config.public_file_server.enabled = true`
-* NewspaperWorks overrides Hyrax's default `:after_create_fileset` event handler, in order to attach pre-existing derivatives in some ingest use cases.  The file attachment adapters for NewspaperWorks use this callback to allow programmatic assignment of pre-existing derivative files before the primary file's file set has been created for a new work.  The callback ensures that derivative files are attached, stored using Hyrax file/path naming conventions, once the file set has been created.  Because the Hyrax callback registry only allows single subscribers to any event, application developers who overwrite this handler, or integrate other gems that do likewise, must take care to create a custom composition that ensures all work and queued jobs desired run after this object lifecycle event.
+#### Configuration changes to `config/intitializers/hyrax.rb` you should make after running the installer:
+
+* set `config.geonames_username` Enables geonames [username for Geonames](http://www.geonames.org/login
+* set `config.work_requires_files = false`
+* set ` config.iiif_image_server = true`
+* set `config.fits_path = /location/of/fits.sh`
+
+#### Configuration changes to `config/environments/production.rb` you should make after running the installer:
+
+* set `config.public_file_server.enabled = true`
+
+* NewspaperWorks overrides Hyrax's default `:after_create_fileset` More infomation can be found [here](https://github.com/marriott-library/newspaper_works/wiki/File-Attachment-Notes)
 
 ## Development and Testing with Vagrant
 
