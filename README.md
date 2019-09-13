@@ -22,10 +22,11 @@ Jump in: [![Slack Status](http://slack.samvera.org/badge.svg)](http://slack.samv
   - [Extending and Using](#extending-and-using)
     - [Ingest, Application Interface](#ingest-application-interface)
   - [Basic Model Use (console)](#basic-model-use-console)
+  - [Newspapers PCDM metadata model](#newspapers-pcdm-metadata-model)
   - [Application/Site Specific Configuration](#applicationsite-specific-configuration)
     - [Config changes made by the installer:](#config-changes-made-by-the-installer)
-    - [Configuration changes to _config/intitializers/hyrax.rb_ you should make after running the installer:](#configuration-changes-to-configintitializershyraxrb-you-should-make-after-running-the-installer)
-    - [Configuration changes to _config/environments/production.rb_ you should make after running the installer:](#configuration-changes-to-configenvironmentsproductionrb-you-should-make-after-running-the-installer)
+    - [Configuration changes to _config/intitializers/hyrax.rb_ you should make after running the installer:](#configuration-changes-to-_configintitializershyraxrb_-you-should-make-after-running-the-installer)
+    - [Configuration changes to _config/environments/production.rb_ you should make after running the installer:](#configuration-changes-to-_configenvironmentsproductionrb_-you-should-make-after-running-the-installer)
   - [Development and Testing with Vagrant](#development-and-testing-with-vagrant)
     - [Host System Requirements (install these before proceeding)](#host-system-requirements-install-these-before-proceeding)
     - [Test Environment Setup (provisioning of virtual machine)](#test-environment-setup-provisioning-of-virtual-machine)
@@ -92,6 +93,9 @@ _See [wiki](https://github.com/marriott-library/newspaper_works/wiki)_.
 ## Basic Model Use (console)
 
 _More here soon!_
+
+## Newspapers PCDM metadata model
+[Detailed metadata model documents](https://wiki.duraspace.org/display/samvera/PCDM+metadata+model+for+Newspapers)
 
 ## Application/Site Specific Configuration
 
