@@ -115,54 +115,11 @@ _More here soon!_
 
 * NewspaperWorks overrides Hyrax's default `:after_create_fileset` More infomation can be found [here](https://github.com/marriott-library/newspaper_works/wiki/File-Attachment-Notes)
 
-## Development and Testing with Vagrant
+## Developing and Testing with Vagrant
+
+A VM has been created for users and developers to quickly and easily deploy the latest newspaper_works codebase using vagrant and virtual box. Additional information can be found by heading over to the [samvera-newspapers-vagrant](https://github.com/marriott-library/samvera-newspapers-vagrant) github project.
 
 Additional information regarding development and testing environments setup and configuration can be found [here](https://github.com/marriott-library/newspaper_works/wiki/Installing,-Developing,-and-Testing)
-
-### Host System Requirements (install these before proceeding)
-
-* [Vagrant](https://www.vagrantup.com/) version 1.8.3+
-* [VirtualBox](https://www.virtualbox.org/) version 5.1.38+
-
-### Test Environment Setup (provisioning of virtual machine)
-
-1. Clone newspaper works samvera-newspapers-vagrant `git clone https://github.com/marriott-library/samvera-newspapers-vagrant.git`
-2. Change the directory to the repository `cd samvera-newspapers-vagrant`
-3. Provision vagrant box by running `vagrant up`
-4. Shell into the machine with `vagrant ssh` or `ssh -p 2222 vagrant@localhost`
-
-### Using/testing the Newspaper_works application with Vagrant
-* Ensure you're in the samvera-newspapers-vagrant directory
-* Start vagrant box provisioning (incase you have not provisioned the virtual machine)
-  - `vagrant up`
-* Shell into vagrant box **three times**
-  - `vagrant ssh`
-* First shell (start fcrepo_wrapper)
-  - `cd /home/vagrant/newspaper_works fcrepo_wrapper --config config/fcrepo_wrapper_test.yml`
-* Second shell (start solr_wrapper)
-  - `cd /home/vagrant/newspaper_works solr_wrapper --config config/solr_wrapper_test.yml`
-* Third shell testing and development
-* Run spec tests
-  - `cd /home/vagrant/newspaper_works rake spec`
-* Run rails console
-  - `cd /home/vagrant/newspaper_works rails s`
-
-## Development and testing setup
-
-* clone newspaper_works:
-  - `git clone https://github.com/marriott-library/newspaper_works.git`
-* Install Gem and dependencies:
-  - `bundle install`
-* Generate internal testing application
-  - `rake engine_cart:generate`
-* Each in a distinct terminal session, run Solr and Fedora Commons Wrappers:
-  - `solr_wrapper --config config/solr_wrapper_test.yml`
-  - `fcrepo_wrapper --config config/fcrepo_wrapper_test.yml`
-* Now you can either:
-  - Run tests via `rake spec` in the root of the `newspaper_works` gem.
-  - Run an interactive Rails console in the generated testing app:
-    - `rails`
-* For development, you may want to include a clone of `newspaper_works` in your app's Gemfile, either via `github:` or by `path:` in a local Gemfile used only for local development of your app.
 
 # Contributing to Newspaper Works
 We encourage anyone who is interested in newspapers and Samvera to contribute to this project. [How can I contribute?](https://github.com/samvera/hyrax/blob/master/.github/CONTRIBUTING.md)
