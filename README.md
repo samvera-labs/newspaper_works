@@ -40,22 +40,16 @@ Jump in: [![Slack Status](http://slack.samvera.org/badge.svg)](http://slack.samv
 
 <!-- /TOC -->
 
-# Introduction
-The Newspapers in Samvera is an IMLS grant funded project to develop newspaper specific functionality for the [Samvera](http://samvera.org/) Hyrax framework.
+# Overview
+The Newspaper Works gem provides work type models and administrative functionality for Hyrax-based Samvera applications in the space of scanned newspaper media.  This gem can be included in a Digital Asset Management application based on Hyrax 2.5.x
+
+A complete list of the features for available in Newspaper_works can be found [here](https://github.com/marriott-library/newspaper_works/wiki/Features-Matrix)
 
 ## Documentation
 We are currently working on adding and updating documentation on our [Project Wiki](https://github.com/marriott-library/newspaper_works/wiki)
 
-# Overview
-The Newspaper Works gem provides work type models and administrative functionality for Hyrax-based Samvera applications in the space of scanned newspaper media.  This gem can be included in a Digital Asset Management application based on Hyrax 2.5.x
-
 ## Purpose, Use, and Aims
 This gem, while not a stand-alone application, can be integrated into an application based on Hyrax 2.5.x easily to support a variety of cases for management, ingest, and archiving of primarily scanned (historic) newspaper archives.
-
-## Development Status
-This gem is currently under development. The development team is actively working on this project and is updating the codebase nightly. We are scheduled to release version 1.0 in September 2019.
-
-A public testing site is available for those interested in testing out the newspaper_works gem. [Newspaper Works Demo Site](https://newspaperworks.digitalnewspapers.org/) **NOTE:** The demo site may not be running the latest release of Newspapers_Works.
 
 ## Requirements
 
@@ -79,6 +73,8 @@ A public testing site is available for those interested in testing out the newsp
 
 # Installing, Developing, and Testing
 Newspaper_works easily integrates with your Hyrax 2.5.x applications.
+
+A public testing site is available for those interested in testing out the newspaper_works gem. [Newspaper Works Demo Site](https://newspaperworks.digitalnewspapers.org/) **NOTE:** The demo site may not be running the latest release of Newspapers_Works.
 
 ## Extending and Using
 
@@ -168,13 +164,13 @@ Additional information regarding development and testing environments setup and 
     - `rails`
 * For development, you may want to include a clone of `newspaper_works` in your app's Gemfile, either via `github:` or by `path:` in a local Gemfile used only for local development of your app.
 
+# Contributing to Newspaper Works
+We encourage anyone who is interested in newspapers and Samvera to contribute to this project. [How can I contribute?](https://github.com/samvera/hyrax/blob/master/.github/CONTRIBUTING.md)
+
 # Acknowledgements
 ## Sponsoring Organizations
 
-This gem is part of a project developed in a collaboration between
-[The University of Utah](https://www.utah.edu/), [J. Willard Marriott Library](https://www.lib.utah.edu/ß) and
-[Boston Public Library](https://www.bpl.org/), as part of a "Newspapers in Samvera" project
-grant funded by the [Institute for Museum and Library Services](https:///imls.gov).
+This gem is part of a project developed in a collaboration between [The University of Utah](https://www.utah.edu/), [J. Willard Marriott Library](https://www.lib.utah.edu/) and [Boston Public Library](https://www.bpl.org/), as part of a "Newspapers in Samvera" project grant funded by the [Institute for Museum and Library Services](https:///imls.gov).
 
 The development team is grateful for input, collaboration, and support we receive from the Samvera Community, related working groups, and our project's advisory board.
 
@@ -192,7 +188,7 @@ The development team is grateful for input, collaboration, and support we receiv
  * [National Digital Newspapers Program NDNP](https://www.loc.gov/ndnp/)
 
 ## Contact
-  * Contact any contributors above by email, or ping us on [Samvera Community Slack channel(s)](http://slack.samvera.org/)
+ Contact any contributors above by email, or ping us on [Samvera Community Slack channel(s)](http://slack.samvera.org/)
 
 ![Institute of Museum and Library Services Logo](https://imls.gov/sites/default/files/logo.png)
 
