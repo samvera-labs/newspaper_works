@@ -110,8 +110,12 @@ RSpec.configure do |config|
       Hyrax::PermissionTemplate.create!(source_id: id) if no_template
       # Default admin set needs to exist in Fedora, with relation to its
       #   PermissionTemplate object:
-      admin_set = AdminSet.find(AdminSet.find_or_create_default_admin_set_id)
-      admin_set.save!
+      begin
+        admin_set = AdminSet.find(AdminSet.find_or_create_default_admin_set_id)
+        admin_set.save!
+      rescue ActiveRecord::RecordNotUnique
+        admin_set = AdminSet.find(AdminSet::DEFAULT_ID)
+      end
       permission_template = admin_set.permission_template
       workflow = permission_template.available_workflows.where(
         name: 'default'
