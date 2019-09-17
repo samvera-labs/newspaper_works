@@ -11,6 +11,7 @@ module NewspaperWorks
 
       def initialize(path, publication)
         @path = path
+        validate_path
         # as a NewspaperWorks::Ingest::PublicationInfo object:
         @publication = publication
       end

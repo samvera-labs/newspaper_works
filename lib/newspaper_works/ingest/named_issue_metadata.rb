@@ -14,8 +14,9 @@ module NewspaperWorks
         @filename = File.basename(path)
       end
 
-      def validate_path(path)
-        raise ArgumentError, 'Path not directory' unless File.directory?(path)
+      def validate_path
+        # expect path to exist:
+        raise ArgumentError unless File.exist?(path)
         # `YYYYMMDDEE` with valid date digits, optional `EE` edition
         ptn = /^([0-9]{4})(1[012]|[0][1-9])(3[01]|[12][0-9]|0[1-9])([0-9]{2})?/
         raise ArgumentError unless ptn.match(filename)
