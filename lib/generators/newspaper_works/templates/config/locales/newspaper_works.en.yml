@@ -1,0 +1,6 @@
+---
+en:
+  blacklight:
+    search:
+      fields:
+        all_text_tsimv: All Text
