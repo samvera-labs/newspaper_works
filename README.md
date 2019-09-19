@@ -1,7 +1,7 @@
 NewspaperWorks
 ===================================================
 Code:
-[![Build Status](https://travis-ci.org/marriott-library/newspaper_works.svg?branch=master)](https://travis-ci.org/marriott-library/newspaper_works) [![Coverage Status](https://coveralls.io/repos/github/marriott-library/newspaper_works/badge.svg?branch=rubocop-cleanup)](https://coveralls.io/github/marriott-library/newspaper_works?branch=rubocop-cleanup)
+[![Build Status](https://travis-ci.org/marriott-library/newspaper_works.svg?branch=master)](https://travis-ci.org/marriott-library/newspaper_works) [![Coverage Status](https://coveralls.io/repos/github/marriott-library/newspaper_works/badge.svg)](https://coveralls.io/github/marriott-library/newspaper_works)
 
 Docs:
 [![Apache 2.0 License](http://img.shields.io/badge/APACHE2-license-blue.svg)](./LICENSE)
@@ -15,13 +15,13 @@ Jump in: [![Slack Status](http://slack.samvera.org/badge.svg)](http://slack.samv
   - [Documentation](#documentation)
   - [Requirements](#requirements)
   - [Dependencies](#dependencies)
-- [Installation](#installing-developing-and-testing)
+- [Installation](#installation)
   - [Application/Site Specific Configuration](#applicationsite-specific-configuration)
     - [Config changes made by the installer:](#config-changes-made-by-the-installer)
     - [Configuration changes you should make after running the installer](#configuration-changes-you-should-make-after-running-the-installer)
 - [Ingesting Content](#ingesting-content)
-- [Developing, Testing, & Contributing](#developing-testing-contributing)
-  - [Contributing](#contributing-to-newspaper-works) 
+- [Developing, Testing, and Contributing](#developing-testing-and-contributing)
+  - [Contributing](#contributing) 
 - [Acknowledgements](#acknowledgements)
   - [Sponsoring Organizations](#sponsoring-organizations)
   - [More Information](#more-information)
@@ -85,7 +85,6 @@ NewspaperWorks easily integrates with your Hyrax 2.5.x applications.
 * In `app/controllers/catalog_controller.rb`, the `config.search_builder_class` is set to a new `CustomSearchBuiler` to support newspapers search features.
 * Additional facet fields for newspaper metadata are added to `app/controllers/catalog_controller.rb`.
 * Newspaper resource types added to `config/authorities/resource_types.yml`.
-* NewspaperWorks overrides Hyrax's default `:after_create_fileset` More infomation can be found [here](https://github.com/marriott-library/newspaper_works/wiki/File-Attachment-Notes).
 
 (It may be helpful to run `git diff` after installation to see all the changes made by the installer.)
 
@@ -120,13 +119,13 @@ The ingest process creates a full complement of derivatives for each Page object
 
 For more information on derivatives, see the [wiki](https://github.com/marriott-library/newspaper_works/wiki/Image-Format-and-Derivative-Notes).
 
-# Developing, Testing, & Contributing
+# Developing, Testing, and Contributing
 
 Detailed information regarding development and testing environments setup and configuration can be found [here](https://github.com/marriott-library/newspaper_works/wiki/Installing,-Developing,-and-Testing)
 
 A Vagrant VM is available for users and developers to quickly and easily deploy the latest NewspaperWorks codebase using Vagrant and VirtualBox. See [samvera-newspapers-vagrant](https://github.com/marriott-library/samvera-newspapers-vagrant) for more.
 
-Additionally, the [NewspaperWorks Demo Site](https://newspaperworks.digitalnewspapers.org/) is available for those interested in testing out NewspaperWorks as deployed in a vanilla Hyrax application. (**NOTE:** The demo site may not be running the latest release of Newspapers_Works.)
+Additionally, the [NewspaperWorks Demo Site](https://newspaperworks.digitalnewspapers.org/) is available for those interested in testing out NewspaperWorks as deployed in a vanilla Hyrax application. (**NOTE:** The demo site may not be running the latest release of NewspaperWorks.)
 
 ## Contributing
 
