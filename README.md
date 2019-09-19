@@ -45,10 +45,10 @@ NewspaperWorks supports:
 * OCR keyword match highlighting
 * viewer with page navigation and deep zooming
 
-A complete list of features can be found [here](https://github.com/marriott-library/newspaper_works/wiki/Features-Matrix).
+A complete list of features can be found [here](wiki/Features-List).
 
 ## Documentation
-A set of helpful documents to help you learn more and deploy NewspaperWorks can be found on the [Project Wiki](https://github.com/marriott-library/newspaper_works/wiki), including a PCDM model diagram, metadata schema, batch ingest instructions, and more details on installing, developing, and testing the code. 
+A set of helpful documents to help you learn more and deploy NewspaperWorks can be found on the [Project Wiki](./newspaper_works/wiki), including a PCDM model diagram, metadata schema, batch ingest instructions, and more details on installing, developing, and testing the code. 
 
 ## Requirements
 
@@ -69,7 +69,7 @@ A set of helpful documents to help you learn more and deploy NewspaperWorks can 
   * [GraphicsMagick](http://www.graphicsmagick.org/)
   * [libcurl3](https://packages.ubuntu.com/search?keywords=libcurl3)
 
-See the [wiki](https://github.com/marriott-library/newspaper_works/wiki/Installing,-Developing,-and-Testing) for more details on how to install and configure dependencies.
+See the [wiki](./newspaper_works/wiki/Installing,-Developing,-and-Testing) for more details on how to install and configure dependencies.
 
 # Installation
 NewspaperWorks easily integrates with your Hyrax 2.5.x applications.
@@ -106,9 +106,9 @@ NewspaperWorks easily integrates with your Hyrax 2.5.x applications.
 
 NewspaperWorks supports a range of different ingest workflows:
 * single-item ingest via the UI
-* batch ingest of [NDNP materials](https://github.com/marriott-library/newspaper_works/wiki/NDNP-Batch-Ingest-Guide) (page-level digitization) via command line
-* batch ingest of [PDF issues](https://github.com/marriott-library/newspaper_works/wiki/PDF-Batch-Ingest-Guide) via command line
-* batch ingest of [TIFF or JP2 master files](https://github.com/marriott-library/newspaper_works/wiki/TIFF-or-JP2-Batch-Ingest-Guide) via command line
+* batch ingest of [NDNP materials](./newspaper_works/wiki/NDNP-Batch-Ingest-Guide) (page-level digitization) via command line
+* batch ingest of [PDF issues](./newspaper_works/wiki/PDF-Batch-Ingest-Guide) via command line
+* batch ingest of [TIFF or JP2 master files](./newspaper_works/wiki/TIFF-or-JP2-Batch-Ingest-Guide) via command line
 
 The ingest process creates a full complement of derivatives for each Page object, including:
 * TIFF
@@ -117,11 +117,11 @@ The ingest process creates a full complement of derivatives for each Page object
 * OCR text
 * word-coordinate JSON
 
-For more information on derivatives, see the [wiki](https://github.com/marriott-library/newspaper_works/wiki/Image-Format-and-Derivative-Notes).
+For more information on derivatives, see the [wiki](./newspaper_works/wiki/Image-Format-and-Derivative-Notes).
 
 # Developing, Testing, and Contributing
 
-Detailed information regarding development and testing environments setup and configuration can be found [here](https://github.com/marriott-library/newspaper_works/wiki/Installing,-Developing,-and-Testing)
+Detailed information regarding development and testing environments setup and configuration can be found [here](./newspaper_works/wiki/Installing,-Developing,-and-Testing)
 
 A Vagrant VM is available for users and developers to quickly and easily deploy the latest NewspaperWorks codebase using Vagrant and VirtualBox. See [samvera-newspapers-vagrant](https://github.com/marriott-library/samvera-newspapers-vagrant) for more.
 
