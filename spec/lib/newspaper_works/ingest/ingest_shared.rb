@@ -12,6 +12,9 @@ RSpec.shared_context "ingest test fixtures", shared_context: :metadata do
 
   # single batch of PDF fixtures
   let(:pdf_fixtures) { File.join(fixtures_path, 'pdf_batch', 'sn93059126') }
+
+  # single batch of image fixtures
+  let(:image_fixtures) { File.join(fixtures_path, 'tiff_batch') }
 end
 
 RSpec.shared_examples 'ingest adapter IO' do

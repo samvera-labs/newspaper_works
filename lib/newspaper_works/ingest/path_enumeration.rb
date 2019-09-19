@@ -1,5 +1,3 @@
-require 'find'
-
 module NewspaperWorks
   module Ingest
     # Provides enumeration of path keys to object values, where:
