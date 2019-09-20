@@ -79,5 +79,19 @@ module NewspaperWorks
       end
       hl_matches.uniq.sort.join(' ')
     end
+
+    # print the ocr snippets. if more than one, separate with <br/>
+    def render_ocr_snippets(options = {})
+      snippets = options[:value]
+      snippets_content = [content_tag('div',
+                                      "... #{snippets.first} ...".html_safe,
+                                      class: 'ocr_snippet first_snippet')]
+      if snippets.length > 1
+        snippets_content << render(partial: 'newspaper_works/newspapers_search/snippets_more',
+                                   locals: { snippets: snippets.drop(1),
+                                             counter: options[:counter] })
+      end
+      snippets_content.join("\n").html_safe
+    end
   end
 end
