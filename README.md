@@ -30,7 +30,7 @@ Jump in: [![Slack Status](http://slack.samvera.org/badge.svg)](http://slack.samv
 <!-- /TOC -->
 
 # Overview
-NewspaperWorks is a gem (Rails "engine") for [Hyrax](http://hyrax.samvera.org/) -based digital repository applications to support ingest, management, and display of digitzed newspaper content.
+NewspaperWorks is a gem (Rails "engine") for [Hyrax](https://hyrax.samvera.org/) -based digital repository applications to support ingest, management, and display of digitzed newspaper content.
 
 NewspaperWorks is not a stand-alone application. It is designed to be integrated into a new or existing Hyrax (2.5.x) application, providing content models, ingest workflows, and feature-rich UX for newspaper repository use-cases.
 
