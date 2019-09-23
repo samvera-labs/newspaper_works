@@ -31,7 +31,7 @@ module NewspaperWorks
         return @pages unless @pages.nil?
         @pages = []
         entries = Dir.entries(path).map { |n| File.join(path, n) }
-        entries.each do |p|
+        entries.sort.each do |p|
           next unless File.ftype(p) == 'file'
           ext = File.basename(p).downcase.split('.')[-1]
           next unless IMAGE_EXT.include?(ext)
@@ -41,7 +41,7 @@ module NewspaperWorks
       end
 
       def info(path)
-        page_seq_num = page_paths.index(path)
+        page_seq_num = page_paths.index(path) + 1
         NewspaperWorks::Ingest::PageImage.new(path, self, page_seq_num)
       end
 

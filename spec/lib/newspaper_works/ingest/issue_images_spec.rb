@@ -30,11 +30,21 @@ RSpec.describe NewspaperWorks::Ingest::IssueImages do
       issue = described_class.new(issue_path, publication)
       expect(issue.to_a.size).to eq 4
       expect(issue.keys.size).to eq 4
-      issue.entries.each do |key, value|
-        expect(value).to be_a NewspaperWorks::Ingest::PageImage
-        expect(value.lccn).to eq publication.lccn
-        expect(value.path).to eq key
-        expect(value.issue).to be issue
+      # lexical ordering:
+      expect(issue.keys).to eq issue.keys.sort
+      issue.entries.each_with_index do |pair, idx|
+        # PageImage object value:
+        page_image = pair[1]
+        expect(page_image).to be_a NewspaperWorks::Ingest::PageImage
+        expect(page_image.lccn).to eq publication.lccn
+        # path key
+        expect(page_image.path).to eq pair[0]
+        expect(page_image.issue).to be issue
+        # Verify lexical ordering (for page_number in file name vs. seq num):
+        expect(page_image.page_number.to_i).to eq idx + 1
+        # page numbering matches sequence numbering:
+        expected_title = "The weekly journal: June 4, 1853: Page #{page_image.page_number}"
+        expect(page_image.title).to contain_exactly expected_title
       end
     end
   end

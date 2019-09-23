@@ -30,12 +30,16 @@ module NewspaperWorks
       # @return [String, NilClass] page number string, or nil if indecipherable
       def named_page_number
         pattern = /(page)([_-]?)([^.]+)([.])/i
-        match = pattern.match
+        match = pattern.match(path)
         match.nil? ? nil : match[3]
       end
 
       def page_number
         named_page_number || @sequence.to_s
+      end
+
+      def title
+        ["#{@issue.title.first}: Page #{page_number}"]
       end
 
       def validate_path
