@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'newspaper_works_fixtures'
 
-RSpec.describe NewspaperWorks::Ingest::PDFIssueIngester do
+RSpec.describe NewspaperWorks::Ingest::BatchIssueIngester do
   include_context "ingest test fixtures"
 
   describe "ingester construction and composition" do

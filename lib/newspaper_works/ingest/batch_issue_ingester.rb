@@ -1,6 +1,6 @@
 module NewspaperWorks
   module Ingest
-    class PDFIssueIngester
+    class BatchIssueIngester
       # CLI constructor, related class methods:
       extend NewspaperWorks::Ingest::FromCommand
 
@@ -16,9 +16,14 @@ module NewspaperWorks
         # get publication info for LCCN from authority web service:
         @publication = NewspaperWorks::Ingest::PublicationInfo.new(@lccn)
         # issues for publication, as enumerable of PDFIssue
-        @issues = NewspaperWorks::Ingest::PDFIssues.new(path, publication)
+        @issues = issue_enumerator
         @opts = opts
         configure_logger('ingest')
+      end
+
+      def issue_enumerator
+        # TODO: pivot which enumerator to return based on detected contents:
+        NewspaperWorks::Ingest::PDFIssues.new(path, publication)
       end
 
       def lccn_from_path(path)
@@ -36,13 +41,19 @@ module NewspaperWorks
         issue_data.title
       end
 
+      def link_publication(issue)
+        find_or_create_publication_for_issue(
+          issue,
+          @lccn,
+          @publication.title,
+          @opts
+        )
+      end
+
       def create_issue(issue_data)
         issue = NewspaperIssue.create
         copy_issue_metadata(issue_data, issue)
-        NewspaperWorks::Ingest.assign_administrative_metadata(
-          issue,
-          @opts
-        )
+        NewspaperWorks::Ingest.assign_administrative_metadata(issue, @opts)
         issue.save!
         write_log(
           "Created new NewspaperIssue work with date, lccn, edition metadata:"\
@@ -51,12 +62,7 @@ module NewspaperWorks
           "\tPublication Date: #{issue_data.publication_date}\n"\
           "\tEdition number: #{issue_data.edition_number}"
         )
-        find_or_create_publication_for_issue(
-          issue,
-          @lccn,
-          @publication.title,
-          @opts
-        )
+        link_publication(issue)
         issue
       end
 
