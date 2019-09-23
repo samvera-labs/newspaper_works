@@ -5,7 +5,7 @@ RSpec.describe NewspaperWorks::Ingest::PageImage do
 
   let(:lccn) { 'sn93059126' }
 
-  let(:issue_path) { File.join(image_fixtures, lccn, '1853060401') }
+  let(:issue_path) { File.join(tiff_fixtures, lccn, '1853060401') }
 
   let(:publication) { NewspaperWorks::Ingest::PublicationInfo.new(lccn) }
 

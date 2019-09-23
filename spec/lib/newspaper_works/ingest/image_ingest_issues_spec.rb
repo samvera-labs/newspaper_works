@@ -7,7 +7,7 @@ RSpec.describe NewspaperWorks::Ingest::ImageIngestIssues do
 
   let(:publication) { NewspaperWorks::Ingest::PublicationInfo.new(lccn) }
 
-  let(:pub_path) { File.join(image_fixtures, lccn) }
+  let(:pub_path) { File.join(tiff_fixtures, lccn) }
 
   let(:expected_paths) do
     entries = Dir.entries(pub_path).map { |p| File.join(pub_path, p) }
