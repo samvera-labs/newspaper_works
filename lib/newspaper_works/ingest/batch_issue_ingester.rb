@@ -1,3 +1,6 @@
+require 'open3'
+require 'tmpdir'
+
 module NewspaperWorks
   module Ingest
     class BatchIssueIngester
@@ -5,6 +8,7 @@ module NewspaperWorks
       extend NewspaperWorks::Ingest::FromCommand
 
       include NewspaperWorks::Ingest::PubFinder
+      include NewspaperWorks::Ingest::BatchIngestHelper
       include NewspaperWorks::Logging
 
       attr_accessor :path, :lccn, :publication, :opts, :issues
@@ -24,21 +28,6 @@ module NewspaperWorks
       def issue_enumerator
         # TODO: pivot which enumerator to return based on detected contents:
         NewspaperWorks::Ingest::PDFIssues.new(path, publication)
-      end
-
-      def lccn_from_path(path)
-        File.basename(path)
-      end
-
-      def normalize_lccn(v)
-        p = /^[A-Za-z]{0,3}[0-9]{8}([0-9]{2})?$/
-        v = v.gsub(/\s+/, '').downcase.slice(0, 13)
-        raise ArgumentError, "LCCN appears invalid: #{v}" unless p.match(v)
-        v
-      end
-
-      def issue_title(issue_data)
-        issue_data.title
       end
 
       def link_publication(issue)
@@ -66,20 +55,43 @@ module NewspaperWorks
         issue
       end
 
-      def copy_issue_metadata(source, target)
-        target.title = issue_title(source)
-        target.lccn = source.lccn
-        target.publication_date = source.publication_date
-        target.edition_number = source.edition_number
-      end
-
       def ingest_pdf(issue, path)
         # ingest primary PDF for issue:
-        attachment = NewspaperWorks::Data::WorkFiles.of(issue)
-        attachment.assign(path)
-        attachment.commit!
+        attach_file(issue, path)
         # queue page creation job:
         CreateIssuePagesJob.perform_later(issue, [path], nil, nil)
+      end
+
+      def ingest_pages(issue, issue_data)
+        issue_data.each do |page_image|
+          # NewspaperPage is created, with
+          page = NewspaperPage.create
+          page.title = page_image.title
+          page.page_nummber = page_image.page_number
+          page.save!
+          # Link page as a child of issue, via ordered members:
+          issue.ordered_members << page
+          issue.save!
+          # Ensure we have a source TIFF file, attach to page:
+          path = page_image.path
+          path = page_image.path.end_with?('jp2') ? mk_tiff(path) : path
+          attach_file(page, path)
+          # Make an issue PDF from constituent pages, via retryable async job,
+          #   which will not succeed until the PDF derivatives are created
+          #   for each page, but should eventually succeed on that condition:
+        end
+        NewspaperWorks::ComposeIssuePDFJob.perform_later(issue)
+      end
+
+      def make_tiff(path)
+        raise ArgumentError unless path.end_with?('jp2')
+        name = File.basename(path).split('.')[0]
+        tiff_path = File.join(Dir.tmpdir, "#{name}.tiff")
+        cmd = "opj_decompress -i #{path} -o #{tiff_path}"
+        Open3.popen3(cmd) do |_stdin, _stdout, stderr, _wait_thr|
+          raise 'Error converting JP2 to TIFF' unless stderr.read.empty?
+        end
+        tiff_path
       end
 
       def ingest
