@@ -20,7 +20,7 @@ namespace :newspaper_works do
     '"rake newspaper_works:ingest_pdf_issues -- --path="'
   task :ingest_pdf_issues do
     use_application
-    ingester = NewspaperWorks::Ingest::PDFIssueIngester.from_command(
+    ingester = NewspaperWorks::Ingest::BatchIssueIngester.from_command(
       ARGV,
       'rake newspaper_works:ingest_pdf_issues --'
     )
