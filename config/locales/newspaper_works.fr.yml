@@ -46,3 +46,7 @@ fr:
     search:
       fields:
         all_text_tsimv: 'Correspondances de mots clés'
+      results:
+        snippets:
+          less: '<< Moins'
+          more: 'Plus >>'

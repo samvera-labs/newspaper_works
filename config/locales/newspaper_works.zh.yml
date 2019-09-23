@@ -46,3 +46,7 @@ zh:
     search:
       fields:
         all_text_tsimv: '关键字匹配'
+      results:
+        snippets:
+          less: '<< 减'
+          more: '更多 >>'
