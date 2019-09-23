@@ -26,8 +26,10 @@ module NewspaperWorks
       end
 
       def issue_enumerator
-        # TODO: pivot which enumerator to return based on detected contents:
-        NewspaperWorks::Ingest::PDFIssues.new(path, publication)
+        impl = NewspaperWorks::Ingest::PDFIssues
+        impl = NewspaperWorks::Ingest::ImageIngestIssues if detect_media(path) == 'image'
+        # issue enumerator depends on detected media:
+        impl.new(path, publication)
       end
 
       def link_publication(issue)
@@ -94,12 +96,19 @@ module NewspaperWorks
         tiff_path
       end
 
+      def ingest_type
+        return 'issue_pdf' if @issues.class == NewspaperWorks::Ingest::PDFIssues
+        'page_image'
+      end
+
       def ingest
         write_log("Beginning issue(s) batch ingest for #{@path}")
         write_log("\tPublication: #{@publication.title} (LCCN: #{@lccn})")
         @issues.each do |path, issue_data|
           issue = create_issue(issue_data)
-          ingest_pdf(issue, path)
+          tactic = ingest_type
+          ingest_pdf(issue, path) if tactic == 'issue_pdf'
+          ingest_pages(issue, issue_data) if tactic == 'page_image'
         end
         write_log(
           "Issue ingest completed for LCCN #{@lccn}. Asyncrhonous jobs "\
