@@ -83,14 +83,14 @@ module NewspaperWorks
       end
 
       def ingest
-        write_log("Beginning PDF issue(s) batch ingest for #{@path}")
+        write_log("Beginning issue(s) batch ingest for #{@path}")
         write_log("\tPublication: #{@publication.title} (LCCN: #{@lccn})")
         @issues.each do |path, issue_data|
           issue = create_issue(issue_data)
           ingest_pdf(issue, path)
         end
         write_log(
-          "PDF issue ingest completed for LCCN #{@lccn}. Asyncrhonous jobs "\
+          "Issue ingest completed for LCCN #{@lccn}. Asyncrhonous jobs "\
           "may still be creating derivatives for issue, and child page works."
         )
       end
