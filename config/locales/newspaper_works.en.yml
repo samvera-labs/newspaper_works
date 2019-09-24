@@ -48,5 +48,5 @@ en:
         all_text_tsimv: 'Keyword matches'
       results:
         snippets:
-          less: '<< Less'
-          more: 'More >>'
+          less: '<< less'
+          more: 'more >>'
