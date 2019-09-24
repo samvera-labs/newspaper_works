@@ -130,6 +130,7 @@ RSpec.describe NewspaperWorks::Ingest::BatchIssueIngester do
       if page_count > 0
         # 3. Child pages created
         expect(issue.pages.size).to eq page_count
+        expect_administrative_metadata(issue.pages[0])
         # 4. Creation of issue PDF enqueued:
         expect(job_enqueued?(NewspaperWorks::ComposeIssuePDFJob)).to be true
       end

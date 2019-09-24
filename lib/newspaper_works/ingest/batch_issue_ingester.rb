@@ -64,24 +64,27 @@ module NewspaperWorks
         CreateIssuePagesJob.perform_later(issue, [path], nil, nil)
       end
 
+      def create_page(page_image, issue)
+        page = NewspaperPage.create
+        page.title = page_image.title
+        page.page_number = page_image.page_number
+        page.save!
+        # Link page as a child of issue, via ordered members:
+        issue.ordered_members << page
+        NewspaperWorks::Ingest.assign_administrative_metadata(page, @opts)
+        issue.save!
+        # Ensure we have a source TIFF file, attach to page:
+        path = page_image.path
+        path = page_image.path.end_with?('jp2') ? make_tiff(path) : path
+        attach_file(page, path)
+      end
+
       def ingest_pages(issue, issue_data)
-        issue_data.each_value do |page_image|
-          # NewspaperPage is created, with
-          page = NewspaperPage.create
-          page.title = page_image.title
-          page.page_number = page_image.page_number
-          page.save!
-          # Link page as a child of issue, via ordered members:
-          issue.ordered_members << page
-          issue.save!
-          # Ensure we have a source TIFF file, attach to page:
-          path = page_image.path
-          path = page_image.path.end_with?('jp2') ? make_tiff(path) : path
-          attach_file(page, path)
-          # Make an issue PDF from constituent pages, via retryable async job,
-          #   which will not succeed until the PDF derivatives are created
-          #   for each page, but should eventually succeed on that condition:
-        end
+        # Create pages in order they appear (lexical)
+        issue_data.each_value { |page_image| create_page(page_image, issue) }
+        # Make an issue PDF from constituent pages, via retryable async job,
+        #   which will not succeed until the PDF derivatives are created
+        #   for each page, but should eventually succeed on that condition:
         NewspaperWorks::ComposeIssuePDFJob.perform_later(issue)
       end
 
