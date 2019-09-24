@@ -7,7 +7,7 @@ RSpec.describe NewspaperWorks::Ingest::PDFIssues do
 
   let(:publication) { NewspaperWorks::Ingest::PublicationInfo.new(lccn) }
 
-  let(:pub_path) { pdf_fixtures }
+  let(:pub_path) { File.join(pdf_fixtures, lccn) }
 
   describe " construction and metadata" do
     it "constructs with path and publication" do

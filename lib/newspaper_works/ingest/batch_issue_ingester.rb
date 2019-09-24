@@ -65,18 +65,18 @@ module NewspaperWorks
       end
 
       def ingest_pages(issue, issue_data)
-        issue_data.each do |page_image|
+        issue_data.each_value do |page_image|
           # NewspaperPage is created, with
           page = NewspaperPage.create
           page.title = page_image.title
-          page.page_nummber = page_image.page_number
+          page.page_number = page_image.page_number
           page.save!
           # Link page as a child of issue, via ordered members:
           issue.ordered_members << page
           issue.save!
           # Ensure we have a source TIFF file, attach to page:
           path = page_image.path
-          path = page_image.path.end_with?('jp2') ? mk_tiff(path) : path
+          path = page_image.path.end_with?('jp2') ? make_tiff(path) : path
           attach_file(page, path)
           # Make an issue PDF from constituent pages, via retryable async job,
           #   which will not succeed until the PDF derivatives are created
@@ -88,10 +88,15 @@ module NewspaperWorks
       def make_tiff(path)
         raise ArgumentError unless path.end_with?('jp2')
         name = File.basename(path).split('.')[0]
-        tiff_path = File.join(Dir.tmpdir, "#{name}.tiff")
+        # OpenJPEG2000 has weird quirk, only likes 3-char file ext TIF:
+        tiff_path = File.join(Dir.mktmpdir, "#{name}.tif")
         cmd = "opj_decompress -i #{path} -o #{tiff_path}"
         Open3.popen3(cmd) do |_stdin, _stdout, stderr, _wait_thr|
-          raise 'Error converting JP2 to TIFF' unless stderr.read.empty?
+          unless stderr.read.strip.empty?
+            msg = "Error converting JP2 to TIFF: #{path}"
+            write_log(msg, Logger::ERROR)
+            raise msg
+          end
         end
         tiff_path
       end

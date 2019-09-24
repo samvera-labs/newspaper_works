@@ -10,13 +10,13 @@ RSpec.shared_context "ingest test fixtures", shared_context: :metadata do
     path
   end
 
-  # single batch of PDF fixtures
-  let(:pdf_fixtures) { File.join(fixtures_path, 'pdf_batch', 'sn93059126') }
+  # directory containing PDF fixture batch(es)
+  let(:pdf_fixtures) { File.join(fixtures_path, 'pdf_batch') }
 
-  # single batch of TIFF image fixtures
+  # directory containing TIFF image fixtures batch(es)
   let(:tiff_fixtures) { File.join(fixtures_path, 'tiff_batch') }
 
-  # single batch of JP2 image fixtures
+  # directory containing JP2 image fixture batch(es)
   let(:jp2_fixtures) { File.join(fixtures_path, 'jp2_batch') }
 end
 
