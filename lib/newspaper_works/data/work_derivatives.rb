@@ -2,12 +2,9 @@ require 'hyrax'
 
 module NewspaperWorks
   module Data
-    # Disable below metric, for now, not splitting this class into modules,
-    #   which would just make for more complexity and hinder readabilty.
     #   TODO: consider compositional refactoring (not mixins), but this
     #         may make readability/comprehendability higher, and yield
     #         higher applied/practical complexity.
-    # rubocop:disable Metrics/ClassLength
     class WorkDerivatives
       include NewspaperWorks::Data::FilesetHelper
       include NewspaperWorks::Data::PathHelper
@@ -82,8 +79,7 @@ module NewspaperWorks
 
       # Assign a destination name to unassigned queue for deletion -- OR --
       #   remove a path from queue of assigned items
-      # @param name_or_id [String] Destination name (file extension),
-      #   or source path
+      # @param name [String] Destination name (file extension), or source path
       def unassign(name)
         # if name is queued path, remove from @assigned queue:
         if @assigned.include?(name)
@@ -113,10 +109,10 @@ module NewspaperWorks
       # @param file_set [FileSet] saved file set, attached to work,
       #   with identifier, and a non-nil import_url
       def commit_queued!(file_set)
-        raise ArgumentError('No FileSet import_url') if file_set.import_url.nil?
+        raise ArgumentError, 'No FileSet import_url' if file_set.import_url.nil?
         import_path = file_url_to_path(file_set.import_url)
         work = file_set.member_of.select(&:work?)[0]
-        raise ArgumentError('Work not found for fileset') if work.nil?
+        raise ArgumentError, 'Work not found for fileset' if work.nil?
         derivatives = WorkDerivatives.of(work, file_set)
         IngestFileRelation.derivatives_for_file(import_path).each do |path|
           next unless File.exist?(path)
@@ -134,7 +130,7 @@ module NewspaperWorks
       # @param file [String, IO] path to file or IO object
       # @param name [String] destination name, usually file extension
       def attach(file, name)
-        raise RuntimeError('Cannot save for nil fileset') if fileset.nil?
+        raise 'Cannot save for nil fileset' if fileset.nil?
         mkdir_pairtree
         path = path_factory.derivative_path_for_reference(fileset, name)
         # if file argument is path, copy file
@@ -156,7 +152,7 @@ module NewspaperWorks
       # Delete a derivative file from work, by destination name
       # @param name [String] destination name, usually file extension
       def delete(name, force: nil)
-        raise RuntimeError('Cannot save for nil fileset') if fileset.nil?
+        raise 'Cannot save for nil fileset' if fileset.nil?
         path = path_factory.derivative_path_for_reference(fileset, name)
         # will remove file, if it exists; won't remove pairtree, even
         #   if it becomes empty, as that is excess scope.
@@ -202,10 +198,10 @@ module NewspaperWorks
       #   is provided, the size of derivative file
       # @param name [String] optional destination name, usually file extension
       # @return [Integer] size in bytes
-      def size(*args)
+      def size(name = nil)
         load_paths if @paths.nil?
-        return @paths.size if args[0].nil?
-        File.size(@paths[args[0]])
+        return @paths.size if name.nil?
+        File.size(@paths[name])
       end
 
       # Check if derivative file exists for destination name
@@ -314,6 +310,5 @@ module NewspaperWorks
           FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
         end
     end
-    # rubocop:enable Metrics/ClassLength
   end
 end
