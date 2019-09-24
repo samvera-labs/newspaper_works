@@ -46,5 +46,5 @@ de:
         all_text_tsimv: 'Keyword-Übereinstimmungen'
       results:
         snippets:
-          less: '<< Weniger'
-          more: 'Mehr >>'
+          less: '<< weniger'
+          more: 'mehr >>'

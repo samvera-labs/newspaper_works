@@ -48,5 +48,5 @@ pt-BR:
         all_text_tsimv: 'Correspondências de palavras-chave'
       results:
         snippets:
-          less: '<< Menos'
-          more: 'Mais >>'
+          less: '<< menos'
+          more: 'mais >>'
