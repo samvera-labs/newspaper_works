@@ -87,9 +87,10 @@ module NewspaperWorks
                                       "... #{snippets.first} ...".html_safe,
                                       class: 'ocr_snippet first_snippet')]
       if snippets.length > 1
-        snippets_content << render(partial: 'newspaper_works/newspapers_search/snippets_more',
+        snippets_content << render(partial: 'catalog/snippets_more',
                                    locals: { snippets: snippets.drop(1),
-                                             counter: options[:counter] })
+                                              options_variable: options,
+                                             document_id: options[:document].id })
       end
       snippets_content.join("\n").html_safe
     end
