@@ -46,3 +46,7 @@ en:
     search:
       fields:
         all_text_tsimv: 'Keyword matches'
+      results:
+        snippets:
+          less: '<< Less'
+          more: 'More >>'

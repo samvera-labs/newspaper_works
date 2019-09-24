@@ -46,3 +46,7 @@ es:
     search:
       fields:
         all_text_tsimv: 'Coincidencias de palabras clave'
+      results:
+        snippets:
+          less: '<< Menos'
+          more: 'Más >>'
