@@ -80,7 +80,12 @@ module NewspaperWorks
       hl_matches.uniq.sort.join(' ')
     end
 
+    ##
     # print the ocr snippets. if more than one, separate with <br/>
+    #
+    # @param options [Hash] options hash provided by Blacklight
+    # @return [String] snippets HTML to be rendered
+    # rubocop:disable Rails/OutputSafety
     def render_ocr_snippets(options = {})
       snippets = options[:value]
       snippets_content = [content_tag('div',
@@ -89,10 +94,10 @@ module NewspaperWorks
       if snippets.length > 1
         snippets_content << render(partial: 'catalog/snippets_more',
                                    locals: { snippets: snippets.drop(1),
-                                              options_variable: options,
-                                             document_id: options[:document].id })
+                                             options: options })
       end
       snippets_content.join("\n").html_safe
     end
+    # rubocop:enable Rails/OutputSafety
   end
 end

@@ -1,4 +1,5 @@
 <%# additional ocr snippets, with a Bootstrap collapse toggle control %>
+<% document_id = options[:document].id %>
 <div class="collapse ocr_snippet" id="<%= "snippet_collapse_#{document_id}" %>">
   <% snippets.each do |snippet| %>
     <%= content_tag('div',
