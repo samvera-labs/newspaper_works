@@ -14,9 +14,10 @@ RSpec.describe NewspaperWorks::Ingest::ImageIngestIssues do
     entries.select { |p| File.directory?(p) && !File.basename(p).start_with?('.') }
   end
 
+  let(:issues) { described_class.new(pub_path, publication) }
+
   describe " construction and metadata" do
     it "constructs with path and publication" do
-      issues = described_class.new(pub_path, publication)
       expect(issues.path).to eq pub_path
       expect(issues.publication).to be publication
       expect(issues.lccn).to eq lccn
@@ -24,7 +25,6 @@ RSpec.describe NewspaperWorks::Ingest::ImageIngestIssues do
     end
 
     it "enumerates valid directories as IssueImages objects" do
-      issues = described_class.new(pub_path, publication)
       expect(issues.size).to eq 2
       enumerated = issues.values
       expect(enumerated.size).to eq issues.size
@@ -34,7 +34,6 @@ RSpec.describe NewspaperWorks::Ingest::ImageIngestIssues do
     end
 
     it "presents hash-like mapping behavior" do
-      issues = described_class.new(pub_path, publication)
       # Keys are paths to directory containing issue images:
       expect(issues.keys).to match_array expected_paths
       # info and [] methods get IssueImages object for given path key:
@@ -46,7 +45,6 @@ RSpec.describe NewspaperWorks::Ingest::ImageIngestIssues do
     end
 
     it "enumerates pairs like a hash" do
-      issues = described_class.new(pub_path, publication)
       issues.each_value do |v|
         expect(v).to be_a NewspaperWorks::Ingest::IssueImages
       end

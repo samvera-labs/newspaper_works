@@ -19,9 +19,10 @@ RSpec.describe NewspaperWorks::Ingest::IssueImages do
   # Publication for JP2 fixtures:
   let(:publication_jp2) { NewspaperWorks::Ingest::PublicationInfo.new(lccn_jp2) }
 
+  let(:issue) { described_class.new(tiff_issue_path, publication) }
+
   describe "issue construction and metadata" do
     it "constructs with path and publication" do
-      issue = described_class.new(tiff_issue_path, publication)
       expect(issue.path).to eq tiff_issue_path
       expect(issue.filename).to eq File.basename(tiff_issue_path)
       expect(issue.publication).to be publication
@@ -30,14 +31,12 @@ RSpec.describe NewspaperWorks::Ingest::IssueImages do
     end
 
     it "extracts date, edition, title from filename" do
-      issue = described_class.new(tiff_issue_path, publication)
       expect(issue.publication_date).to eq '1853-06-04'
       expect(issue.edition_number).to eq 1
       expect(issue.title).to contain_exactly 'The weekly journal: June 4, 1853'
     end
 
     it "enumerates pages (TIFF)" do
-      issue = described_class.new(tiff_issue_path, publication)
       expect(issue.to_a.size).to eq 4
       expect(issue.keys.size).to eq 4
       # lexical ordering:
