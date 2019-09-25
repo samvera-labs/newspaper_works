@@ -90,6 +90,7 @@ module NewspaperWorks
 
       def make_tiff(path)
         raise ArgumentError unless path.end_with?('jp2')
+        Hyrax.config.whitelisted_ingest_dirs |= [Dir.tmpdir]
         name = File.basename(path).split('.')[0]
         # OpenJPEG2000 has weird quirk, only likes 3-char file ext TIF:
         tiff_path = File.join(Dir.mktmpdir, "#{name}.tif")
