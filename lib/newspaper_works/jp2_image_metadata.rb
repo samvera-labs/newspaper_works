@@ -11,7 +11,7 @@ module NewspaperWorks
     end
 
     # @param io [IO] IO stream opened in binary mode, for reading
-    # @return Array(Integer, Integer) X size, Y size, in Integer-typed px units
+    # @return [Array(Integer, Integer)] X size, Y size, in Integer-typed px
     def extract_jp2_dim(io)
       raise IOError, 'file not open in binary mode' unless io.binmode?
       buffer = ''
@@ -39,7 +39,7 @@ module NewspaperWorks
     end
 
     # @param io [IO] IO stream opened in binary mode, for reading
-    # @return Array(Integer, Integer) number components, bits-per-component
+    # @return [Array(Integer, Integer)] number components, bits-per-component
     def extract_jp2_components(io)
       raise IOError, 'file not open in binary mode' unless io.binmode?
       io.seek(0, IO::SEEK_SET)

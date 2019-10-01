@@ -1,6 +1,7 @@
 require "newspaper_works/engine"
 require "newspaper_works/errors"
 require "newspaper_works/jp2_image_metadata"
+require "newspaper_works/image_identifier"
 require "newspaper_works/ingest"
 require "newspaper_works/issue_pdf_composer"
 require "newspaper_works/text_extraction"
