@@ -96,14 +96,16 @@ RSpec.describe NewspaperWorks::NewspaperPageDerivativeService do
     end
 
     it "identifies a source file using ImageMagick" do
-      expect(service_for_file('4.1.07.tiff').identify).to include 'TIFF'
-      expect(service_for_file('4.1.07.tiff').identify).to include '8-bit'
+      service = service_for_file('4.1.07.tiff')
+      expect(service.identify[:content_type]).to eq 'image/tiff'
+      expect(service.identify[:bits_per_component]).to eq 8
     end
 
     it "identifies jp2 source" do
-      # test/verify jp2 source is identified, which relies on GraphicsMagick
-      expect(service_for_file('4.1.07.jp2').identify).to include 'JP2'
-      expect(service_for_file('4.1.07.jp2').identify).to include '8-bit'
+      # test/verify jp2 source is identified, which relies on JP2 backend
+      service = service_for_file('4.1.07.jp2')
+      expect(service.identify[:content_type]).to eq 'image/jp2'
+      expect(service.identify[:bits_per_component]).to eq 8
     end
 
     it "identifies color and gray sources" do

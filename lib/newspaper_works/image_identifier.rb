@@ -43,7 +43,7 @@ module NewspaperWorks
 
       def jp2_metadata
         result = NewspaperWorks::JP2ImageMetadata.new(path).technical_metadata
-        result['content_type'] = 'image/jp2'
+        result[:content_type] = 'image/jp2'
         result
       end
 

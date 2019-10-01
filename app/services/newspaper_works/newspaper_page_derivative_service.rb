@@ -47,27 +47,17 @@ module NewspaperWorks
     end
 
     def identify
-      if @source_meta.nil?
-        path = @source_path
-        cmd = "identify #{path}"
-        # fallback to graphicsmagick if source is jp2, as Ubuntu 16.10
-        #   ImageMagick has no jp2 support.
-        cmd = 'gm ' + cmd if path.ends_with?('jp2')
-        Open3.popen3(cmd) do |_stdin, stdout, _stderr, _wait_thr|
-          @source_meta = stdout.read
-        end
-      end
-      @source_meta
+      return @source_meta unless @source_meta.nil?
+      @source_meta = NewspaperWorks::ImageIdentifier.new(@source_path).metadata
     end
 
     def use_color?
-      # imagemagick `identify` output describes color space:
-      !(identify.include?('Gray') || one_bit?)
+      identify[:color] == 'color'
     end
 
     # is source one-bit monochrome?
     def one_bit?
-      identify.include?('1-bit')
+      identify[:color] == 'monochrome'
     end
 
     def create_derivatives(filename)
