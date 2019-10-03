@@ -66,7 +66,6 @@ A set of helpful documents to help you learn more and deploy NewspaperWorks can 
   * [LibreOffice](https://www.libreoffice.org/)
   * [ghostscript](https://www.ghostscript.com/)
   * [poppler-utils](https://poppler.freedesktop.org/)
-  * [GraphicsMagick](http://www.graphicsmagick.org/)
   * [ImageMagick](https://github.com/ImageMagick/ImageMagick6)
     - _ImageMagick policy XML may need to be more permissive in both resources and source media types allowed.  See template [policy.xml](config/vendor/imagemagick-6-policy.xml)._
   * [libcurl3](https://packages.ubuntu.com/search?keywords=libcurl3)
