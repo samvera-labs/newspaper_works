@@ -67,6 +67,10 @@ module NewspaperWorks
         `#{cmd}`.lines
       end
 
+      def im_mime(lines)
+        im_line_select(lines, 'mime type')
+      end
+
       def populate_im_color!(lines, result)
         bpc = im_line_select(lines, 'depth').split('-')[0].to_i # '1-bit' -> 1
         colorspace = im_line_select(lines, 'colorspace')
@@ -82,7 +86,7 @@ module NewspaperWorks
         result = {}
         lines = im_identify
         result[:width], result[:height] = im_identify_geometry(lines)
-        result[:content_type] = im_line_select(lines, 'mime type')
+        result[:content_type] = im_mime(lines)
         populate_im_color!(lines, result)
         result
       end
