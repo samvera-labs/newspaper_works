@@ -48,7 +48,7 @@ RSpec.describe NewspaperWorks::PDFDerivativeService do
     end
 
     it "creates gray PDF derivative from one-bit source" do
-      makes_pdf('page1.tiff')
+      makes_pdf('ocr_mono.tiff')
     end
 
     it "creates gray PDF from grayscale source" do
@@ -57,6 +57,10 @@ RSpec.describe NewspaperWorks::PDFDerivativeService do
 
     it "creates color PDF from color source" do
       makes_pdf('4.1.07.tiff')
+    end
+
+    it "creates color PDF from color JP2 source" do
+      makes_pdf('4.1.07.jp2')
     end
   end
 end

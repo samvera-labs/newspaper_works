@@ -110,18 +110,18 @@ RSpec.describe NewspaperWorks::NewspaperPageDerivativeService do
 
     it "identifies color and gray sources" do
       expect(service_for_file('4.1.07.tiff').use_color?).to be true
-      expect(service_for_file('page1.tiff').use_color?).to be false
+      expect(service_for_file('ocr_gray.tiff').use_color?).to be false
     end
 
     it "identifies a one-bit source" do
       # 1-bit group4 monochrome TIFF:
-      expect(service_for_file('page1.tiff').one_bit?).to be true
+      expect(service_for_file('ocr_mono.tiff').one_bit?).to be true
       # 8-bit gray TIFF:
       expect(
         service_for_file('lowres-gray-via-ndnp-sample.tiff').one_bit?
       ).to be false
       # color TIFF:
-      expect(service_for_file('4.1.07.tif').one_bit?).to be false
+      expect(service_for_file('4.1.07.tiff').one_bit?).to be false
     end
   end
 end

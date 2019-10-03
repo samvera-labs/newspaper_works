@@ -2,7 +2,7 @@ module NewspaperWorks
   # Base type for derivative services specific to NewspaperPage only
   class NewspaperPageDerivativeService
     attr_reader :file_set, :master_format
-    delegate :uri, :mime_type, to: :file_set
+    delegate :uri, to: :file_set
 
     TARGET_EXT = nil
 
@@ -51,6 +51,10 @@ module NewspaperWorks
       @source_meta = NewspaperWorks::ImageIdentifier.new(@source_path).metadata
     end
 
+    def mime_type
+      identify[:content_type]
+    end
+
     def use_color?
       identify[:color] == 'color'
     end
@@ -74,6 +78,34 @@ module NewspaperWorks
       derivative_path_factory.derivatives_for_reference(file_set).each do |path|
         FileUtils.rm_f(path) if path.ends_with?(target_ext)
       end
+    end
+
+    def jp2_to_intermediate
+      intermediate_path = File.join(Dir.mktmpdir, 'intermediate.tif')
+      jp2_cmd = "opj_decompress -i #{@source_path} -o #{intermediate_path}"
+      # make intermediate, then...
+      `#{jp2_cmd}`
+      intermediate_path
+    end
+
+    def convert_cmd
+      raise NotImplementedError, 'Calling subclass missing convert_cmd method'
+    end
+
+    # convert non-JP2 source/primary file to PDF derivative with ImageMagick6
+    #   calls convert_cmd on calling subclasses
+    def im_convert
+      `#{convert_cmd}`
+    end
+
+    # convert JP2 source/primary file to PDF derivative, via
+    #   opj_decompress to intermediate TIFF, then ImageMagick6 convert
+    def jp2_convert
+      # jp2 source -> intermediate
+      intermediate_path = jp2_to_intermediate
+      @source_path = intermediate_path
+      # intermediate -> PDF
+      im_convert
     end
 
     # def cleanup_derivatives; end

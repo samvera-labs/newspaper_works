@@ -43,12 +43,18 @@ RSpec.describe NewspaperWorks::TIFFDerivativeService do
       svc.cleanup_derivatives
     end
 
-    it "creates gray TIFF derivative from one-bit source" do
-      makes_tiff('page1.tiff')
+    # for cases where primary file is TIFF already
+    def avoids_duplicative_creation(filename)
+      expected = expected_path(valid_file_set)
+      expect(File.exist?(expected)).to be false
+      svc = described_class.new(valid_file_set)
+      svc.create_derivatives(source_image(filename))
+      expect(File.exist?(expected)).not_to be true
     end
 
-    it "creates gray TIFF from grayscale source" do
-      makes_tiff('lowres-gray-via-ndnp-sample.tiff')
+    it "Does not make TIFF derivatives when primary is TIFF" do
+      avoids_duplicative_creation('ocr_mono.tiff')
+      avoids_duplicative_creation('ocr_gray.tiff')
     end
 
     it "creates TIFF from PDF source, robust to multi-page" do
