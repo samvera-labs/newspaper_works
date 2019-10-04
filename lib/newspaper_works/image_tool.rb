@@ -1,4 +1,5 @@
 require 'open3'
+require 'tmpdir'
 
 module NewspaperWorks
   class ImageTool
@@ -39,7 +40,35 @@ module NewspaperWorks
       metadata[:color]
     end
 
+    # Convert source image to image at destination path, inferring file type
+    #   from destination file extension.  In case of JP2 files, create
+    #   intermediate file using OpenJPEG 2000 that ImageMagick can use.
+    #   Only outputs monochrome output if monochrome is true, destination
+    #   format is TIFF.
+    # @param destination [String] Path to output / destination file
+    # @param monochrome [Boolean] true if monochrome output, otherwise false
+    def convert(destination, monochrome = false)
+      raise 'JP2 output not yet supported' if destination.end_with?('jp2')
+      return convert_image(jp2_to_tiff(@path), destination, monochrome) if jp2?
+      convert_image(@path, destination, monochrome)
+    end
+
     private
+
+      def convert_image(source, destination, monochrome)
+        monochrome &&= destination.slice(-4, 4).index('tif')
+        mono_opts = "-depth 1 -monochrome -compress Group4 -type bilevel "
+        opts = monochrome ? mono_opts : ''
+        cmd = "convert #{source} #{opts}#{destination}"
+        `#{cmd}`
+      end
+
+      def jp2_to_tiff(source)
+        intermediate_path = File.join(Dir.mktmpdir, 'intermediate.tif')
+        jp2_cmd = "opj_decompress -i #{source} -o #{intermediate_path}"
+        `#{jp2_cmd}`
+        intermediate_path
+      end
 
       def jp2_metadata
         result = NewspaperWorks::JP2ImageMetadata.new(path).technical_metadata

@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'tmpdir'
 
 describe NewspaperWorks::ImageTool do
   let(:fixtures) { File.join(NewspaperWorks::GEM_PATH, 'spec/fixtures/files') }
@@ -63,6 +64,40 @@ describe NewspaperWorks::ImageTool do
       expect(result[:bits_per_component]).to eq 8
       # e.g. is 3, but would be four if sample image had an alpha channel
       expect(result[:num_components]).to eq 3
+    end
+  end
+
+  describe "converts images" do
+    it "makes a monochrome TIFF from JP2" do
+      tool = described_class.new(gray_jp2)
+      dest = File.join(Dir.mktmpdir, 'mono.tif')
+      tool.convert(dest, true)
+      expect(File.exist?(dest)).to be true
+      expect(described_class.new(dest).metadata[:color]).to eq 'monochrome'
+    end
+
+    it "makes a gray TIFF from JP2" do
+      tool = described_class.new(gray_jp2)
+      dest = File.join(Dir.mktmpdir, 'gray.tif')
+      tool.convert(dest, false)
+      expect(File.exist?(dest)).to be true
+      expect(described_class.new(dest).metadata[:color]).to eq 'gray'
+    end
+
+    it "makes a monochrome TIFF from grayscale TIFF" do
+      tool = described_class.new(gray_tiff)
+      dest = File.join(Dir.mktmpdir, 'mono.tif')
+      tool.convert(dest, true)
+      expect(File.exist?(dest)).to be true
+      expect(described_class.new(dest).metadata[:color]).to eq 'monochrome'
+    end
+
+    # Not yet supported to use this tool to make JP2, for now the only
+    #   component in NewspaperWorks doing that is
+    #   NewspaperWorks::JP2DerivativeService
+    it "raises error on JP2 destination" do
+      expect { described_class.new(gray_tiff).convert('out.jp2') }.to \
+        raise_error(RuntimeError)
     end
   end
 end
