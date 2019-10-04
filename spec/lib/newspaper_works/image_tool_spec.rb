@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe NewspaperWorks::ImageIdentifier do
+describe NewspaperWorks::ImageTool do
   let(:fixtures) { File.join(NewspaperWorks::GEM_PATH, 'spec/fixtures/files') }
 
   # Image fixtures to test identification, metadata extraction for:

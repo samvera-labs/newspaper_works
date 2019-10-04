@@ -48,7 +48,7 @@ module NewspaperWorks
 
     def identify
       return @source_meta unless @source_meta.nil?
-      @source_meta = NewspaperWorks::ImageIdentifier.new(@source_path).metadata
+      @source_meta = NewspaperWorks::ImageTool.new(@source_path).metadata
     end
 
     def mime_type

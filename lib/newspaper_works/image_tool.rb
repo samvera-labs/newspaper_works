@@ -1,7 +1,7 @@
 require 'open3'
 
 module NewspaperWorks
-  class ImageIdentifier
+  class ImageTool
     attr_accessor :path, :ftype
 
     def initialize(path)

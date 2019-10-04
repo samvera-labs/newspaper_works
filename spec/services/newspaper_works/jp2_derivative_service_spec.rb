@@ -22,8 +22,8 @@ RSpec.describe NewspaperWorks::JP2DerivativeService do
     end
 
     def metadata_match_checker(source, target)
-      target_meta = NewspaperWorks::ImageIdentifier.new(target).metadata
-      source_meta = NewspaperWorks::ImageIdentifier.new(source).metadata
+      target_meta = NewspaperWorks::ImageTool.new(target).metadata
+      source_meta = NewspaperWorks::ImageTool.new(source).metadata
       expect(target_meta[:content_type]).to eq 'image/jp2'
       expect(target_meta[:width]).to eq source_meta[:width]
       expect(target_meta[:height]).to eq source_meta[:height]
