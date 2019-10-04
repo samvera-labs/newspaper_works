@@ -9,7 +9,7 @@ module NewspaperWorks
     #   - Coordinates in px units, unlike ALTO, which may have scaling concerns
     class HOCRReader
       attr_accessor :source, :doc_stream
-      delegate :text, to: :doc_stream
+      delegate :text, :width, :height, :words, to: :doc_stream
 
       # SAX Document Stream class to gather text and word tokens from hOCR
       class HOCRDocStream < Nokogiri::XML::SAX::Document
