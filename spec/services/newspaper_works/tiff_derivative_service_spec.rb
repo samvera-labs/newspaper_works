@@ -22,8 +22,8 @@ RSpec.describe NewspaperWorks::TIFFDerivativeService do
     end
 
     def get_res(path)
-      lines = `gm identify -verbose #{path}`.lines
-      lines.select { |line| line.strip.start_with?('Geometry') }[0].strip
+      tool = NewspaperWorks::ImageTool.new(path)
+      "#{tool.metadata[:width]}x#{tool.metadata[:height]}"
     end
 
     def check_dpi_match(orig, dest)
@@ -32,14 +32,15 @@ RSpec.describe NewspaperWorks::TIFFDerivativeService do
     end
 
     def makes_tiff(filename)
+      path = source_image(filename)
       expected = expected_path(valid_file_set)
       expect(File.exist?(expected)).to be false
       svc = described_class.new(valid_file_set)
-      svc.create_derivatives(source_image(filename))
+      svc.create_derivatives(path)
       expect(File.exist?(expected)).to be true
-      desc = `gm identify #{expected}`
-      expect(desc).to include 'TIFF'
-      check_dpi_match(source_image(filename), expected)
+      mime = NewspaperWorks::ImageTool.new(expected).metadata[:content_type]
+      expect(mime).to eq 'image/tiff'
+      check_dpi_match(path, expected)
       svc.cleanup_derivatives
     end
 
