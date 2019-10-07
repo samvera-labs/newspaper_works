@@ -23,23 +23,6 @@ module NewspaperWorks
       @metadata = jp2? ? jp2_metadata : identify_metadata
     end
 
-    # @return [String] RFC 2045 MIME type of image file at path
-    def content_type
-      metadata[:content_type]
-    end
-
-    # @return [Array(Integer, Integer)] two item array of width, height in px
-    def geometry
-      [metadata[:width], metadata[:height]]
-    end
-
-    # Return color system type.
-    #   Is image gray (multi-bit), monochrome (one-bit), or color?
-    # @return [String] one of 'gray', 'monochrome', 'color'
-    def color_type
-      metadata[:color]
-    end
-
     # Convert source image to image at destination path, inferring file type
     #   from destination file extension.  In case of JP2 files, create
     #   intermediate file using OpenJPEG 2000 that ImageMagick can use.
