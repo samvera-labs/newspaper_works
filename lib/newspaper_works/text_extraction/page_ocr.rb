@@ -9,10 +9,6 @@ module NewspaperWorks
     class PageOCR
       attr_accessor :html, :path
 
-      def self.alto_from(path)
-        new(path).alto
-      end
-
       def initialize(path)
         @path = path
         # hOCR html:
@@ -21,10 +17,6 @@ module NewspaperWorks
         @source_meta = nil
         @box = nil
         @plain = nil
-      end
-
-      def extension
-        @path.split('.')[-1].downcase
       end
 
       def run_ocr
