@@ -10,6 +10,7 @@ describe NewspaperWorks::ImageTool do
   let(:gray_tiff) { File.join(fixtures, 'ocr_gray.tiff') }
   let(:mono_tiff) { File.join(fixtures, 'ocr_mono.tiff') }
   let(:color_tiff) { File.join(fixtures, '4.1.07.tiff') }
+  let(:pdf) { File.join(fixtures, 'minimal-1-page.pdf') }
 
   describe "Extracts metadata with JP2 backend" do
     it "constructs with a path" do
@@ -64,6 +65,11 @@ describe NewspaperWorks::ImageTool do
       expect(result[:bits_per_component]).to eq 8
       # e.g. is 3, but would be four if sample image had an alpha channel
       expect(result[:num_components]).to eq 3
+    end
+
+    it "detects mime type of pdf" do
+      result = described_class.new(pdf).metadata
+      expect(result[:content_type]).to eq 'application/pdf'
     end
   end
 

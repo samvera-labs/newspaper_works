@@ -80,6 +80,7 @@ module NewspaperWorks
       end
 
       def im_mime(lines)
+        return 'application/pdf' if pdf? # workaround older imagemagick bug
         im_line_select(lines, 'mime type')
       end
 
@@ -109,6 +110,10 @@ module NewspaperWorks
 
       def jp2?
         @ftype.end_with?('ftypjp2')
+      end
+
+      def pdf?
+        magic.start_with?('%PDF-')
       end
   end
 end
