@@ -22,6 +22,8 @@ before_install:
   - sudo apt-get update -q
   - sudo apt-get remove --yes openjdk-11-jdk openjdk-11-jdk-headless
   - sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+  - sudo dpkg -l | grep jdk
+  - sudo dpkg -l | grep java
   - gem update --system
   - gem install bundler
   - google-chrome-stable --headless --disable-gpu --no-sandbox --remote-debugging-port=9222 http://localhost &
