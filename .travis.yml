@@ -21,7 +21,7 @@ cache:
 before_install:
   - sudo apt-get update -q
   # remove the default JDK version (11) installed, all packages:
-  - sudo apt-get remove --yes openjdk-11-jdk openjdk-11-jdk-headless openjdk-11-jre openjdk-11-jre-headless
+  - sudo apt-get purge --yes openjdk-11-jdk openjdk-11-jdk-headless openjdk-11-jre openjdk-11-jre-headless
   - sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
   # output verification to log of JDK versons installed (or not):
   - sudo dpkg -l | grep jdk
