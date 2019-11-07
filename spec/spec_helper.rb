@@ -37,6 +37,15 @@ require 'rspec/active_model/mocks'
 require 'selenium-webdriver'
 require 'webdrivers'
 
+# monkey patch Hyrax::VirusScanner#null_scanner to be quiet:
+module Hyrax
+  class VirusScanner
+    def null_scanner
+      false # no warning output, just correct return value
+    end
+  end
+end
+
 # @note In January 2018, TravisCI disabled Chrome sandboxing in its Linux
 #       container build environments to mitigate Meltdown/Spectre
 #       vulnerabilities, at which point Hyrax could no longer use the
@@ -115,8 +124,12 @@ RSpec.configure do |config|
 
   config.include EngineRoutes, type: :controller
 
-  # ensure Hyrax has active sipity workflow for default admin set:
+  # start with clean repository, active sipity workflow for default admin set:
   config.before(:suite) do
+    # completely clean repository before suite:
+    require 'active_fedora/cleaner'
+    ActiveFedora::Cleaner.clean!
+
     begin
       # ensure permission template actually exists in RDBMS:
       id = 'admin_set/default'
