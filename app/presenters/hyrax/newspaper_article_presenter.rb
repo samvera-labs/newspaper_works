@@ -27,7 +27,7 @@ module Hyrax
     private
 
       def iiif_metadata_fields
-        [:title, :alternative_title, :place_of_publication, :issn, :lccn,
+        [:title, :alt_title, :place_of_publication, :issn, :lccn,
          :oclcnum, :held_by, :text_direction, :page_number, :section, :genre,
          :author, :photographer, :volume, :edition, :issue_number,
          :geographic_coverage, :extent, :publication_date, :resource_type,

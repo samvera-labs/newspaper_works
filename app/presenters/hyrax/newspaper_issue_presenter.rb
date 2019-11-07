@@ -52,7 +52,7 @@ module Hyrax
       end
 
       def iiif_metadata_fields
-        [:title, :alternative_title, :place_of_publication_label, :issn, :lccn,
+        [:title, :alt_title, :place_of_publication_label, :issn, :lccn,
          :oclcnum, :held_by, :volume, :edition_name, :edition_number,
          :issue_number, :extent, :publication_date, :resource_type, :creator,
          :contributor, :description, :license, :rights_statement, :publisher,

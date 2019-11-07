@@ -4,7 +4,7 @@ RSpec.shared_examples "a newspaper core presenter" do
   let(:user_key) { 'a_user_key' }
 
   let(:core_attributes) do
-    { "alternative_title" => ['There and Back Again'],
+    { "alt_title" => ['There and Back Again'],
       "issn" => '2049-3630',
       "lccn" => '2001001114',
       "oclcnum" => 'ocm00012345',
@@ -14,7 +14,7 @@ RSpec.shared_examples "a newspaper core presenter" do
   let(:ability) { nil }
   let(:presenter) { described_class.new(solr_document, ability, request) }
 
-  it { is_expected.to delegate_method(:alternative_title).to(:solr_document) }
+  it { is_expected.to delegate_method(:alt_title).to(:solr_document) }
   it { is_expected.to delegate_method(:issn).to(:solr_document) }
   it { is_expected.to delegate_method(:lccn).to(:solr_document) }
   it { is_expected.to delegate_method(:oclcnum).to(:solr_document) }

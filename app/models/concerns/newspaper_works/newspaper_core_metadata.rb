@@ -10,7 +10,7 @@ module NewspaperWorks
 
       # - Alternative Title
       property(
-        :alternative_title,
+        :alt_title,
         predicate: ::RDF::Vocab::DC.alternative,
         multiple: true
       ) do |index|

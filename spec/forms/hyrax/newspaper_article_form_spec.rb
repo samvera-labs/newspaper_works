@@ -5,6 +5,8 @@ RSpec.describe Hyrax::NewspaperArticleForm do
   let(:work) { NewspaperArticle.new }
   let(:form) { described_class.new(work, nil, nil) }
 
+  let(:hyrax3) { Hyrax::VERSION.start_with?('3') }
+
   describe "#required_fields" do
     subject { form.required_fields }
 
@@ -20,14 +22,30 @@ RSpec.describe Hyrax::NewspaperArticleForm do
   describe "#secondary_terms" do
     subject { form.secondary_terms }
 
-    it do
-      is_expected.to eq [:creator, :contributor, :description, :license,
-                         :rights_statement, :publisher, :subject, :identifier,
-                         :place_of_publication, :issn, :lccn, :oclcnum,
-                         :alternative_title, :genre, :author, :photographer,
-                         :publication_date, :volume, :edition_number,
-                         :edition_name, :issue_number, :geographic_coverage,
-                         :extent, :page_number, :section]
+    it "has expected secondary terms for Hyrax 3" do
+      if hyrax3
+        is_expected.to eq [
+          :alt_title, :creator, :contributor, :description, :abstract,
+          :license, :rights_statement, :access_right, :rights_notes,
+          :publisher, :subject, :identifier, :place_of_publication, :issn,
+          :lccn, :oclcnum, :alt_title, :genre, :author, :photographer,
+          :publication_date, :volume, :edition_number, :edition_name,
+          :issue_number, :geographic_coverage, :extent, :page_number, :section
+        ]
+      end
+    end
+
+    it "has expected secondary terms for Hyrax 2" do
+      unless hyrax3
+        is_expected.to eq [
+          :alt_title, :creator, :contributor, :description,
+          :license, :rights_statement,
+          :publisher, :subject, :identifier, :place_of_publication, :issn,
+          :lccn, :oclcnum, :alt_title, :genre, :author, :photographer,
+          :publication_date, :volume, :edition_number, :edition_name,
+          :issue_number, :geographic_coverage, :extent, :page_number, :section
+        ]
+      end
     end
   end
 end

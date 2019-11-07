@@ -15,7 +15,7 @@ RSpec.describe NewspaperWorks::NewspaperCoreMetadata do
   end
 
   it 'has expected properties' do
-    expect(work).to respond_to(:alternative_title)
+    expect(work).to respond_to(:alt_title)
     expect(work).to respond_to(:place_of_publication)
     expect(work).to respond_to(:issn)
     expect(work).to respond_to(:lccn)
@@ -36,7 +36,7 @@ RSpec.describe NewspaperWorks::NewspaperCoreMetadata do
 
   it 'work using mixin saves' do
     work.place_of_publication = ['http://www.geonames.org/5780993/about.rdf']
-    work.alternative_title = ['The alt title']
+    work.alt_title = ['The alt title']
     expect(work.id).to be_nil
     work.save!
     expect(work.id).not_to be_nil

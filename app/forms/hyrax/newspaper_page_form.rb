@@ -6,7 +6,8 @@ module Hyrax
     self.model_class = ::NewspaperPage
     self.terms += [:height, :width, :resource_type, :text_direction,
                    :page_number, :section]
-    self.terms -= [:creator, :keyword, :rights_statement, :contributor,
+    self.terms -= [:alt_title, :abstract, :creator, :keyword, :access_right,
+                   :rights_notes, :rights_statement, :contributor,
                    :description, :license, :subject, :date_created, :subject,
                    :language, :based_near, :related_url, :source,
                    :resource_type, :publisher]

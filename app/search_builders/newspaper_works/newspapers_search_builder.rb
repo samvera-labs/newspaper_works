@@ -1,3 +1,5 @@
+require 'solrizer'
+
 # based heavily on BlacklightAdvancedSearch::AdvancedSearchBuilder
 # this class is used to set params on the search that is performed to
 # display facet values on the Newspapers Search form,

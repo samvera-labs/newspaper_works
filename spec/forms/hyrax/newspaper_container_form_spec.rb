@@ -5,6 +5,8 @@ RSpec.describe Hyrax::NewspaperContainerForm do
   let(:work) { NewspaperContainer.new }
   let(:form) { described_class.new(work, nil, nil) }
 
+  let(:hyrax3) { Hyrax::VERSION.start_with?('3') }
+
   describe "#required_fields" do
     subject { form.required_fields }
 
@@ -20,11 +22,25 @@ RSpec.describe Hyrax::NewspaperContainerForm do
   describe "#secondary_terms" do
     subject { form.secondary_terms }
 
-    it do
-      is_expected.to eq [:license, :rights_statement, :publisher, :identifier,
-                         :place_of_publication, :issn, :lccn, :oclcnum,
-                         :alternative_title, :extent,
-                         :publication_date_start, :publication_date_end]
+    it "has expected secondary terms for Hyrax 3" do
+      if hyrax3
+        is_expected.to eq [
+          :alt_title, :abstract, :license, :rights_statement, :access_right,
+          :rights_notes, :publisher, :identifier, :place_of_publication, :issn,
+          :lccn, :oclcnum, :alt_title, :extent, :publication_date_start,
+          :publication_date_end
+        ]
+      end
+    end
+
+    it "has expected secondary terms for Hyrax 2" do
+      unless hyrax3
+        is_expected.to eq [
+          :license, :rights_statement, :publisher, :identifier,
+          :place_of_publication, :issn, :lccn, :oclcnum, :alt_title, :extent,
+          :publication_date_start, :publication_date_end
+        ]
+      end
     end
   end
 end
