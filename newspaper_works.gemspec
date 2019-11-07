@@ -24,10 +24,14 @@ SUMMARY
   spec.test_files = spec.files.grep(%r{^(test|spec|features)/})
   spec.add_dependency 'blacklight_iiif_search', '~> 1.0'
   spec.add_dependency 'blacklight_advanced_search', '6.4.1'
-  spec.add_dependency 'hyrax', '>= 2.5.1', '~> 2'
+  # support Hyrax 2.5, 2.6
+  # spec.add_dependency 'hyrax', '>= 2.5.1', '~> 2'
+  # Hyrax 3:
+  spec.add_dependency 'hyrax', '3.0.0.pre.rc1'
   spec.add_dependency 'nokogiri'
   spec.add_dependency 'rails', '~> 5.1'
   spec.add_dependency 'sass-rails', '~> 5.0'
+  spec.add_dependency 'solrizer', '~> 4.1'
 
   spec.add_development_dependency 'bixby'
   spec.add_development_dependency 'capybara', '~> 2.4', '< 2.18.0'
