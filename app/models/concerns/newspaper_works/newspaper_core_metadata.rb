@@ -8,9 +8,10 @@ module NewspaperWorks
       # common metadata for Newspaper title, issue, article; fields
       # that are not in ::Hyrax::BasicMetadata are enumerated here.
 
-      # - Alternative Title
+      # - Alternative Title (while included in Hyrax 3, NewspaperWorks in
+      #   Hyrax 2.x needs this):
       property(
-        :alt_title,
+        :alternative_title,
         predicate: ::RDF::Vocab::DC.alternative,
         multiple: true
       ) do |index|

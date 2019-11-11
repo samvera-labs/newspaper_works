@@ -4,6 +4,6 @@ module NewspaperWorks
   module NewspaperCorePresenter
     include NewspaperWorks::PersistentUrlPresenterBehavior
     include NewspaperWorks::PlaceOfPublicationPresenterBehavior
-    delegate :alt_title, :issn, :lccn, :oclcnum, :held_by, to: :solr_document
+    delegate :alternative_title, :issn, :lccn, :oclcnum, :held_by, to: :solr_document
   end
 end

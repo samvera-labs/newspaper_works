@@ -51,7 +51,7 @@ RSpec.describe Hyrax::NewspaperTitlePresenter do
 
   subject { presenter }
 
-  it { is_expected.to delegate_method(:alt_title).to(:solr_document) }
+  it { is_expected.to delegate_method(:alternative_title).to(:solr_document) }
   it { is_expected.to delegate_method(:issn).to(:solr_document) }
   it { is_expected.to delegate_method(:lccn).to(:solr_document) }
   it { is_expected.to delegate_method(:oclcnum).to(:solr_document) }

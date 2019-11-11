@@ -1,5 +1,5 @@
 module NewspaperWorks::Solr::Document
-  SOLR_NAMES = %w[alt_title genre place_of_publication
+  SOLR_NAMES = %w[alternative_title genre place_of_publication
                   issn lccn oclcnum held_by text_direction
                   page_number section author photographer
                   volume issue_number geographic_coverage
