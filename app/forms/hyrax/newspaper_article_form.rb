@@ -7,5 +7,6 @@ module Hyrax
                    :publication_date, :volume, :edition_number, :edition_name,
                    :issue_number, :geographic_coverage, :extent, :page_number,
                    :section]
+    self.terms -= [:alt_title]
   end
 end

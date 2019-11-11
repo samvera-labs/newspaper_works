@@ -7,6 +7,9 @@ module Hyrax
     self.terms += [:alternative_title, :edition_name, :frequency, :preceded_by,
                    :succeeded_by, :publication_date_start,
                    :publication_date_end]
-    self.terms -= [:creator, :contributor, :description, :source, :subject]
+    self.terms -= [
+      :creator, :contributor, :description, :source, :subject,
+      :alt_title
+    ]
   end
 end

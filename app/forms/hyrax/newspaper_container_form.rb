@@ -6,6 +6,6 @@ module Hyrax
     self.model_class = ::NewspaperContainer
     self.terms += [:alternative_title, :extent, :publication_date_start,
                    :publication_date_end]
-    self.terms -= [:creator, :contributor, :description, :subject]
+    self.terms -= [:creator, :contributor, :description, :subject, :alt_title]
   end
 end

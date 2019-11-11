@@ -10,7 +10,7 @@ module Hyrax
                    :rights_notes, :rights_statement, :contributor,
                    :description, :license, :subject, :date_created, :subject,
                    :language, :based_near, :related_url, :source,
-                   :resource_type, :publisher]
+                   :resource_type, :publisher, :alt_title]
     self.required_fields -= [:creator, :keyword, :rights_statement]
   end
 end
