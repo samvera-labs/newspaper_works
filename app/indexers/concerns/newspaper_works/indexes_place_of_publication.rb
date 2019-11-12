@@ -47,8 +47,9 @@ module NewspaperWorks
       solr_doc['place_of_publication_label_tesim'] << display_name
       solr_doc['place_of_publication_label_sim'] << display_name
       return unless geodata['lat'] && geodata['lng']
-      # TODO: this should use a Solr location_rpt field type
-      solr_doc['place_of_publication_llsim'] << "#{geodata['lat']},#{geodata['lng']}"
+      # TODO: index coordinates using Solr location_rpt field type
+      solr_doc['place_of_publication_geojson_ssim'] << geojson_for_coords(geodata['lat'], geodata['lng'],
+                                                                          display_name).to_json
     end
 
     # fetch data from GeoNames API
@@ -62,6 +63,24 @@ module NewspaperWorks
       geonames_url = "http://api.geonames.org/getJSON?geonameId=#{geoname_id}&username=#{geonames_un}"
       resp = Faraday.new(geonames_url).get
       JSON.parse(resp.body)
+    end
+
+    # create a GeoJSON data structure for lat/long values
+    #
+    # @param lat [String] latitude
+    # @param long [String] longitude
+    # @param display_name [String] human-readable name for location
+    # @return [Hash] GeoJSON
+    def geojson_for_coords(lat, long, display_name = nil)
+      geojson_hash = {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [long.to_f, lat.to_f]
+        }
+      }
+      geojson_hash[:properties] = { placename: display_name } if display_name
+      geojson_hash
     end
   end
 end

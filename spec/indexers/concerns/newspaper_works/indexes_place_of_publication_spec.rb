@@ -18,7 +18,7 @@ RSpec.describe NewspaperWorks::IndexesPlaceOfPublication do
     end
     it 'sets the geodata fields correctly' do
       expect(solr_doc['place_of_publication_state_sim'].first).not_to be_falsey
-      expect(solr_doc['place_of_publication_llsim'].first).not_to be_falsey
+      expect(solr_doc['place_of_publication_geojson_ssim'].first).not_to be_falsey
     end
   end
 
@@ -39,7 +39,7 @@ RSpec.describe NewspaperWorks::IndexesPlaceOfPublication do
     end
     it 'parses the geodata correctly' do
       expect(solr_doc['place_of_publication_city_sim']).to include('Salem')
-      expect(solr_doc['place_of_publication_llsim']).to include('42.51954,-70.89672')
+      expect(solr_doc['place_of_publication_geojson_ssim']).to include('-70.89672,42.51954')
     end
   end
 
@@ -48,6 +48,15 @@ RSpec.describe NewspaperWorks::IndexesPlaceOfPublication do
       expect(geodata.class).to eq(Hash)
       expect(geodata['name']).not_to be_falsey
       expect(geodata['lat']).not_to be_falsey
+    end
+  end
+
+  describe '#geojson_for_coords' do
+    let(:geojson) { test_indexer.geojson_for_coords(geodata['lat'], geodata['lng']) }
+    it 'returns a GeoJSON hash' do
+      expect(geojson.class).to eq(Hash)
+      expect(geojson['type']).to eq 'Feature'
+      expect(geojson['geometry']['coordinates']).to eq [-70.89672, 42.51954]
     end
   end
 end
