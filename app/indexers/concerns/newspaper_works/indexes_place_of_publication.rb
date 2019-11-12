@@ -26,7 +26,7 @@ module NewspaperWorks
       end
       solr_doc['place_of_publication_label_tesim'] ||= []
       solr_doc['place_of_publication_label_sim'] ||= []
-      solr_doc['place_of_publication_llsim'] ||= []
+      solr_doc['place_of_publication_geojson_ssim'] ||= []
     end
 
     # adds geographic data to solr_doc Hash, with fields for
