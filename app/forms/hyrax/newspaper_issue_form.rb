@@ -5,7 +5,7 @@ module Hyrax
   class NewspaperIssueForm < ::NewspaperWorks::NewspaperCoreFormData
     self.model_class = ::NewspaperIssue
     self.terms += [:alternative_title, :volume, :edition_number, :edition_name,
-                   :issue_number, :extent, :publication_date, :not_here]
+                   :issue_number, :extent, :publication_date]
     self.terms -= [:creator, :contributor, :description, :subject, :alt_title]
   end
 end

@@ -25,7 +25,7 @@ RSpec.describe Hyrax::NewspaperArticleForm do
     it "has expected secondary terms for Hyrax 3" do
       if hyrax3
         is_expected.to eq [
-          :alternative_title, :creator, :contributor, :description, :abstract,
+          :creator, :contributor, :description, :abstract,
           :license, :rights_statement, :access_right, :rights_notes,
           :publisher, :subject, :identifier, :place_of_publication, :issn,
           :lccn, :oclcnum, :alternative_title, :genre, :author, :photographer,
@@ -38,7 +38,7 @@ RSpec.describe Hyrax::NewspaperArticleForm do
     it "has expected secondary terms for Hyrax 2" do
       unless hyrax3
         is_expected.to eq [
-          :alternative_title, :creator, :contributor, :description,
+          :creator, :contributor, :description,
           :license, :rights_statement,
           :publisher, :subject, :identifier, :place_of_publication, :issn,
           :lccn, :oclcnum, :alternative_title, :genre, :author, :photographer,
