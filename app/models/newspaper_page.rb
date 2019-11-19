@@ -67,4 +67,13 @@ class NewspaperPage < ActiveFedora::Base
     result = member_of.select { |v| v.instance_of?(NewspaperContainer) }
     result[0] unless result.empty?
   end
+
+  def parent_object
+    NewspaperIssue
+  end
+
+  def parent_options
+    return nil if parent_object.count.zero?
+    parent_object.all.map { |object| [object.title.first, object.id] }
+  end
 end
