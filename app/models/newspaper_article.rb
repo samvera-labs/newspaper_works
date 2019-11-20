@@ -155,13 +155,4 @@ class NewspaperArticle < ActiveFedora::Base
     pages = self.pages
     pages.first.container unless pages.empty?
   end
-
-  def parent_object
-    NewspaperPage
-  end
-
-  def parent_options
-    return nil if parent_object.count.zero?
-    parent_object.all.map { |object| [object.title.first, object.id] }
-  end
 end

@@ -74,7 +74,7 @@ en:
 
     title_search_form:
       label:                    'Search within this newspaper'
-      placeholder:              'Search within this newspaper...'
+      placeholder:              'Search within this newzspaper...'
       front_pages_link:         'View all front pages'
 
   simple_form:
@@ -97,6 +97,7 @@ en:
         photographer:           'The name of the photographer for photos accompanying the article.'
         geographic_coverage:    'The location(s) described in the article.'
         page_number:            'The pagination information, as written on the page.'
+        parent:                 '...'
         text_direction:         'The reading direction of the text. Enter as "ltr" (left-to-right) or "rtl (right-to-left)"'
         section:                'The section of the newspaper the item appears in (Business, Sports, etc.)'
     labels:
@@ -106,6 +107,7 @@ en:
         issn:                   'ISSN'
         lccn:                   'LCCN'
         oclcnum:                'OCLC #'
+        parent:                 'Parent Work'
         publication_date_end:   'Publication date (end)'
         publication_date_start: 'Publication date (start)'
 

@@ -83,13 +83,4 @@ class NewspaperContainer < ActiveFedora::Base
   def pages
     members.select { |v| v.instance_of?(NewspaperPage) }
   end
-
-  def parent_object
-    NewspaperTitle
-  end
-
-  def parent_options
-    return nil if parent_object.count.zero?
-    parent_object.all.map { |object| [object.title.first, object.id] }
-  end
 end

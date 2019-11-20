@@ -1,0 +1,21 @@
+<% unless params[:parent_id] %>
+  <% if defined?(f.object.model.parent_options) && f.object.model.parent_options %>
+    <h2><%= t("simple_form.labels.defaults.parent") %></h2>
+    <%= f.input :in_works_ids, as: :hidden, input_html: { value: "", multiple: true } %>
+    <div class="form-inline select optional parent_id">
+      <% selected_val = defined?(f.object.model.member_of.first.id) ? f.object.model.member_of.first.id : nil %>
+      <%= label_tag 'parent_id', f.object.model.parent_object.name.titlecase, class: 'control-label select optional' %>
+      <%= select_tag 'parent_id', options_for_select(f.object.model.parent_options, selected_val), include_blank: true, class: 'form-control' %>
+      <div><p class="help-block"><%= t("simple_form.hints.defaults.parent") %></p></div>
+    </div>
+
+    <script type='text/javascript'>
+        $(function() {
+            $('#parent_id').change(function() {
+                var x = $(this).val();
+                $('#<%= f.object_name %>_in_works_ids').val(x);
+            });
+        });
+    </script>
+  <% end %>
+<% end %>

@@ -108,8 +108,4 @@ class NewspaperTitle < ActiveFedora::Base
   def containers
     members.select { |v| v.instance_of?(NewspaperContainer) }
   end
-
-  def parent_options
-    nil
-  end
 end
