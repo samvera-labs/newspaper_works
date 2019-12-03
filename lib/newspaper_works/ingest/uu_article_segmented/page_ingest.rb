@@ -30,12 +30,11 @@ module NewspaperWorks
         def text
           tokens = xpath(
             './/nodes//n'
-          ).to_a.map { |n| n.text }
+          ).to_a.map(&:text)
           line = tokens.join(' ')
           # word-wrap long line to 80 column lines for easier debug/viewing:
           line.scan(/\S.{0,#{80}}\S(?=\s|$)|\S+/).join("\n")
         end
-
       end
     end
   end

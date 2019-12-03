@@ -36,19 +36,19 @@ module NewspaperWorks
 
         # @return [Array<String>] list of paths to each page in manifest order
         def paths
-          _paths = xpath('//pages/page-ref/@href').map { |a| a.value }
+          result = xpath('//pages/page-ref/@href').map(&:value)
           # normalize to absolute paths relative to location of manifest
-          _paths.map { |p| File.expand_path(p, File.dirname(@path)) }
+          result.map { |p| File.expand_path(p, File.dirname(@path)) }
         end
 
         def article_paths
-          _paths = xpath('//articles/article-ref/@href').map { |a| a.value }
+          result = xpath('//articles/article-ref/@href').map(&:value)
           # normalize to absolute paths relative to location of manifest
-          _paths.map { |p| File.expand_path(p, File.dirname(@path)) }
+          result.map { |p| File.expand_path(p, File.dirname(@path)) }
         end
 
         def article(path)
-          NewspaperWorks::Ingest::UUArticleSegmented::ArticleIngest(
+          NewspaperWorks::Ingest::UUArticleSegmented::ArticleIngest.new(
             path, self
           )
         end
