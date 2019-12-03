@@ -53,11 +53,11 @@ module NewspaperWorks
           )
         end
 
-        # @return [Array<NewspaperWorks::Ingest::UUArticleSegmented::ArticleIngest]
+        # @return [Hash{String, NewspaperWorks::Ingest::UUArticleSegmented::ArticleIngest}]
         #   list of articles for issue, linked back to this issue
         def articles
           return @articles unless @articles.nil?
-          @articles = article_paths.map { |path| article(path) }
+          @articles = article_paths.map { |path| [path, article(path)] }.to_h
         end
 
         # return path, or if path is directory, the path to a unit.xml file

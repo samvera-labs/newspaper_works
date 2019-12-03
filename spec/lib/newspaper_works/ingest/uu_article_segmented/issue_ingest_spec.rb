@@ -13,9 +13,9 @@ RSpec.describe NewspaperWorks::Ingest::UUArticleSegmented::IssueIngest do
 
   let(:page_cls) { NewspaperWorks::Ingest::UUArticleSegmented::PageIngest }
 
-  let(:article_cls) {
+  let(:article_cls) do
     NewspaperWorks::Ingest::UUArticleSegmented::ArticleIngest
-  }
+  end
 
   describe "construction and composition" do
     it "constructs adapter given path" do
@@ -41,10 +41,10 @@ RSpec.describe NewspaperWorks::Ingest::UUArticleSegmented::IssueIngest do
       expect(page_again).to be page
     end
 
-    it "provides accessor to list of articles" do
+    it "provides accessor to hash of articles" do
       articles = issue.articles
       expect(articles.size).to eq 18
-      article = articles[0]
+      article = articles.values[0]
       expect(article).to be_a article_cls
     end
   end
