@@ -35,7 +35,7 @@ module NewspaperWorks
         end
 
         # @return [Array<String>] list of paths to each page in manifest order
-        def paths
+        def page_paths
           result = xpath('//pages/page-ref/@href').map(&:value)
           # normalize to absolute paths relative to location of manifest
           result.map { |p| File.expand_path(p, File.dirname(@path)) }
@@ -70,6 +70,8 @@ module NewspaperWorks
           raise IOError, 'Manifest not found: #{path}' unless File.exist?(path)
           path
         end
+
+        alias paths page_paths
       end
     end
   end
