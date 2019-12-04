@@ -25,7 +25,11 @@ RSpec.describe NewspaperWorks::Ingest::UUArticleSegmented::PageIngest do
     end
 
     it "provides date metadata for page" do
+      expect(page.page_number).to eq '8'
       expect(page.publication_date).to eq '1850-06-15'
+      # title without issue context contains date and page_number:
+      expected_title = "#{page.publication_date}: Page #{page.page_number}"
+      expect(page.title).to contain_exactly expected_title
     end
   end
 

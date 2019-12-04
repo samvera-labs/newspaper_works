@@ -15,6 +15,19 @@ module NewspaperWorks
           @issue = issue
         end
 
+        # @return [String] Page number string, as provided by XML:
+        def page_number
+          xpath('//header-item[@name="page"]/@value').first.text
+        end
+
+        # Title, including publication title, date when available.
+        # @return [String]
+        def title
+          return ["#{@issue.title.first}: Page #{page_number}"] unless @issue.nil?
+          # fallback to just publication date and page number
+          ["#{publication_date}: Page #{page_number}"]
+        end     
+
         # Path to page image (PDF)
         # @return [String]
         def image_path
