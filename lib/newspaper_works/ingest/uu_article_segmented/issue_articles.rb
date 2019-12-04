@@ -1,9 +1,8 @@
 module NewspaperWorks
   module Ingest
     module UUArticleSegmented
-      # IssueIngest is enumerable of pages, and has accessor to list
-      #   contained articles; it is constructed with a path.
-      class IssueIngest
+      # Enumerable and ordered mapping of articles
+      class IssueArticles
         # PathEnumeration mixes in #each for Enumerable, this class provides
         #   both #info and #paths methods to make PathEnumeration work.
         include NewspaperWorks::Ingest::PathEnumeration
@@ -13,43 +12,29 @@ module NewspaperWorks
 
         attr_accessor :path, :issue
 
-        def initialize(path)
+        def initialize(path, issue = nil)
           @path = normalize_path(path)
           @doc = nil
-          @issue = nil
-          @pages = {}
+          # reference to parent IssueIngest object, if available:
+          @issue = issue
           # unordered cache of article objects, keyed by path
-          @articles = nil
+          @articles = {}
         end
 
-        # enumerable stuff: get/enumerate pages of issue
-        def info(path)
-          return @pages[path] if @pages.keys.include?(path)
-          # construct each page in context of (this) issue parent:
-          @pages[path] = page_for_path(path)
-        end
+        # get/enumerate articles, to meet contract of PathEnumeration mixin:
 
-        def page_for_path(path)
-          NewspaperWorks::Ingest::UUArticleSegmented::PageIngest.new(
-            path, self
-          )
-        end
-
-        # @return [Array<String>] list of paths to each page in manifest order
-        def page_paths
-          result = xpath('//pages/page-ref/@href').map(&:value)
+        # @return [Array<String>] list of article paths in manifest order
+        def paths
+          result = xpath('//articles/article-ref/@href').map(&:value)
           # normalize to absolute paths relative to location of manifest
           result.map { |p| File.expand_path(p, File.dirname(@path)) }
         end
 
-        # @return [NewspaperWorks::Ingest::UUArticleSegmented::IssueArticles]
-        #   ordered enumerable mappoing of articles for issue,
-        #   linked back to this issue
-        def articles
-          return @articles unless @articles.nil?
-          @articles = NewspaperWorks::Ingest::UUArticleSegmented::IssueArticles.new(
-            @path,
-            self
+        # @return [NewspaperWorks::Ingest::UUArticleSegmented::ArticleIngest]
+        def info(path)
+          return @articles[path] if @articles.keys.include?(path)
+          @articles[path] = NewspaperWorks::Ingest::UUArticleSegmented::ArticleIngest.new(
+            path, @issue
           )
         end
 
@@ -63,8 +48,6 @@ module NewspaperWorks
           raise IOError, 'Manifest not found: #{path}' unless File.exist?(path)
           path
         end
-
-        alias paths page_paths
       end
     end
   end

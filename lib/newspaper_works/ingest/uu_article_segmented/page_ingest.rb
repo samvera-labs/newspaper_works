@@ -26,7 +26,7 @@ module NewspaperWorks
           return ["#{@issue.title.first}: Page #{page_number}"] unless @issue.nil?
           # fallback to just publication date and page number
           ["#{publication_date}: Page #{page_number}"]
-        end     
+        end
 
         # Path to page image (PDF)
         # @return [String]

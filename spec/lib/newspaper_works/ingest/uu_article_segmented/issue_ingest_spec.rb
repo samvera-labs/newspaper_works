@@ -17,6 +17,10 @@ RSpec.describe NewspaperWorks::Ingest::UUArticleSegmented::IssueIngest do
     NewspaperWorks::Ingest::UUArticleSegmented::ArticleIngest
   end
 
+  let(:articles_cls) do
+    NewspaperWorks::Ingest::UUArticleSegmented::IssueArticles
+  end
+
   describe "construction and composition" do
     it "constructs adapter given path" do
       expect(issue.path).to eq issue_path
@@ -43,6 +47,7 @@ RSpec.describe NewspaperWorks::Ingest::UUArticleSegmented::IssueIngest do
 
     it "provides accessor to hash of articles" do
       articles = issue.articles
+      expect(articles).to be_a articles_cls
       expect(articles.size).to eq 18
       article = articles.values[0]
       expect(article).to be_a article_cls
