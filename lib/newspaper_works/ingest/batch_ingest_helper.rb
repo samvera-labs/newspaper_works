@@ -1,4 +1,6 @@
 require 'find'
+require 'open3'
+require 'tmpdir'
 
 module NewspaperWorks
   module Ingest

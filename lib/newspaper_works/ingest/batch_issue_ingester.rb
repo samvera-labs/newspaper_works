@@ -1,6 +1,3 @@
-require 'open3'
-require 'tmpdir'
-
 module NewspaperWorks
   module Ingest
     class BatchIssueIngester
@@ -19,7 +16,8 @@ module NewspaperWorks
         @lccn = normalize_lccn(lccn.nil? ? lccn_from_path(path) : lccn)
         # get publication info for LCCN from authority web service:
         @publication = NewspaperWorks::Ingest::PublicationInfo.new(@lccn)
-        # issues for publication, as enumerable of PDFIssue
+        # issues for publication, as ordered enumerable object representing
+        #   issue, that (a) has metadata for issue; (b) enumerates pages.
         @issues = issue_enumerator
         @opts = opts
         configure_logger('ingest')
