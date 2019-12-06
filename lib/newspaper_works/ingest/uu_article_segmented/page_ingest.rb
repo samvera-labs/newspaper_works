@@ -1,3 +1,5 @@
+require 'date'
+
 module NewspaperWorks
   module Ingest
     module UUArticleSegmented
