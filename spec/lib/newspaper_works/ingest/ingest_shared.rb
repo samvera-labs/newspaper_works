@@ -18,6 +18,9 @@ RSpec.shared_context "ingest test fixtures", shared_context: :metadata do
 
   # directory containing JP2 image fixture batch(es)
   let(:jp2_fixtures) { File.join(fixtures_path, 'jp2_batch') }
+
+  # directory containing UU article-segmented batch(es)
+  let(:article_segmented) { File.join(fixtures_path, 'article_segmented') }
 end
 
 RSpec.shared_examples 'ingest adapter IO' do
