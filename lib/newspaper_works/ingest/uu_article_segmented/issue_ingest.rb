@@ -1,3 +1,5 @@
+require 'date'
+
 module NewspaperWorks
   module Ingest
     module UUArticleSegmented
@@ -11,15 +13,19 @@ module NewspaperWorks
         # XML and date accessors common functionality:
         include NewspaperWorks::Ingest::UUArticleSegmented::IngestCommon
 
-        attr_accessor :path, :issue
+        delegate :lccn, to: :issue
 
-        def initialize(path)
+        attr_accessor :path, :issue, :publication
+
+        def initialize(path, publication = nil)
           @path = normalize_path(path)
           @doc = nil
           @issue = nil
           @pages = {}
           # unordered cache of article objects, keyed by path
           @articles = nil
+          # PublicationInfo, if available:
+          @publication = publication
         end
 
         # enumerable stuff: get/enumerate pages of issue
@@ -62,6 +68,14 @@ module NewspaperWorks
           path = File.expand_path('./unit.xml', path)
           raise IOError, 'Manifest not found: #{path}' unless File.exist?(path)
           path
+        end
+
+        # issue metadata accessors:
+        #   - publication_date is defined in IngestCommon mixin
+        def title
+          title_date = DateTime.iso8601(publication_date).strftime('%B %-d, %Y')
+          return [title_date] if @publication.nil?
+          ["#{publication.title}: #{title_date}"]
         end
 
         alias paths page_paths

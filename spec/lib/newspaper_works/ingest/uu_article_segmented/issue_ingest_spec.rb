@@ -21,6 +21,10 @@ RSpec.describe NewspaperWorks::Ingest::UUArticleSegmented::IssueIngest do
     NewspaperWorks::Ingest::UUArticleSegmented::IssueArticles
   end
 
+  let(:lccn) { 'sn84037033' }
+
+  let(:publication) { NewspaperWorks::Ingest::PublicationInfo.new(lccn) }
+
   describe "construction and composition" do
     it "constructs adapter given path" do
       expect(issue.path).to eq issue_path
@@ -29,6 +33,13 @@ RSpec.describe NewspaperWorks::Ingest::UUArticleSegmented::IssueIngest do
 
     it "provides date metadata for issue" do
       expect(issue.publication_date).to eq '1850-06-15'
+      # issue constructed without publictation makes due with what it has:
+      expect(issue.title).to contain_exactly "June 15, 1850"
+      # when issue is constructed with publication, embed publication title:
+      issue = described_class.new(issue_path, publication)
+      expect(issue.title).to contain_exactly "Deseret news: June 15, 1850"
+      # edition number
+      expect(issue.edition_number).to eq 1
     end
   end
 

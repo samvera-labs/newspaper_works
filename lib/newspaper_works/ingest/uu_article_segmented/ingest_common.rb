@@ -16,6 +16,12 @@ module NewspaperWorks
           @doc
         end
 
+        # @return [Integer] edition number
+        def edition_number
+          v = xpath('//header-item[@name="number"]/@value').first.value
+          v.nil? ? 1 : v.to_i
+        end
+
         # @return [String] ISO 8601 date stamp
         def publication_date
           Date.parse(date_stamp).to_s # e.g. from "18-JUN-1860" to ISO8601

@@ -25,7 +25,8 @@ module NewspaperWorks
         def title
           return ["#{@issue.title.first}: Page #{page_number}"] unless @issue.nil?
           # fallback to just publication date and page number
-          ["#{publication_date}: Page #{page_number}"]
+          title_date = DateTime.iso8601(publication_date).strftime('%B %-d, %Y')
+          ["#{title_date}: Page #{page_number}"]
         end
 
         # Path to page image (PDF)
