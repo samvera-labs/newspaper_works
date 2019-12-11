@@ -74,7 +74,7 @@ en:
 
     title_search_form:
       label:                    'Search within this newspaper'
-      placeholder:              'Search within this newzspaper...'
+      placeholder:              'Search within this newspaper...'
       front_pages_link:         'View all front pages'
 
   simple_form:
