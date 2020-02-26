@@ -22,6 +22,13 @@ module Hyrax
       all_title_issue_dates.map { |issue_date| year_or_nil(issue_date) }.compact.uniq.sort
     end
 
+    def issue_years_count
+      year_count = Hash.new(0)
+      years = all_title_issue_dates.map { |issue_date| year_or_nil(issue_date) }.compact.sort
+      years.each { |year| year_count[year] += 1 }
+      year_count
+    end
+
     def prev_year
       return nil if issue_years.empty?
       index = issue_years.index(year) - 1

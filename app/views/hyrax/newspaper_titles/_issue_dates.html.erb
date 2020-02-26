@@ -1,0 +1,28 @@
+<div id="issue_dates_wrapper" class="row">
+  <% if years.count > 1 && years.values.max >= 1 %>
+    <div id="newspaper-date-coverage" style="height: 150px; width: 50%;"></div>
+    <script>
+      new Morris.Bar({
+      element: 'newspaper-date-coverage',
+      data: [
+        <% years.each do |year, issues| %>
+        { year: '<%= year %>', issues: <%= issues %> },
+        <% end %>
+      ],
+      xkey: 'year',
+      ykeys: ['issues'],
+      yLabelFormat: (y) => { return Math.floor(y); },
+      labels: ['Issues']
+    });
+
+    $("#newspaper-date-coverage svg rect, .morris-hover").on('click', function(data) {
+      year = $(".morris-hover-row-label").html();
+      url = `<%= main_app.hyrax_newspaper_title_path(params[:id]) %>&year=${year}`
+      window.location.href = url;     //open url in current window
+      //window.open(url);             //open url in new window
+    });
+    </script>
+  <% else %>
+    <p>No Years Found!</p>
+  <% end %>
+</div>
