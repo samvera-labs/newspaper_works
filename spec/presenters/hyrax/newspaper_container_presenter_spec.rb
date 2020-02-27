@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 require_relative '../newspaper_works/newspaper_core_presenter_spec'
 

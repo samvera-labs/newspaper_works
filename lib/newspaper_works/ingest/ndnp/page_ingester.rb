@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'newspaper_works/logging'
 
 module NewspaperWorks

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 namespace :newspaper_works do
   def use_application
     ENV['RAILS_ENV'] = Rails.env if ENV['RAILS_ENV'].nil?

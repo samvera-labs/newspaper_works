@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   class IngestFileRelation < ApplicationRecord
     validates :file_path, presence: true

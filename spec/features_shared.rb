@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # a set of Title, Issue, and Page objects that can be reused in feature specs
 RSpec.shared_context "fixtures_for_features", shared_context: :metadata do
   # use this so titles are different every time spec is run

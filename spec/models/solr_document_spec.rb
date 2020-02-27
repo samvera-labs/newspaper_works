@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 RSpec.describe SolrDocument do
   let(:solr_doc) { described_class.new(id: 'foo', file_set_ids_ssim: ['bar']) }

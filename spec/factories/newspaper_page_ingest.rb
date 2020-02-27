@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :newspaper_page_ingest, class: NewspaperWorks::Ingest::NewspaperPageIngest do
     newspaper_page

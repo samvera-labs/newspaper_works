@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :uploaded_pdf_file, class: Hyrax::UploadedFile do
     initialize_with do

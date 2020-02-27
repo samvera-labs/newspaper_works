@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # mixin to provide URL for IIIF Content Search service
 module NewspaperWorks
   module IiifManifestPresenterBehavior

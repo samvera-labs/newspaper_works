@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   # Application Record Class
   class ApplicationRecord < ActiveRecord::Base

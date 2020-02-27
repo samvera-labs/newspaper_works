@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # mixin to provide persistent URL methods
 module NewspaperWorks
   module PersistentUrlPresenterBehavior

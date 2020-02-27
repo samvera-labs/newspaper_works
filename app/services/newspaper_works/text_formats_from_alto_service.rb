@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   # Plugin to make text format derviatives (JSON, plain-text) from ALTO,
   #   either existing derivative, or an impending attachment.

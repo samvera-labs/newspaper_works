@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Newspaper Issue
 class NewspaperIssue < ActiveFedora::Base
   # WorkBehavior mixes in minimal ::Hyrax::CoreMetadata fields of

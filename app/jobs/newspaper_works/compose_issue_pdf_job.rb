@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   # Compose and attach a multi-page PDF from constituent pages, if ready
   #   (if not ready, job retry requires Rails >= 5.1)

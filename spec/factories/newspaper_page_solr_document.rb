@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryBot.define do
   factory :newspaper_page_solr_document, class: SolrDocument do
     initialize_with do

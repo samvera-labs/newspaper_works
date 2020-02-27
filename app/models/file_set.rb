@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # ---
 # newspaper_works needs a fileset compatible with and mixing in
 # ::Hyrax::FileSetBehavior, since Hyrax does not define such a class.

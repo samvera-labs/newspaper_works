@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Shared Model
 RSpec.shared_examples 'a persistent work type' do
   let(:work) { described_class.new }

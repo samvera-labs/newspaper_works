@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # indexes the publication_date_start and _end fields
 module NewspaperWorks
   module IndexesPublicationDateRange

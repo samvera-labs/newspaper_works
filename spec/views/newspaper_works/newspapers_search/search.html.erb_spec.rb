@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 
 RSpec.describe 'newspaper_works/newspapers_search/search.html.erb', type: :view do

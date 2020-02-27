@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'active_fedora'
 require 'hyrax'
 require 'blacklight_iiif_search'

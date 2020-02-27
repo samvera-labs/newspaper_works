@@ -1,8 +1,9 @@
+# frozen_string_literal: true
 module NewspaperWorks
   # validates start and end date are properly formatted and end date comes after
   # or on the same date as the start date.
   class PublicationDateStartEndValidator < ActiveModel::Validator
-    DATE_RANGE_REGEX = /\A\d{4}(-((0[1-9])|(1[0-2])))?(-(([0-2][1-9])|3[0-1]))?\z/
+    DATE_RANGE_REGEX = /\A\d{4}(-((0[1-9])|(1[0-2])))?(-(([0-2][1-9])|3[0-1]))?\z/.freeze
 
     def validate(record)
       start_date = record.publication_date_start

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # indexes parent relationships e.g. issue->title, page->issue, etc
 module NewspaperWorks
   module IndexesRelationships

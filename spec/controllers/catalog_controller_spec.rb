@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 
 # specs to test that install generators have correctly modified CatalogController

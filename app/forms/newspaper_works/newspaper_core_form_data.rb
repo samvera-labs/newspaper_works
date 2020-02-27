@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   class NewspaperCoreFormData < Hyrax::Forms::WorkForm
     self.terms += [:resource_type, :place_of_publication, :issn, :lccn,

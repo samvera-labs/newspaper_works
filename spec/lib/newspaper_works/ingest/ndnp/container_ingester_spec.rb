@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 require 'ndnp_shared'
 require 'misc_shared'
@@ -50,7 +51,7 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::ContainerIngester do
       # first, unlink the reel from publication before deleting:
       container = containers[0]
       publication = container.publication
-      publication.members.delete(container) unless publication.nil?
+      publication&.members.delete(container)
       # then delete reel
       containers.delete_all
     end

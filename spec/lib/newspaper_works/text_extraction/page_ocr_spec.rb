@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'json'
 require 'nokogiri'
 require 'spec_helper'

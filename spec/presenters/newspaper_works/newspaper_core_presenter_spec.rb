@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.shared_examples "a newspaper core presenter" do
   let(:solr_document) { SolrDocument.new(attributes) }
   let(:request) { double(host: 'example.org') }

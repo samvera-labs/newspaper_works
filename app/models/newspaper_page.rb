@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Newspaper Page
 class NewspaperPage < ActiveFedora::Base
   # WorkBehavior mixes in minimal ::Hyrax::CoreMetadata fields of

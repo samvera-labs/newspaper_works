@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'newspaper_works/logging'
 require 'newspaper_works/ingest'
 

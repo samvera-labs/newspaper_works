@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   module BreadcrumbHelper
     # create an array of links representing the ancestors of the current object

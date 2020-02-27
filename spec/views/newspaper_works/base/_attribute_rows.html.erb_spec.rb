@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # hyrax/spec/views/hyrax/base/_attribute_rows.html.erb_spec.rb
 require 'spec_helper'
 

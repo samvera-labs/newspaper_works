@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # have to override some methods from BlacklightAdvancedSearch classes/modules
 # to provide date range search functionality
 require BlacklightAdvancedSearch::Engine.root.join(Rails.root, 'config', 'initializers',

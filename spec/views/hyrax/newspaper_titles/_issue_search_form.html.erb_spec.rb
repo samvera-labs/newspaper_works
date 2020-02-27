@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 RSpec.describe 'hyrax/newspaper_titles/_issue_search_form.html.erb', type: :view do
   let(:presenter) { double }

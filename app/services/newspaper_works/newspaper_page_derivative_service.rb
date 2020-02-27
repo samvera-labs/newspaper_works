@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   # Base type for derivative services specific to NewspaperPage only
   class NewspaperPageDerivativeService

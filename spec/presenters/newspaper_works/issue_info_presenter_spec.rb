@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 RSpec.describe NewspaperWorks::IssueInfoPresenter do
   let(:solr_document) { SolrDocument.new(attributes) }

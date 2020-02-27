@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Generated via
 #  `rails generate hyrax:work NewspaperIssue`
 class NewspaperIssueIndexer < NewspaperWorks::NewspaperCoreIndexer
@@ -13,7 +14,7 @@ class NewspaperIssueIndexer < NewspaperWorks::NewspaperCoreIndexer
   def generate_solr_document
     super.tap do |solr_doc|
       # set manually to ensure correct field type (_dtsi)
-      if object.publication_date =~ /\A\d{4}-\d{2}-\d{2}\z/
+      if object.publication_date match?(/\A\d{4}-\d{2}-\d{2}\z/)
         solr_doc['publication_date_ssi'] = nil
         solr_doc['publication_date_dtsi'] = object.publication_date.to_datetime
       end

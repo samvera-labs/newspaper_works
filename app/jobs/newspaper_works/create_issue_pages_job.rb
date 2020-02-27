@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   # Create child page works for issue
   class CreateIssuePagesJob < NewspaperWorks::ApplicationJob

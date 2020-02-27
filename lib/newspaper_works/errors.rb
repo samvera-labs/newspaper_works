@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   # generic/base NewspaperWorks-specific exception:
   class NewspaperWorksError < StandardError

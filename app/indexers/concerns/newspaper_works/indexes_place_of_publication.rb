@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # indexes the place_of_publication field
 module NewspaperWorks
   module IndexesPlaceOfPublication

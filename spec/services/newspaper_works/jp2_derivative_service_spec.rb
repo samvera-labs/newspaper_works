@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 RSpec.describe NewspaperWorks::JP2DerivativeService do
   let(:valid_file_set) do

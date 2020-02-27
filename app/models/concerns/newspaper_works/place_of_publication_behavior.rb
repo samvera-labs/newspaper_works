@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # module comment...
 module NewspaperWorks
   # setting this allows us to use GeoNames autocomplete for place_of_publication property

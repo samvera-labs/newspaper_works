@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   module Ingest
     class ImageIngestIssues
@@ -36,7 +37,7 @@ module NewspaperWorks
 
         def path_validates?(p)
           ptn = /^([0-9]{4})(1[012]|[0][1-9])(3[01]|[12][0-9]|0[1-9])([0-9]{2})?/
-          ptn.match(File.basename(p)) ? true : false
+          ptn.match?(File.basename(p)) ? true : false
         end
     end
   end

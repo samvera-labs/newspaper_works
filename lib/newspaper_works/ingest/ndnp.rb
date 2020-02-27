@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'newspaper_works/ingest/ndnp/ndnp_mets_helper'
 require 'newspaper_works/ingest/ndnp/ndnp_asset_helper'
 require 'newspaper_works/ingest/ndnp/page_ingest'

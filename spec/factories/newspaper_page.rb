@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # will infer, create a NewspaperPage object
 FactoryBot.define do
   factory :newspaper_page do

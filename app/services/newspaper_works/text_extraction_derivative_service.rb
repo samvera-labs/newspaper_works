@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   class TextExtractionDerivativeService < NewspaperPageDerivativeService
     def initialize(file_set)

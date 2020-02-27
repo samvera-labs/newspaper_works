@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "newspaper_works/engine"
 require "newspaper_works/errors"
 require "newspaper_works/jp2_image_metadata"

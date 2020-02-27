@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks::Solr::Document
   SOLR_NAMES = %w[alternative_title genre place_of_publication
                   issn lccn oclcnum held_by text_direction

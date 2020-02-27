@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   module Ingest
     # class-method mixin module for ingest command-line invocation

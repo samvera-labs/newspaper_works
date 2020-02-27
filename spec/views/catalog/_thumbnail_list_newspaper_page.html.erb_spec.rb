@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 RSpec.describe 'catalog/_thumbnail_list_newspaper_page.html.erb', type: :view do
   let(:query) { 'suffrage' }

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   module Ingest
     # Represents TIFF/JP2 page, access to file, page-numbering metadata

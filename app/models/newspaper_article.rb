@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Newspaper Article Cass
 class NewspaperArticle < ActiveFedora::Base
   # WorkBehavior mixes in minimal ::Hyrax::CoreMetadata fields of
@@ -147,8 +148,7 @@ class NewspaperArticle < ActiveFedora::Base
   end
 
   def publication
-    issue = self.issue
-    issue.publication unless issue.nil?
+    issue = self&.issue&.publication
   end
 
   def container

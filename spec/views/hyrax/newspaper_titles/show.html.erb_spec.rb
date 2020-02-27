@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 RSpec.describe 'hyrax/newspaper_titles/show.html.erb', type: :view do
   let(:work_solr_document) do

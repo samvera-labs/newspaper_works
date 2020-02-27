@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.shared_context "shared setup", shared_context: :metadata do
   let(:fixture_path) do
     path = File.join(

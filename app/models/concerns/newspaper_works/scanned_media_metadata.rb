@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Scanned Media: Shared Metadata
 module NewspaperWorks
   # scanned media metadata for newspaper models (e.g. page, article images)

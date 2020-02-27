@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Core indexer for newspaper work types
 module NewspaperWorks
   class NewspaperCoreIndexer < Hyrax::WorkIndexer

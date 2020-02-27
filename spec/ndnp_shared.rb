@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'newspaper_works_fixtures'
 
 RSpec.shared_context "ndnp fixture setup", shared_context: :metadata do

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # indexes the full text of a Newspaper object
 module NewspaperWorks
   module IndexesFullText

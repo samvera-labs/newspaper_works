@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 NewspaperWorks.config do |config|
   # 'publication_unique_id' configs used for Chronicling America style linking
   #  e.g. First page of an issue from publication with LCCN sn86069873, from Jan. 15, 1897

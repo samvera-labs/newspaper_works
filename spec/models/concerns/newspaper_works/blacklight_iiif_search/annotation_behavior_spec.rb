@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 RSpec.describe NewspaperWorks::BlacklightIiifSearch::AnnotationBehavior do
   let(:page_document) { build(:newspaper_page_solr_document) }

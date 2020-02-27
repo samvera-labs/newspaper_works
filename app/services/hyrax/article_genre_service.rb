@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # based on Hyrax::RightsStatementService
 module Hyrax
   # Provide select options for the NewspaperArticle genre (edm:hasType) field

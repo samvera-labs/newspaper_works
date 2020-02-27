@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # useful methods for retrieving and ordering NewspaperPage objects
 module NewspaperWorks
   module PageFinder

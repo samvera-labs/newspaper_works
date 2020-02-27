@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   class DerivativeAttachment < ApplicationRecord
     # We can store nil/optional fileset as interim value before fileset

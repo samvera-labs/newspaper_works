@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # customize behavior for IiifSearch
 module NewspaperWorks
   module BlacklightIiifSearch

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # NewspaperIssue ancestor data
 module NewspaperWorks
   # shared NewspaperIssue info for multiple newspaper models

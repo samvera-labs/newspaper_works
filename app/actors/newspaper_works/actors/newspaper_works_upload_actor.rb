@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   module Actors
     class NewspaperWorksUploadActor < Hyrax::Actors::AbstractActor

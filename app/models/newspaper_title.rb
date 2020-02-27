@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # NewspaperTitle: object for a publication/title
 class NewspaperTitle < ActiveFedora::Base
   # WorkBehavior mixes in minimal ::Hyrax::CoreMetadata fields of

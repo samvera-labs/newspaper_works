@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # General derivative service for NewspaperWorks, which is meant to wrap
 #   and replace the stock Hyrax::FileSetDerivativeService with a proxy
 #   that runs one or more derivative service "plugin" components.

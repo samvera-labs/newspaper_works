@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'newspaper_works/text_extraction/alto_reader'
 require 'newspaper_works/text_extraction/hocr_reader'
 require 'newspaper_works/text_extraction/page_ocr'

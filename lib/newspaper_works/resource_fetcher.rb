@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   # in-memory caching fetcher for HTTP GET requests, wraps Faraday.get
   class ResourceFetcher

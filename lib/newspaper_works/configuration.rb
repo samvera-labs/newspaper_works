@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   class Configuration
     # 'publication_unique_id' configs used for Chronicling America style linking

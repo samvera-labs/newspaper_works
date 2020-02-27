@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module NewspaperWorks
   class JP2ImageMetadata
     TOKEN_MARKER_START = "\xFF".force_encoding("BINARY").freeze

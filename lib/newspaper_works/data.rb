@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'newspaper_works/data/fileset_helper'
 require 'newspaper_works/data/path_helper'
 require 'newspaper_works/data/work_derivatives'

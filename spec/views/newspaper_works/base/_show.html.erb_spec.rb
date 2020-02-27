@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 RSpec.describe 'newspaper_works/base/_show.html.erb', type: :view do
   let(:work_solr_document) do

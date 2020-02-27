@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # module comment...
 module NewspaperWorks
   # core metadata for newspaper models

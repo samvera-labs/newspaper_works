@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 # require 'model_shared'
 RSpec.describe 'hyrax/newspaper_titles/_issue_calendar.html.erb', type: :view do

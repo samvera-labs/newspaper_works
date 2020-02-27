@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # based heavily on BlacklightAdvancedSearch::AdvancedController
 module NewspaperWorks
   class NewspapersSearchController < CatalogController
