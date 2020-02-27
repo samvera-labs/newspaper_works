@@ -45,6 +45,7 @@ RSpec.describe 'hyrax/newspaper_titles/show.html.erb', type: :view do
 
   before do
     allow(presenter).to receive(:year).and_return('2019')
+    allow(presenter).to receive(:issue_years_count).and_return({ 1939 => 10, 1940 => 20, 1941 => 30, 1942 => 40, 1943 => 50, 1944 => 60, 1945 => 70  })
     allow(presenter).to receive(:workflow).and_return(workflow_presenter)
     allow(presenter).to receive(:representative_presenter).and_return(representative_presenter)
     allow(presenter).to receive(:representative_id).and_return('123')
@@ -55,6 +56,7 @@ RSpec.describe 'hyrax/newspaper_titles/show.html.erb', type: :view do
     allow(view).to receive(:blacklight_config).and_return(Blacklight::Configuration.new)
     allow(view).to receive(:signed_in?)
     allow(view).to receive(:on_the_dashboard?).and_return(false)
+    allow(view).to receive(:params).and_return(id: 12345)
     stub_template 'hyrax/base/_metadata.html.erb' => ''
     stub_template 'hyrax/base/_relationships.html.erb' => ''
     stub_template 'hyrax/base/_show_actions.html.erb' => ''
@@ -83,5 +85,10 @@ RSpec.describe 'hyrax/newspaper_titles/show.html.erb', type: :view do
   it 'shows the issue calendar partial' do
     render
     expect(rendered).to render_template(partial: '_issues_calendar')
+  end
+
+  it 'shows the issue dates graph partial' do
+    render
+    expect(rendered).to render_template(partial: '_issue_dates')
   end
 end
