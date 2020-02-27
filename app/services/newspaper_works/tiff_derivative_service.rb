@@ -3,24 +3,24 @@ require 'open3'
 
 module NewspaperWorks
   class TIFFDerivativeService < NewspaperPageDerivativeService
-    TARGET_EXT = 'tiff'.freeze
+    TARGET_EXT = 'tiff'
 
     # For imagemagick commands, the output type is determined by the
     #   output file's extension.
     # TIFF (LZW, 8 bit grayscale)
     GRAY_CMD = 'convert %<source_file>s ' \
                '-depth 8 -colorspace Gray ' \
-               '-compress lzw %<out_file>s'.freeze
+               '-compress lzw %<out_file>s'
 
     # Monochrome one-bit black/white TIFF, Group 4 compressed:
     MONO_CMD = 'convert %<source_file>s ' \
                '-depth 1 -monochrome -compress Group4 -type bilevel ' \
-               '%<out_file>s'.freeze
+               '%<out_file>s'
 
     # sRBG color TIFF (8 bits per channel, lzw)
     COLOR_CMD = 'convert %<source_file>s ' \
                 '-depth 24 ' \
-                '-compress lzw %<out_file>s'.freeze
+                '-compress lzw %<out_file>s'
 
     def initialize(file_set)
       super(file_set)

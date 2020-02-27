@@ -5,7 +5,7 @@ module NewspaperWorks
   #   NOTE: to keep this from conflicting with TextExtractionDerivativeService,
   #         this class should be invoked by it, not PluggableDerivativeService.
   class TextFormatsFromALTOService < NewspaperPageDerivativeService
-    TARGET_EXT = 'tiff'.freeze
+    TARGET_EXT = 'tiff'
 
     def save_derivative(destination, data)
       # Load/prepare base of "pairtree" dir structure for extension, fileset

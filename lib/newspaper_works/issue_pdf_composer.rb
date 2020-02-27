@@ -7,7 +7,7 @@ module NewspaperWorks
   class IssuePDFComposer
     attr_accessor :issue, :page_pdfs
 
-    CMD_BASE = "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite".freeze
+    CMD_BASE = "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite"
 
     # @param issue [NewspaperIssue] adapts issue work object
     def initialize(issue)

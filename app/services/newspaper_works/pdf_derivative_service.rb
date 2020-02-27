@@ -3,19 +3,19 @@ require 'open3'
 
 module NewspaperWorks
   class PDFDerivativeService < NewspaperPageDerivativeService
-    TARGET_EXT = 'pdf'.freeze
+    TARGET_EXT = 'pdf'
 
     # PDF (JPEG, 8 bit grayscale), 150ppi
     GRAY_PDF_CMD = 'convert %<source_file>s ' \
                    '-resize 1800 -density 150 ' \
                    '-depth 8 -colorspace Gray ' \
-                   '-compress jpeg %<out_file>s'.freeze
+                   '-compress jpeg %<out_file>s'
 
     # sRBG color PDF (JPEG, 8 bits per channel), 150ppi
     COLOR_PDF_CMD = 'convert %<source_file>s ' \
                     '-resize 1800 -density 150 ' \
                     '-depth 8 ' \
-                    '-compress jpeg %<out_file>s'.freeze
+                    '-compress jpeg %<out_file>s'
 
     def initialize(file_set)
       super(file_set)

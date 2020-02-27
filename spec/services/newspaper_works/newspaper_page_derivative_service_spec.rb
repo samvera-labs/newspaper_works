@@ -30,7 +30,7 @@ RSpec.describe NewspaperWorks::NewspaperPageDerivativeService do
 
   describe "core path/extension functionality" do
     class MyDerivativeService < described_class
-      TARGET_EXT = 'jpg'.freeze
+      TARGET_EXT = 'jpg'
     end
 
     it "allows derivative service subclass to define file extension" do

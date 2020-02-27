@@ -17,7 +17,7 @@ module NewspaperWorks
         rdfs: 'http://www.w3.org/2000/01/rdf-schema#'
       }.freeze
 
-      BASE_URL = 'https://chroniclingamerica.loc.gov/lccn'.freeze
+      BASE_URL = 'https://chroniclingamerica.loc.gov/lccn'
 
       def initialize(lccn)
         # true until loaded

@@ -8,20 +8,20 @@ module NewspaperWorks
               '-d 0,0 -b 64,64 -n 6 -p RLCP -t 1024,1024 -I -M 1 ' \
               '-r 64,53.821,45.249,40,32,26.911,22.630,20,16,14.286,' \
               '11.364,10,8,6.667,5.556,4.762,4,3.333,2.857,2.500,2,' \
-              '1.667,1.429,1.190,1'.freeze
+              '1.667,1.429,1.190,1'
 
     # OpenJPEG 2000 Command to make RGB JP2:
     CMD_COLOR = 'opj_compress -i %<source_file>s -o %<out_file>s ' \
                 '-d 0,0 -b 64,64 -n 6 -p RPCL -t 1024,1024 -I -M 1 '\
                 '-r 2.4,1.48331273,.91673033,.56657224,.35016049,.21641118,' \
-                '.13374944,.0944,.08266171'.freeze
+                '.13374944,.0944,.08266171'
 
     # OpenJPEG 1.x command replacement for 2.x opj_compress, takes same options;
     #   this is necessary on Ubuntu Trusty (e.g. Travis CI)
-    CMD_1X = 'image_to_j2k'.freeze
+    CMD_1X = 'image_to_j2k'
 
     # Target file extension of this service plugin:
-    TARGET_EXT = 'jp2'.freeze
+    TARGET_EXT = 'jp2'
 
     attr_reader :file_set
     delegate :uri, :mime_type, to: :file_set

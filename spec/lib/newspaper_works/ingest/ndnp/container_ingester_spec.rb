@@ -51,7 +51,7 @@ RSpec.describe NewspaperWorks::Ingest::NDNP::ContainerIngester do
       # first, unlink the reel from publication before deleting:
       container = containers[0]
       publication = container.publication
-      publication&.members.delete(container)
+      publication&.members&.delete(container)
       # then delete reel
       containers.delete_all
     end

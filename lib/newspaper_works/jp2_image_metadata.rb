@@ -3,7 +3,7 @@ module NewspaperWorks
   class JP2ImageMetadata
     TOKEN_MARKER_START = "\xFF".force_encoding("BINARY").freeze
     TOKEN_MARKER_SIZ = "\x51".force_encoding("BINARY").freeze
-    TOKEN_IHDR = 'ihdr'.freeze
+    TOKEN_IHDR = 'ihdr'
 
     attr_accessor :path
 

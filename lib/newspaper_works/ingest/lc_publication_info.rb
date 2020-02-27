@@ -13,7 +13,7 @@ module NewspaperWorks
         MODS: 'http://www.loc.gov/mods/v3'
       }.freeze
 
-      BASE_URL = 'https://lccn.loc.gov'.freeze
+      BASE_URL = 'https://lccn.loc.gov'
 
       def initialize(lccn)
         super(lccn)
