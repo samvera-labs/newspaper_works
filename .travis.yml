@@ -24,7 +24,7 @@ cache:
 before_install:
   - sudo apt-get update -q
   - gem update --system
-  - gem install bundle --version '~> 1.17.2'
+  - gem install bundler --version '~> 1.17.2'
   - google-chrome-stable --headless --disable-gpu --no-sandbox --remote-debugging-port=9222 http://localhost &
   - sudo wget -P /opt/install https://brussels.lib.utah.edu/FITS/fits-1.4.1.zip
   - sudo unzip /opt/install/fits-1.4.1.zip -d /opt/install/fits-1.4.1
