@@ -4,7 +4,7 @@ inherit_gem:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
-RSpec/LayoutLineLength:
+Metrics/LineLength:
   Max: 15
   Exclude:
     - 'spec/lib/newspaper_works/data/work_derivatives_spec.rb'
