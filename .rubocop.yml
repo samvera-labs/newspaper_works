@@ -1,5 +1,5 @@
-#inherit_gem:
-# bixby: bixby_default.yml
+inherit_gem:
+ bixby: bixby_default.yml
 
 Style/FrozenStringLiteralComment:
   Enabled: false
@@ -13,12 +13,11 @@ AllCops:
     - 'spec/test_app_templates/**/*'
     - 'vendor/**/*'
 
-#Layout/Linelength:
-#  Max: 15
-#  Exclude:
-#    - 'spec/lib/newspaper_works/data/work_derivatives_spec.rb'
-#    - 'spec/lib/newspaper_works/ingest/ndnp/issue_ingester_spec.rb'
-#    - 'lib/generators/newspaper_works/catalog_controller_generator.rb'
+Layout/LineLength:
+  Exclude:
+    - 'spec/lib/newspaper_works/data/work_derivatives_spec.rb'
+    - 'spec/lib/newspaper_works/ingest/ndnp/issue_ingester_spec.rb'
+    - 'lib/generators/newspaper_works/catalog_controller_generator.rb'
 
 Lint/ImplicitStringConcatenation:
   Exclude:
@@ -58,9 +57,9 @@ Naming/PredicateName:
   Exclude:
     - ''
 
-#Performance/StringReplacement:
-#  Exclude:
-#    - 'app/indexers/concerns/newspaper_works/indexes_full_text.rb'
+Performance/StringReplacement:
+  Exclude:
+    - 'app/indexers/concerns/newspaper_works/indexes_full_text.rb'
 
 Style/AsciiComments:
   Enabled: false
@@ -82,62 +81,65 @@ Style/ClassAndModuleChildren:
 Style/SingleLineBlockParams:
   Enabled: false
 
-#Rails/ApplicationJob:
-#  Enabled: false
+Rails/ApplicationJob:
+  Enabled: false
 
-#Rails/ApplicationRecord:
-#  Enabled: false
+Rails/ApplicationRecord:
+  Enabled: false
 
 # We define custom methods like `find_by_user_key`,
 # `find_by_created_date`, etc
-#Rails/DynamicFindBy:
-#  Enabled: false
+Rails/DynamicFindBy:
+  Enabled: false
 
-#Rails/FilePath:
-#  Exclude:
-#    - 'spec/abilities/**/*'
+Rails/FilePath:
+  Exclude:
+    - 'spec/abilities/**/*'
 
-#Rails/OutputSafety:
-#  Exclude:
-#    - 'lib/generators/newspaper_works/templates/config/initializers/patch_blacklight_advanced_search.rb'
-#    - 'spec/helpers/newspaper_works_helper_spec.rb'
+Rails/OutputSafety:
+  Exclude:
+    - 'lib/generators/newspaper_works/templates/config/initializers/patch_blacklight_advanced_search.rb'
+    - 'spec/helpers/newspaper_works_helper_spec.rb'
 
-#RSpec/DescribeClass:
-#  Exclude:
-#    - 'spec/abilities/**/*'
-#    - 'spec/conversions/**/*'
-#    - 'spec/features/**/*'
-#    - 'spec/inputs/**/*'
-#    - 'spec/views/**/*'
-#    - 'spec/lib/tasks/**/*'
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/abilities/**/*'
+    - 'spec/conversions/**/*'
+    - 'spec/features/**/*'
+    - 'spec/inputs/**/*'
+    - 'spec/views/**/*'
+    - 'spec/lib/tasks/**/*'
 
 # # By default RSpec/MessageSpies has the following:
 # #   Prefer have_received for setting message expectations. Setup form as a spy using allow or instance_spy.
 # # The default assumes EnforcedStyle is 'have_received'. Most of our specs are 'receive'
-#RSpec/MessageSpies:
-#  Enabled: false
+RSpec/MessageSpies:
+  Enabled: false
 
-#RSpec/InstanceVariable:
-#  Exclude:
-#    - 'spec/**/*'
+RSpec/InstanceVariable:
+  Exclude:
+    - 'spec/**/*'
 
-#RSpec/ExpectActual:
-#  Enabled: false
+RSpec/ExpectActual:
+  Enabled: false
 
-#RSpec/LetSetup:
-#  Enabled: false
+RSpec/LetSetup:
+  Enabled: false
 
-#RSpec/MessageExpectation:
-#  Enabled: false
+RSpec/MessageExpectation:
+  Enabled: false
 
-#RSpec/NamedSubject:
-#  Enabled: false
+RSpec/NamedSubject:
+  Enabled: false
 
-#RSpec/NestedGroups:
-#  Enabled: false
+RSpec/NestedGroups:
+  Enabled: false
 
-#RSpec/LeadingSubject:
-#  Enabled: false
+RSpec/LeadingSubject:
+  Enabled: false
 
-#RSpec/VerifiedDoubles:
-#  Enabled: false
+RSpec/VerifiedDoubles:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Max: 19
