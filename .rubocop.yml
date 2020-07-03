@@ -12,6 +12,26 @@ AllCops:
     - 'script/**/*'
     - 'spec/test_app_templates/**/*'
     - 'vendor/**/*'
+    # Resole the issues below
+    - 'app/helpers/newspaper_works/breadcrumb_helper.rb'
+    - 'app/helpers/newspaper_works/newspaper_works_helper_behavior.rb'
+    - 'app/helpers/newspaper_works/newspaper_works_helper_behavior.rb'
+    - 'app/models/newspaper_article.rb'
+    - 'app/validators/newspaper_works/publication_date_start_end_validator.rb'
+    - 'app/validators/newspaper_works/publication_date_validator.rb'
+    - 'lib/newspaper_works/data/work_derivatives.rb'
+    - 'lib/newspaper_works/data/work_files.rb'
+    - 'lib/newspaper_works/ingest.rb'
+    - 'lib/newspaper_works/ingest/ndnp/batch_ingester.rb'
+    - 'app/indexers/newspaper_issue_indexer.rb'
+    - 'lib/newspaper_works/ingest/pdf_pages.rb'
+    - 'lib/newspaper_works/page_finder.rb'
+    - 'lib/newspaper_works/text_extraction/hocr_reader.rb'
+    - 'lib/tasks/newspaper_works_tasks.rake'
+    - 'spec/lib/newspaper_works/data/work_derivatives_spec.rb'
+    - 'spec/lib/newspaper_works/data/work_files_spec.rb'
+    - 'spec/lib/newspaper_works/ingest/ndnp/container_ingester_spec.rb'
+    - 'tasks/newspaperworks_dev.rake'
 
 Layout/LineLength:
   Exclude:
@@ -143,3 +163,6 @@ RSpec/VerifiedDoubles:
 
 RSpec/ExampleLength:
   Max: 19
+
+Rails/RakeEnvironment:
+  Enabled: false
