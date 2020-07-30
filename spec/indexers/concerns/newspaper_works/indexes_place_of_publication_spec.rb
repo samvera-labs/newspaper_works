@@ -4,7 +4,7 @@ RSpec.describe NewspaperWorks::IndexesPlaceOfPublication do
   let(:ntitle) { NewspaperTitle.new }
   let(:test_indexer) { NewspaperTitleIndexer.new(ntitle) }
   let(:geonames_id) { '4950065' }
-  let(:geonames_uri) { "https://sws.geonames.org/#{geonames_id}/" }
+  let(:geonames_uri) { "http://sws.geonames.org/#{geonames_id}/" }
   let(:pop) { Hyrax::ControlledVocabularies::Location.new(geonames_uri) }
   # stub this, so we don't make repeated calls to GeoNames API
   let(:geodata) { test_indexer.get_geodata(geonames_id) }

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe NewspaperWorks::NewspaperCoreIndexer do
-  let(:geonames_uri) { 'https://sws.geonames.org/4950065/' }
+  let(:geonames_uri) { 'http://sws.geonames.org/4950065/' }
   let(:pop) { Hyrax::ControlledVocabularies::Location.new(geonames_uri) }
   let(:article) do
     NewspaperArticle.new(
