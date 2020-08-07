@@ -19,9 +19,6 @@ addons:
 cache:
   bundler: true
 
-  # before_script:
-  # - sudo redis-server /etc/redis/redis.conf --port 8985
-
 before_install:
   - sudo apt-get update -q
   - gem update --system
