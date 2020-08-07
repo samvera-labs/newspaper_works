@@ -49,4 +49,4 @@ env:
     - "RAILS_VERSION=5.2"
 
 services:
-  - redis
+  - redis-server
