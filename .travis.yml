@@ -48,5 +48,5 @@ env:
     - "RAILS_VERSION=5.1.7"
     - "RAILS_VERSION=5.2"
 
-# services:
-# - redis-server
+services:
+  - redis-server
