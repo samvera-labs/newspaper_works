@@ -19,6 +19,9 @@ addons:
 cache:
   bundler: true
 
+before_script:
+  - redis-cli info
+
 before_install:
   - sudo apt-get update -q
   - gem update --system
