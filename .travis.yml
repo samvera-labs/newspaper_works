@@ -20,7 +20,7 @@ cache:
   bundler: true
 
 before_script:
-  - redis-cli info
+  - redis-cli /etc/redis/redis.conf --port 8985
 
 before_install:
   - sudo apt-get update -q
@@ -48,5 +48,5 @@ env:
     - "RAILS_VERSION=5.1.7"
     - "RAILS_VERSION=5.2"
 
-services:
-  - redis-server
+# services:
+# - redis-server
