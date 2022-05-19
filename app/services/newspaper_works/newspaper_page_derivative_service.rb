@@ -82,7 +82,7 @@ module NewspaperWorks
 
     def jp2_to_intermediate
       intermediate_path = File.join(Dir.mktmpdir, 'intermediate.tif')
-      jp2_cmd = "opj_decompress -i #{@source_path} -o #{intermediate_path}"
+      jp2_cmd = "opj_decompress -i '#{@source_path}' -o #{intermediate_path}"
       # make intermediate, then...
       `#{jp2_cmd}`
       intermediate_path

@@ -30,6 +30,7 @@ module NewspaperWorks
     def convert_cmd
       source_path = @source_path
       source_path += '[0]' if @source_path.ends_with?('pdf')
+      source_path = "'#{source_path}'"
       template = use_color? ? COLOR_CMD : GRAY_CMD
       template = MONO_CMD if one_bit?
       format(template, source_file: source_path, out_file: @dest_path)

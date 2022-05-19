@@ -24,7 +24,8 @@ module NewspaperWorks
     #   JP2 source, and whether we have color or grayscale material.
     def convert_cmd
       template = use_color? ? COLOR_PDF_CMD : GRAY_PDF_CMD
-      format(template, source_file: @source_path, out_file: @dest_path)
+      source_path = "'#{@source_path}'"
+      format(template, source_file: source_path, out_file: @dest_path)
     end
 
     def create_derivatives(filename)

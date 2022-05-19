@@ -42,13 +42,13 @@ module NewspaperWorks
       monochrome &&= destination.slice(-4, 4).index('tif')
       mono_opts = "-depth 1 -monochrome -compress Group4 -type bilevel "
       opts = monochrome ? mono_opts : ''
-      cmd = "convert #{source} #{opts}#{destination}"
+      cmd = "convert '#{source}' #{opts}#{destination}"
       `#{cmd}`
     end
 
     def jp2_to_tiff(source)
       intermediate_path = File.join(Dir.mktmpdir, 'intermediate.tif')
-      jp2_cmd = "opj_decompress -i #{source} -o #{intermediate_path}"
+      jp2_cmd = "opj_decompress -i '#{source}' -o #{intermediate_path}"
       `#{jp2_cmd}`
       intermediate_path
     end
@@ -75,7 +75,7 @@ module NewspaperWorks
 
     # @return [Array<String>] lines of output from imagemagick `identify`
     def im_identify
-      cmd = "identify -verbose #{path}"
+      cmd = "identify -verbose '#{path}'"
       `#{cmd}`.lines
     end
 

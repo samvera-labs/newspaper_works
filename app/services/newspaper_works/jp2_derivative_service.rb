@@ -93,7 +93,7 @@ module NewspaperWorks
       source_path = @source_path
       source_path += '[0]' if @source_path.ends_with?('pdf')
       # Use ImageMagick `convert` to create intermediate bitmap:
-      `convert #{source_path} #{tmpname}`
+      `convert '#{source_path}' #{tmpname}`
       @unlink_after_creation.push(tmpname)
       # finally, point @source_path for command at intermediate file:
       @source_path = tmpname
@@ -105,7 +105,8 @@ module NewspaperWorks
       cmd = use_color? ? CMD_COLOR : CMD_GRAY
       cmd = cmd.sub('opj_compress', 'image_to_j2k') if use_openjpeg_1x
       # return command with source and destination file names injected
-      format(cmd, source_file: @source_path, out_file: @dest_path)
+      source_path = "'#{@source_path}'"
+      format(cmd, source_file: source_path, out_file: @dest_path)
     end
 
     def cleanup_intermediate

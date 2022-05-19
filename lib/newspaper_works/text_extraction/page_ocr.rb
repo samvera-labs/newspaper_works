@@ -21,7 +21,7 @@ module NewspaperWorks
 
       def run_ocr
         outfile = File.join(Dir.mktmpdir, 'output_html')
-        cmd = "tesseract #{path} #{outfile} hocr"
+        cmd = "tesseract '#{path}' #{outfile} hocr"
         `#{cmd}`
         outfile + '.hocr'
       end
