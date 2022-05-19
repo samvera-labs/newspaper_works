@@ -30,9 +30,9 @@ Jump in: [![Slack Status](http://slack.samvera.org/badge.svg)](http://slack.samv
 <!-- /TOC -->
 
 # Overview
-NewspaperWorks is a gem (Rails "engine") for [Hyrax](https://hyrax.samvera.org/) -based digital repository applications to support ingest, management, and display of digitzed newspaper content.
+NewspaperWorks is a gem (Rails "engine") for [Hyrax](https://hyrax.samvera.org/) -based digital repository applications to support ingest, management, and display of digitized newspaper content.
 
-NewspaperWorks is not a stand-alone application. It is designed to be integrated into a new or existing Hyrax (2.5.x) application, providing content models, ingest workflows, and feature-rich UX for newspaper repository use-cases.
+NewspaperWorks is not a stand-alone application. It is designed to be integrated into a new or existing Hyrax (v2.5-v2.9.4) application, providing content models, ingest workflows, and feature-rich UX for newspaper repository use-cases.
 
 NewspaperWorks supports:
 * models for Title, Issue, Page, and Article
@@ -52,10 +52,10 @@ A set of helpful documents to help you learn more and deploy NewspaperWorks can 
 
 ## Requirements
 
-  * [Ruby](https://rubyonrails.org/) >=2.4
-  * [Rails](https://rubyonrails.org/) ~>5.1
+  * [Ruby](https://rubyonrails.org/) >=2.4  
+  * [Rails](https://rubyonrails.org/) ~>5.0
   * [Bundler](http://bundler.io/)
-  * [Hyrax](https://github.com/samvera/hyrax) ~>2.5
+  * [Hyrax](https://github.com/samvera/hyrax) v2.5-v2.9.4
     - ..._and various [Samvera dependencies](https://github.com/samvera/hyrax#getting-started) that entails_.
   * A Hyrax-based Rails application
 
@@ -69,15 +69,16 @@ A set of helpful documents to help you learn more and deploy NewspaperWorks can 
   * [ImageMagick](https://github.com/ImageMagick/ImageMagick6)
     - _ImageMagick policy XML may need to be more permissive in both resources and source media types allowed.  See template [policy.xml](config/vendor/imagemagick-6-policy.xml)._
   * [libcurl3](https://packages.ubuntu.com/search?keywords=libcurl3)
+  * [libgbm1](https://packages.debian.org/sid/libgbm1)
 
 See the [wiki](https://github.com/samvera-labs/newspaper_works/wiki/Installing,-Developing,-and-Testing) for more details on how to install and configure dependencies.
 
 # Installation
-NewspaperWorks easily integrates with your Hyrax 2.5.x applications.
+NewspaperWorks easily integrates with your Hyrax 2.x applications.
 
 * Add `gem 'newspaper_works'` to your Gemfile.
 * Run `bundle install`
-* Run `rails generate newspaper_works:generate`
+* Run `rails generate newspaper_works:install`
 * Set config options as indicated below...
 
 ## Application/Site Specific Configuration
@@ -129,6 +130,10 @@ A Vagrant VM is available for users and developers to quickly and easily deploy 
 Additionally, the [NewspaperWorks Demo Site](https://newspaperworks.digitalnewspapers.org/) is available for those interested in testing out NewspaperWorks as deployed in a vanilla Hyrax application. (**NOTE:** The demo site may not be running the latest release of NewspaperWorks.)
 
 ## Contributing
+
+If you're working on a PR for this project, create a feature branch off of `main`.
+
+This repository follows the [Samvera Community Code of Conduct](https://samvera.atlassian.net/wiki/spaces/samvera/pages/405212316/Code+of+Conduct) and [language recommendations](https://github.com/samvera/maintenance/blob/master/templates/CONTRIBUTING.md#language).  Please ***do not*** create a branch called `master` for this repository or as part of your pull request; the branch will either need to be removed or renamed before it can be considered for inclusion in the code base and history of this repository.
 
 We encourage anyone who is interested in newspapers and Samvera to contribute to this project. [How can I contribute?](https://github.com/samvera/hyrax/blob/master/.github/CONTRIBUTING.md)
 
